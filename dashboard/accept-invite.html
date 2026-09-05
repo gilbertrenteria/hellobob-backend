@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Set your password — HelloBob Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+<body>
+  <div class="page-narrow">
+    <div class="card">
+      <h1>Set your password</h1>
+      <p class="subtitle">Choose a password to finish setting up your HelloBob dashboard.</p>
+      <form id="inviteForm">
+        <label for="password">New password</label>
+        <input id="password" type="password" required minlength="8" autocomplete="new-password">
+        <label for="confirm">Confirm password</label>
+        <input id="confirm" type="password" required minlength="8" autocomplete="new-password">
+        <button class="primary" type="submit">Set password &amp; log in</button>
+      </form>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const form = document.getElementById('inviteForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    if (!token) {
+      errorMsg.textContent = 'This link is missing its invite token — ask for a fresh one.';
+      errorMsg.classList.add('visible');
+      form.querySelector('button').disabled = true;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('visible');
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('confirm').value;
+
+      if (password !== confirm) {
+        errorMsg.textContent = "Passwords don't match.";
+        errorMsg.classList.add('visible');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/accept-invite', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ token, password }),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          errorMsg.textContent = json.message || 'That invite link is invalid or expired.';
+          errorMsg.classList.add('visible');
+          return;
+        }
+        window.location.href = '/dashboard/index.html';
+      } catch {
+        errorMsg.textContent = 'Something went wrong — please try again.';
+        errorMsg.classList.add('visible');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -26,6 +26,13 @@ function badRequest(message) {
   return { status: 400, json: { error: 'bad_request', message } };
 }
 
+export function getBusinessRoute(businessId) {
+  const business = getBusiness(businessId);
+  if (!business) return notFound('business');
+  const { id, name, phone_e164, state, timezone } = business;
+  return { status: 200, json: { id, name, phone_e164, state, timezone } };
+}
+
 export function getConversationsRoute(businessId) {
   const business = getBusiness(businessId);
   if (!business) return notFound('business');

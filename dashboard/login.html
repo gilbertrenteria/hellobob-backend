@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Log in — HelloBob Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+<body>
+  <div class="page-narrow">
+    <div class="card">
+      <h1>HelloBob Dashboard</h1>
+      <p class="subtitle">Log in to manage your technicians, hours, and conversations.</p>
+      <form id="loginForm">
+        <label for="email">Email</label>
+        <input id="email" type="email" required autocomplete="email">
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="current-password">
+        <button class="primary" type="submit">Log in</button>
+      </form>
+      <div class="error-msg" id="errorMsg"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('visible');
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      try {
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        });
+        const json = await res.json();
+        if (!res.ok) {
+          errorMsg.textContent = json.message || 'Incorrect email or password.';
+          errorMsg.classList.add('visible');
+          return;
+        }
+        window.location.href = '/dashboard/index.html';
+      } catch {
+        errorMsg.textContent = 'Something went wrong — please try again.';
+        errorMsg.classList.add('visible');
+      }
+    });
+  </script>
+</body>
+</html>

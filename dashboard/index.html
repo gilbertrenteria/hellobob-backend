@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HelloBob Dashboard</title>
+  <link rel="stylesheet" href="/dashboard/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div>
+      <span class="brand">HelloBob</span>
+      <span class="business-name" id="businessName"></span>
+    </div>
+    <button class="secondary small" id="logoutBtn">Log out</button>
+  </div>
+
+  <main>
+    <section>
+      <div class="stat-row" id="statRow"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head"><h2>Technicians &amp; hours</h2></div>
+      <p class="muted">Bob checks these hours before offering a real appointment slot. One shift per day for now — add time off below for vacations or half-days.</p>
+      <form class="inline-form" id="addTechForm">
+        <div>
+          <label for="techName">Add a technician</label>
+          <input id="techName" placeholder="e.g. Mike" required>
+        </div>
+        <button class="secondary" type="submit">Add</button>
+      </form>
+      <div id="technicianList"></div>
+    </section>
+
+    <section class="card">
+      <h2>Appointments</h2>
+      <table>
+        <thead><tr><th>Customer</th><th>Service</th><th>Address</th><th>When</th><th>Technician</th><th>Status</th></tr></thead>
+        <tbody id="appointmentsBody"><tr class="empty-row"><td colspan="6">Loading…</td></tr></tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <h2>Conversations</h2>
+      <table>
+        <thead><tr><th>Customer</th><th>Channel</th><th>Status</th><th>Started</th><th></th></tr></thead>
+        <tbody id="conversationsBody"><tr class="empty-row"><td colspan="5">Loading…</td></tr></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let businessId = null;
+
+    function minutesToTime(m) {
+      const h = Math.floor(m / 60), mm = m % 60;
+      return `${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+    }
+    function timeToMinutes(t) {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    }
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    async function api(path, opts) {
+      const res = await fetch(path, { headers: { 'content-type': 'application/json' }, ...opts });
+      if (res.status === 401) { window.location.href = '/dashboard/login.html'; throw new Error('not authenticated'); }
+      return res;
+    }
+
+    async function loadMe() {
+      const res = await api('/api/me');
+      const me = await res.json();
+      businessId = me.businessId;
+      document.getElementById('businessName').textContent = me.business.name;
+    }
+
+    async function loadStats() {
+      const res = await api(`/api/businesses/${businessId}/compliance-summary`);
+      const s = await res.json();
+      document.getElementById('statRow').innerHTML = `
+        <div class="stat-tile"><div class="n">${s.totalCustomers}</div><div class="label">Customers</div></div>
+        <div class="stat-tile"><div class="n">${s.withFullConsent}</div><div class="label">Opted in to reminders</div></div>
+        <div class="stat-tile"><div class="n">${s.optedOut}</div><div class="label">Opted out</div></div>
+      `;
+    }
+
+    function dayGridHtml(techId, availability) {
+      const byDay = Object.fromEntries(availability.map((a) => [a.day_of_week, a]));
+      return `<div class="days-grid">${DAYS.map((label, dow) => {
+        const a = byDay[dow];
+        return `
+          <div class="day-cell">
+            <label><input type="checkbox" data-role="day-on" data-day="${dow}" ${a ? 'checked' : ''}> ${label}</label>
+            <input type="time" data-role="start" data-day="${dow}" value="${a ? minutesToTime(a.start_minute) : '09:00'}">
+            <input type="time" data-role="end" data-day="${dow}" value="${a ? minutesToTime(a.end_minute) : '17:00'}">
+          </div>`;
+      }).join('')}</div>`;
+    }
+
+    function technicianCardHtml(tech) {
+      return `
+        <div class="tech-card" data-tech-id="${tech.id}">
+          <h3>${escapeHtml(tech.name)}</h3>
+          ${dayGridHtml(tech.id, tech.availability)}
+          <button class="secondary small" data-action="save-hours">Save hours</button>
+          <div class="inline-form" style="margin-top:16px">
+            <div><label>Time off starts</label><input type="datetime-local" data-role="timeoff-start"></div>
+            <div><label>Time off ends</label><input type="datetime-local" data-role="timeoff-end"></div>
+            <div><label>Reason (optional)</label><input type="text" data-role="timeoff-reason" placeholder="Vacation"></div>
+            <button class="secondary small" data-action="add-timeoff">Add time off</button>
+          </div>
+          <div class="error-msg" data-role="tech-error"></div>
+        </div>`;
+    }
+
+    async function loadTechnicians() {
+      const res = await api(`/api/businesses/${businessId}/technicians`);
+      const technicians = await res.json();
+      const list = document.getElementById('technicianList');
+      list.innerHTML = technicians.length
+        ? technicians.map(technicianCardHtml).join('')
+        : '<p class="muted">No technicians yet — add one above.</p>';
+
+      list.querySelectorAll('[data-action="save-hours"]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const card = btn.closest('.tech-card');
+          const techId = card.dataset.techId;
+          const rules = [];
+          card.querySelectorAll('[data-role="day-on"]').forEach((cb) => {
+            if (!cb.checked) return;
+            const day = cb.dataset.day;
+            const start = card.querySelector(`[data-role="start"][data-day="${day}"]`).value;
+            const end = card.querySelector(`[data-role="end"][data-day="${day}"]`).value;
+            rules.push({ dayOfWeek: Number(day), startMinute: timeToMinutes(start), endMinute: timeToMinutes(end) });
+          });
+          const errBox = card.querySelector('[data-role="tech-error"]');
+          errBox.classList.remove('visible');
+          const res = await api(`/api/technicians/${techId}/availability`, { method: 'PUT', body: JSON.stringify({ rules }) });
+          if (!res.ok) {
+            const json = await res.json().catch(() => ({}));
+            errBox.textContent = json.message || 'Could not save hours.';
+            errBox.classList.add('visible');
+          }
+        });
+      });
+
+      list.querySelectorAll('[data-action="add-timeoff"]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const card = btn.closest('.tech-card');
+          const techId = card.dataset.techId;
+          const startAt = card.querySelector('[data-role="timeoff-start"]').value;
+          const endAt = card.querySelector('[data-role="timeoff-end"]').value;
+          const reason = card.querySelector('[data-role="timeoff-reason"]').value;
+          const errBox = card.querySelector('[data-role="tech-error"]');
+          errBox.classList.remove('visible');
+          if (!startAt || !endAt) {
+            errBox.textContent = 'Pick a start and end time first.';
+            errBox.classList.add('visible');
+            return;
+          }
+          const res = await api(`/api/technicians/${techId}/time-off`, { method: 'POST', body: JSON.stringify({ startAt, endAt, reason }) });
+          if (res.ok) {
+            card.querySelector('[data-role="timeoff-start"]').value = '';
+            card.querySelector('[data-role="timeoff-end"]').value = '';
+            card.querySelector('[data-role="timeoff-reason"]').value = '';
+          } else {
+            const json = await res.json().catch(() => ({}));
+            errBox.textContent = json.message || 'Could not add time off.';
+            errBox.classList.add('visible');
+          }
+        });
+      });
+    }
+
+    document.getElementById('addTechForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('techName');
+      const name = input.value.trim();
+      if (!name) return;
+      await api(`/api/businesses/${businessId}/technicians`, { method: 'POST', body: JSON.stringify({ name }) });
+      input.value = '';
+      loadTechnicians();
+    });
+
+    async function loadAppointments() {
+      const res = await api(`/api/businesses/${businessId}/appointments`);
+      const rows = await res.json();
+      const body = document.getElementById('appointmentsBody');
+      body.innerHTML = rows.length
+        ? rows.map((r) => `
+            <tr>
+              <td>${escapeHtml(r.customer_name || r.phone_e164)}</td>
+              <td>${escapeHtml(r.service)}</td>
+              <td>${escapeHtml(r.address || '—')}</td>
+              <td>${escapeHtml(r.scheduled_at || '—')}</td>
+              <td>${escapeHtml(r.technician || '—')}</td>
+              <td>${escapeHtml(r.status)}</td>
+            </tr>`).join('')
+        : '<tr class="empty-row"><td colspan="6">No appointments yet.</td></tr>';
+    }
+
+    async function loadConversations() {
+      const res = await api(`/api/businesses/${businessId}/conversations`);
+      const rows = await res.json();
+      const body = document.getElementById('conversationsBody');
+      body.innerHTML = rows.length
+        ? rows.map((r) => `
+            <tr data-conv-id="${r.id}">
+              <td>${escapeHtml(r.customer_name || r.phone_e164)}</td>
+              <td>${escapeHtml(r.channel)}</td>
+              <td>${escapeHtml(r.status)}</td>
+              <td>${escapeHtml(r.started_at)}</td>
+              <td><button class="secondary small" data-action="view-messages">View</button></td>
+            </tr>
+            <tr class="messages-row" data-messages-for="${r.id}" style="display:none"><td colspan="5"></td></tr>`).join('')
+        : '<tr class="empty-row"><td colspan="5">No conversations yet.</td></tr>';
+
+      body.querySelectorAll('[data-action="view-messages"]').forEach((btn) => {
+        btn.addEventListener('click', async () => {
+          const convId = btn.closest('tr').dataset.convId;
+          const messagesRow = body.querySelector(`[data-messages-for="${convId}"]`);
+          const cell = messagesRow.querySelector('td');
+          if (messagesRow.style.display !== 'none') { messagesRow.style.display = 'none'; return; }
+          cell.textContent = 'Loading…';
+          messagesRow.style.display = '';
+          const res = await api(`/api/conversations/${convId}/messages`);
+          const messages = await res.json();
+          cell.innerHTML = messages.map((m) =>
+            `<div><strong>${m.direction === 'inbound' ? 'Customer' : 'Bob'}:</strong> ${escapeHtml(m.body)}</div>`
+          ).join('') || '<span class="muted">No messages.</span>';
+        });
+      });
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/dashboard/login.html';
+    });
+
+    (async function init() {
+      await loadMe();
+      await Promise.all([loadStats(), loadTechnicians(), loadAppointments(), loadConversations()]);
+    })();
+  </script>
+</body>
+</html>

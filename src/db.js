@@ -151,6 +151,27 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
+  -- Dashboard login. One business can have more than one user (an owner
+  -- plus e.g. an office manager) later, but nothing here assumes that yet.
+  -- password_hash is NULL until the invite is accepted — see auth/auth.js.
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    business_id INTEGER NOT NULL REFERENCES businesses(id),
+    email TEXT NOT NULL UNIQUE,
+    password_hash TEXT,
+    invite_token TEXT,
+    invite_expires_at TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  CREATE TABLE IF NOT EXISTS sessions (
+    token TEXT PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id),
+    business_id INTEGER NOT NULL REFERENCES businesses(id),
+    created_at TEXT NOT NULL DEFAULT (datetime('now')),
+    expires_at TEXT NOT NULL
+  );
+
   CREATE INDEX IF NOT EXISTS idx_consent_lookup ON consent_records(business_id, customer_id, type, created_at);
   CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id, created_at);
   CREATE INDEX IF NOT EXISTS idx_tech_availability ON tech_availability(technician_id, day_of_week);
@@ -248,6 +269,10 @@ export function createConversation(businessId, customerId, channel = 'sms') {
     `INSERT INTO conversations (business_id, customer_id, channel) VALUES (?, ?, ?)`
   ).run(businessId, customerId, channel);
   return db.prepare(`SELECT * FROM conversations WHERE id = ?`).get(Number(info.lastInsertRowid));
+}
+
+export function getConversation(conversationId) {
+  return db.prepare(`SELECT * FROM conversations WHERE id = ?`).get(conversationId) || null;
 }
 
 export function touchConversationInbound(conversationId) {
@@ -410,4 +435,50 @@ export function complianceSummary(businessId) {
   `).get(businessId).n;
   const optedOut = db.prepare(`SELECT COUNT(*) AS n FROM opt_outs WHERE business_id = ?`).get(businessId).n;
   return { totalCustomers, withFullConsent, optedOut };
+}
+
+// ---- Dashboard accounts & sessions (see auth/auth.js for the actual
+// password hashing / token logic — these are just the raw reads/writes) ---
+
+export function createUserInvite({ businessId, email, inviteToken, inviteExpiresAt }) {
+  const info = db.prepare(
+    `INSERT INTO users (business_id, email, invite_token, invite_expires_at) VALUES (?, ?, ?, ?)`
+  ).run(businessId, email, inviteToken, inviteExpiresAt);
+  return db.prepare(`SELECT * FROM users WHERE id = ?`).get(Number(info.lastInsertRowid));
+}
+
+export function getUserByEmail(email) {
+  return db.prepare(`SELECT * FROM users WHERE email = ?`).get(email) || null;
+}
+
+export function getUserByInviteToken(token) {
+  return db.prepare(`SELECT * FROM users WHERE invite_token = ?`).get(token) || null;
+}
+
+export function getUserById(id) {
+  return db.prepare(`SELECT * FROM users WHERE id = ?`).get(id) || null;
+}
+
+/** Sets the real password and clears the (now used) invite token. */
+export function setUserPassword(userId, passwordHash) {
+  db.prepare(
+    `UPDATE users SET password_hash = ?, invite_token = NULL, invite_expires_at = NULL WHERE id = ?`
+  ).run(passwordHash, userId);
+}
+
+export function createSession({ token, userId, businessId, expiresAt }) {
+  db.prepare(
+    `INSERT INTO sessions (token, user_id, business_id, expires_at) VALUES (?, ?, ?, ?)`
+  ).run(token, userId, businessId, expiresAt);
+}
+
+/** Returns the session row if it exists AND hasn't expired, else null (an expired row is treated as absent, not cleaned up here). */
+export function getValidSession(token) {
+  return db.prepare(
+    `SELECT * FROM sessions WHERE token = ? AND expires_at > datetime('now')`
+  ).get(token) || null;
+}
+
+export function deleteSession(token) {
+  db.prepare(`DELETE FROM sessions WHERE token = ?`).run(token);
 }

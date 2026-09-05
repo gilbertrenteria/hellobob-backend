@@ -9,19 +9,37 @@ process.env.PORT = '0';
 
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
+import { randomBytes } from 'node:crypto';
 
 const { createApp } = await import('../src/server.js');
-const { createBusiness } = await import('../src/db.js');
+const { createBusiness, createUserInvite, setUserPassword, createSession } = await import('../src/db.js');
 
 let server;
 let baseUrl;
 let business;
+let cookieHeader;
+
+// These routes are now gated by requireOwnBusiness (a real dashboard login is
+// required — see src/auth/auth.js), so tests need a real session for
+// `business`, not just an unauthenticated fetch. Building the session
+// straight from db.js (rather than driving /api/login) keeps this test
+// focused on the technician routes, not the login flow (that's
+// auth.test.js's job).
+function authedSessionFor(businessId) {
+  const email = `owner-${businessId}@example.com`;
+  const user = createUserInvite({ businessId, email, inviteToken: randomBytes(16).toString('hex'), inviteExpiresAt: new Date(Date.now() + 60_000).toISOString() });
+  setUserPassword(user.id, 'irrelevant-for-this-test');
+  const token = randomBytes(32).toString('hex');
+  createSession({ token, userId: user.id, businessId, expiresAt: new Date(Date.now() + 60 * 60 * 1000).toISOString() });
+  return `hellobob_session=${token}`;
+}
 
 before(async () => {
   server = createApp();
   await new Promise((resolve) => server.listen(0, resolve));
   baseUrl = `http://localhost:${server.address().port}`;
   business = createBusiness({ name: 'Desert Air', phoneE164: '+16195550188', state: 'CA', config: {} });
+  cookieHeader = authedSessionFor(business.id);
 });
 
 after(async () => {
@@ -29,10 +47,13 @@ after(async () => {
 });
 
 function postJson(path, body) {
-  return fetch(`${baseUrl}${path}`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  return fetch(`${baseUrl}${path}`, { method: 'POST', headers: { 'content-type': 'application/json', cookie: cookieHeader }, body: JSON.stringify(body) });
 }
 function putJson(path, body) {
-  return fetch(`${baseUrl}${path}`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+  return fetch(`${baseUrl}${path}`, { method: 'PUT', headers: { 'content-type': 'application/json', cookie: cookieHeader }, body: JSON.stringify(body) });
+}
+function getJson(path) {
+  return fetch(`${baseUrl}${path}`, { headers: { cookie: cookieHeader } });
 }
 
 test('creating a technician and reading it back', async () => {
@@ -41,14 +62,17 @@ test('creating a technician and reading it back', async () => {
   const tech = await created.json();
   assert.equal(tech.name, 'Mike');
 
-  const listed = await fetch(`${baseUrl}/api/businesses/${business.id}/technicians`);
+  const listed = await getJson(`/api/businesses/${business.id}/technicians`);
   const rows = await listed.json();
   assert.ok(rows.some((r) => r.id === tech.id && r.name === 'Mike'));
 });
 
-test('creating a technician for a nonexistent business is 404', async () => {
+test('creating a technician for a business that is not yours is 403', async () => {
+  // Your session only ever grants access to your own business — a
+  // nonexistent business ID is indistinguishable from someone else's, and
+  // both are correctly refused before the route even looks the ID up.
   const res = await postJson('/api/businesses/999999/technicians', { name: 'Ghost' });
-  assert.equal(res.status, 404);
+  assert.equal(res.status, 403);
 });
 
 test('creating a technician without a name is 400', async () => {
@@ -65,7 +89,7 @@ test('setting weekly availability, then reading it back on the technician list',
   });
   assert.equal(setRes.status, 200);
 
-  const listed = await fetch(`${baseUrl}/api/businesses/${business.id}/technicians`);
+  const listed = await getJson(`/api/businesses/${business.id}/technicians`);
   const rows = await listed.json();
   const dave = rows.find((r) => r.id === tech.id);
   assert.equal(dave.availability.length, 1);
