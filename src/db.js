@@ -90,6 +90,41 @@ db.exec(`
     created_at TEXT NOT NULL DEFAULT (datetime('now'))
   );
 
+  -- In-house booking engine (see src/booking/scheduler.js). A business can
+  -- have several technicians, each with their own recurring weekly hours
+  -- and one-off time off — this is what lets Bob check REAL availability
+  -- instead of just recording whatever time a human already agreed to.
+  CREATE TABLE IF NOT EXISTS technicians (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    business_id INTEGER NOT NULL REFERENCES businesses(id),
+    name TEXT NOT NULL,
+    active INTEGER NOT NULL DEFAULT 1,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
+  -- Recurring weekly working windows. A technician can have more than one
+  -- row per day (e.g. a split shift), so this is one window per row, not
+  -- one row per technician.
+  CREATE TABLE IF NOT EXISTS tech_availability (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    technician_id INTEGER NOT NULL REFERENCES technicians(id),
+    day_of_week INTEGER NOT NULL CHECK (day_of_week BETWEEN 0 AND 6), -- 0 = Sunday
+    start_minute INTEGER NOT NULL, -- minutes after midnight, business-local wall clock
+    end_minute INTEGER NOT NULL,
+    CHECK (end_minute > start_minute)
+  );
+
+  -- One-off blocks (vacation, a holiday, a half-day) that override the
+  -- recurring weekly hours above for a specific date/time range.
+  CREATE TABLE IF NOT EXISTS tech_time_off (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    technician_id INTEGER NOT NULL REFERENCES technicians(id),
+    start_at TEXT NOT NULL, -- ISO datetime, business-local wall clock (naive, no offset)
+    end_at TEXT NOT NULL,
+    reason TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
   CREATE TABLE IF NOT EXISTS opt_outs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     business_id INTEGER NOT NULL REFERENCES businesses(id),
@@ -118,7 +153,28 @@ db.exec(`
 
   CREATE INDEX IF NOT EXISTS idx_consent_lookup ON consent_records(business_id, customer_id, type, created_at);
   CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id, created_at);
+  CREATE INDEX IF NOT EXISTS idx_tech_availability ON tech_availability(technician_id, day_of_week);
+  CREATE INDEX IF NOT EXISTS idx_tech_time_off ON tech_time_off(technician_id, start_at, end_at);
 `);
+
+// ---- Migrations -------------------------------------------------------------
+// SQLite has no "ADD COLUMN IF NOT EXISTS", so guard each ALTER by checking
+// the table's current columns first. Runs once at boot; cheap either way.
+function addColumnIfMissing(table, column, ddl) {
+  const cols = db.prepare(`PRAGMA table_info(${table})`).all();
+  if (!cols.some((c) => c.name === column)) {
+    db.exec(`ALTER TABLE ${table} ADD COLUMN ${ddl}`);
+  }
+}
+
+// Added for the in-house booking engine: a real appointment now has a
+// specific technician (by id, not just a free-text name) and a duration, so
+// availability can be computed instead of just recorded. The old free-text
+// `technician` column stays for display/back-compat with rows saved before
+// this existed.
+addColumnIfMissing('appointments', 'technician_id', 'technician_id INTEGER REFERENCES technicians(id)');
+addColumnIfMissing('appointments', 'duration_minutes', 'duration_minutes INTEGER NOT NULL DEFAULT 60');
+addColumnIfMissing('appointments', 'ends_at', 'ends_at TEXT');
 
 // ---- Small typed helpers ---------------------------------------------------
 // Every other module goes through these instead of writing raw SQL, so the
@@ -216,11 +272,19 @@ export function getConversationMessages(conversationId, limit = 30) {
   ).all(conversationId, limit);
 }
 
-export function createAppointment({ businessId, customerId, conversationId, service, address, scheduledAt, technician }) {
+export function createAppointment({
+  businessId, customerId, conversationId, service, address, scheduledAt, technician,
+  technicianId, durationMinutes, endsAt,
+}) {
   const info = db.prepare(
-    `INSERT INTO appointments (business_id, customer_id, conversation_id, service, address, scheduled_at, technician)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`
-  ).run(businessId, customerId, conversationId || null, service, address || null, scheduledAt || null, technician || null);
+    `INSERT INTO appointments
+       (business_id, customer_id, conversation_id, service, address, scheduled_at, technician,
+        technician_id, duration_minutes, ends_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+  ).run(
+    businessId, customerId, conversationId || null, service, address || null, scheduledAt || null, technician || null,
+    technicianId || null, durationMinutes || 60, endsAt || null
+  );
   return db.prepare(`SELECT * FROM appointments WHERE id = ?`).get(Number(info.lastInsertRowid));
 }
 
@@ -230,6 +294,77 @@ export function listAppointments(businessId, limit = 50) {
      FROM appointments a JOIN customers c ON c.id = a.customer_id
      WHERE a.business_id = ? ORDER BY a.created_at DESC LIMIT ?`
   ).all(businessId, limit);
+}
+
+/** Non-cancelled appointments that overlap [rangeStart, rangeEnd), for conflict checks. */
+export function listAppointmentsInRange(businessId, rangeStart, rangeEnd, { technicianId } = {}) {
+  const rows = db.prepare(
+    `SELECT * FROM appointments
+     WHERE business_id = ? AND status != 'cancelled'
+       AND scheduled_at IS NOT NULL AND ends_at IS NOT NULL
+       AND scheduled_at < ? AND ends_at > ?
+       ${technicianId ? 'AND technician_id = ?' : ''}`
+  ).all(...(technicianId ? [businessId, rangeEnd, rangeStart, technicianId] : [businessId, rangeEnd, rangeStart]));
+  return rows;
+}
+
+// ---- Technicians & availability (in-house booking engine) -----------------
+
+export function createTechnician(businessId, name) {
+  const info = db.prepare(`INSERT INTO technicians (business_id, name) VALUES (?, ?)`).run(businessId, name);
+  return db.prepare(`SELECT * FROM technicians WHERE id = ?`).get(Number(info.lastInsertRowid));
+}
+
+export function getTechnician(technicianId) {
+  return db.prepare(`SELECT * FROM technicians WHERE id = ?`).get(technicianId);
+}
+
+export function listTechnicians(businessId, { activeOnly = true } = {}) {
+  return db.prepare(
+    `SELECT * FROM technicians WHERE business_id = ? ${activeOnly ? 'AND active = 1' : ''} ORDER BY id ASC`
+  ).all(businessId);
+}
+
+export function setTechnicianActive(technicianId, active) {
+  db.prepare(`UPDATE technicians SET active = ? WHERE id = ?`).run(active ? 1 : 0, technicianId);
+}
+
+/** Replaces ALL weekly availability rows for this technician with `rules`. */
+export function setTechAvailability(technicianId, rules) {
+  db.exec('BEGIN');
+  try {
+    db.prepare(`DELETE FROM tech_availability WHERE technician_id = ?`).run(technicianId);
+    const insert = db.prepare(
+      `INSERT INTO tech_availability (technician_id, day_of_week, start_minute, end_minute) VALUES (?, ?, ?, ?)`
+    );
+    for (const rule of rules) {
+      insert.run(technicianId, rule.dayOfWeek, rule.startMinute, rule.endMinute);
+    }
+    db.exec('COMMIT');
+  } catch (err) {
+    db.exec('ROLLBACK');
+    throw err;
+  }
+}
+
+export function getTechAvailability(technicianId) {
+  return db.prepare(
+    `SELECT * FROM tech_availability WHERE technician_id = ? ORDER BY day_of_week ASC, start_minute ASC`
+  ).all(technicianId);
+}
+
+export function addTimeOff(technicianId, startAt, endAt, reason) {
+  const info = db.prepare(
+    `INSERT INTO tech_time_off (technician_id, start_at, end_at, reason) VALUES (?, ?, ?, ?)`
+  ).run(technicianId, startAt, endAt, reason || null);
+  return db.prepare(`SELECT * FROM tech_time_off WHERE id = ?`).get(Number(info.lastInsertRowid));
+}
+
+/** Time-off rows for this technician overlapping [rangeStart, rangeEnd). */
+export function listTimeOff(technicianId, rangeStart, rangeEnd) {
+  return db.prepare(
+    `SELECT * FROM tech_time_off WHERE technician_id = ? AND start_at < ? AND end_at > ?`
+  ).all(technicianId, rangeEnd, rangeStart);
 }
 
 export function listConversations(businessId, limit = 50) {

@@ -12,6 +12,10 @@ import {
   getAppointmentsRoute,
   getComplianceSummaryRoute,
   getCustomerConsentRoute,
+  getTechniciansRoute,
+  createTechnicianRoute,
+  setTechnicianAvailabilityRoute,
+  addTechnicianTimeOffRoute,
 } from './routes/api.js';
 import { handleWebsiteChat } from './webchat/websiteChat.js';
 import { captureSignup, SignupError } from './signup.js';
@@ -124,6 +128,36 @@ export function createApp() {
       const consentMatch = path.match(/^\/api\/businesses\/(\d+)\/customers\/(\d+)\/consent$/);
       if (req.method === 'GET' && consentMatch) {
         const route = getCustomerConsentRoute(Number(consentMatch[1]), Number(consentMatch[2]));
+        return sendJson(res, route.status, route.json);
+      }
+
+      // In-house booking engine: technicians + their weekly hours/time off.
+      // See routes/api.js for the "not authenticated yet" caveat.
+      const techniciansMatch = path.match(/^\/api\/businesses\/(\d+)\/technicians$/);
+      if (techniciansMatch && req.method === 'GET') {
+        const route = getTechniciansRoute(Number(techniciansMatch[1]));
+        return sendJson(res, route.status, route.json);
+      }
+      if (techniciansMatch && req.method === 'POST') {
+        const body = await readJsonBody(req);
+        if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
+        const route = createTechnicianRoute(Number(techniciansMatch[1]), body);
+        return sendJson(res, route.status, route.json);
+      }
+
+      const availabilityMatch = path.match(/^\/api\/technicians\/(\d+)\/availability$/);
+      if (availabilityMatch && req.method === 'PUT') {
+        const body = await readJsonBody(req);
+        if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
+        const route = setTechnicianAvailabilityRoute(Number(availabilityMatch[1]), body);
+        return sendJson(res, route.status, route.json);
+      }
+
+      const timeOffMatch = path.match(/^\/api\/technicians\/(\d+)\/time-off$/);
+      if (timeOffMatch && req.method === 'POST') {
+        const body = await readJsonBody(req);
+        if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
+        const route = addTechnicianTimeOffRoute(Number(timeOffMatch[1]), body);
         return sendJson(res, route.status, route.json);
       }
 

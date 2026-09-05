@@ -29,6 +29,11 @@ export const exampleBusinessConfig = {
     { name: 'Emergency after-hours service', typicalPrice: '$189 diagnostic' },
   ],
 
+  // Informational only — real scheduling now lives in the `technicians` /
+  // `tech_availability` tables (see db.js + booking/scheduler.js), created
+  // via POST /api/businesses/:id/technicians and PUT
+  // /api/technicians/:id/availability. Bob checks THAT for real open slots;
+  // this flat list isn't read by the conversation engine.
   technicians: ['Mike', 'Dave', 'Junior'],
 
   emergencyPolicy:
