@@ -1,0 +1,16 @@
+{
+  "name": "hellobob-backend",
+  "version": "0.1.0",
+  "description": "HelloBob virtual front desk backend — AI conversation engine, Twilio SMS/voice webhooks, and consent/compliance tracking. Zero external dependencies (built for environments where npm registry access is restricted) — runs on Node.js 22+ using only built-in modules (node:sqlite, global fetch, process.loadEnvFile).",
+  "type": "module",
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "license": "UNLICENSED",
+  "private": true
+}
