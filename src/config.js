@@ -81,5 +81,5 @@ export const config = {
   // then Resend's own onboarding@resend.dev address works for testing.
   emailFrom: process.env.EMAIL_FROM || 'HelloBob <onboarding@resend.dev>',
   // Where new-signup notifications go — defaults to your own address.
-  notifyEmail: process.env.NOTIFY_EMAIL || 'gilbertrenteria@yahoo.com',
+  notifyEmail: process.env.NOTIFY_EMAIL || 'you@example.com',
 };
