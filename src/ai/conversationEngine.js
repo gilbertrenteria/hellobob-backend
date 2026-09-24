@@ -138,11 +138,14 @@ function buildSystemPrompt(business, { todayNaive }) {
  * @param {object} [deps] Real dependencies by default — tests pass a fake
  *   callClaude directly instead of mocking the module (same seam used in
  *   webchat/websiteChat.js, for the same reason: it's simpler than mocking
- *   ESM named exports and won't break across Node versions).
+ *   ESM named exports and won't break across Node versions). `deps.now` is a
+ *   business-local "YYYY-MM-DDTHH:MM" string (same shape as everything in
+ *   booking/scheduler.js) — tests pin it so availability checks stay
+ *   deterministic; production leaves it unset and uses the real clock.
  * @returns {Promise<{reply: string, category: string}|{reply: null}>}
  */
 export async function runConversationTurn({ business, customer, conversation, inboundText }, deps = {}) {
-  const { callClaude: callClaudeFn = callClaude } = deps;
+  const { callClaude: callClaudeFn = callClaude, now } = deps;
   const history = getConversationMessages(conversation.id, 30);
   const lastOutbound = [...history].reverse().find((m) => m.direction === 'outbound');
 
@@ -170,7 +173,7 @@ export async function runConversationTurn({ business, customer, conversation, in
     { role: 'user', content: inboundText },
   ];
 
-  const todayNaive = nowInBusinessTimezone(business.timezone);
+  const todayNaive = now || nowInBusinessTimezone(business.timezone);
   const schedulingConfigured = businessHasSchedulingConfigured(business.id);
 
   const { text, toolCalls } = await callClaudeFn({
