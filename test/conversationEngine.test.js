@@ -15,6 +15,10 @@ const { setTechAvailability } = await import('../src/db.js');
 const { runConversationTurn } = await import('../src/ai/conversationEngine.js');
 
 const MON = '2026-09-07'; // matches test/booking.test.js — a real Monday
+// The scheduler never offers a slot before `now`, so pin the clock to that
+// Monday (same as booking.test.js does) instead of letting the real date
+// decide — otherwise this suite starts failing the day MON is in the past.
+const NOW = `${MON}T00:00`;
 
 function setup(name = 'Desert Air') {
   const business = createBusiness({ name, phoneE164: `+1619555${Math.floor(Math.random() * 9000 + 1000)}`, state: 'CA', config: {} });
@@ -35,7 +39,7 @@ test('check_availability replies with a real, deterministic listing — never th
 
   const { reply, category } = await runConversationTurn(
     { business, customer, conversation, inboundText: 'Can I get AC repair Monday?' },
-    { callClaude: fakeCallClaude }
+    { callClaude: fakeCallClaude, now: NOW }
   );
 
   assert.ok(!reply.includes('Sure, let me check'), 'must not leak the model\'s own unverified text');
@@ -55,7 +59,7 @@ test('book_appointment locks in a real slot and blocks a double-booking attempt'
   });
   const first = await runConversationTurn(
     { business, customer, conversation, inboundText: '9am works, 123 Main St' },
-    { callClaude: bookFirst }
+    { callClaude: bookFirst, now: NOW }
   );
   assert.match(first.reply, /You're all set for Monday!/);
   assert.equal(first.category, 'consent_ask'); // full-consent ask appended after a real booking
@@ -69,7 +73,7 @@ test('book_appointment locks in a real slot and blocks a double-booking attempt'
   });
   const second = await runConversationTurn(
     { business, customer: other, conversation: otherConversation, inboundText: '9am works too, 456 Oak Ave' },
-    { callClaude: bookSecond }
+    { callClaude: bookSecond, now: NOW }
   );
   assert.match(second.reply, /just got taken/);
   assert.notEqual(second.category, 'consent_ask'); // never confirmed as booked
@@ -85,7 +89,7 @@ test('a business with no technicians configured falls back to recording the verb
 
   const { reply, category } = await runConversationTurn(
     { business, customer, conversation, inboundText: 'Thursday 2pm works' },
-    { callClaude: fakeCallClaude }
+    { callClaude: fakeCallClaude, now: NOW }
   );
   assert.match(reply, /Thursday at 2pm it is!/);
   assert.equal(category, 'consent_ask');
