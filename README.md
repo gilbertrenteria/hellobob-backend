@@ -1,163 +1,93 @@
-# HelloBob backend
+# HelloBob — AI front desk for home-service businesses
 
-The real, working backend for HelloBob — the AI front-desk assistant. It answers
-missed calls and texts on your Twilio number, has an AI-driven SMS conversation
-with the customer (via Claude), books appointments, and enforces the texting
-compliance rules (consent, quiet hours, STOP) worked out in the earlier planning
-docs — deterministically, in code, never left up to the AI to get right.
+When an HVAC company misses a call, HelloBob texts the caller back within seconds, has a real conversation, qualifies the job, and books it into an open technician slot — with the texting-compliance rules enforced in code, not left to the AI.
 
-## Why no dependencies
+Demo: https://gilbertrenteria.github.io/hellobob-backend/ · Built by Gilbert Renteria · 46 automated tests, zero npm dependencies
 
-This was built in an environment where `npm install` couldn't reach the npm
-registry at all. Rather than block on that, the whole backend is written using
-only what Node.js 22 ships with:
+## Screenshot
 
-- **`node:sqlite`** for the database — no native build step, no `better-sqlite3`.
-- **Global `fetch`** for every outbound HTTP call — the Anthropic API, the
-  Twilio REST API.
-- **`process.loadEnvFile()`** instead of `dotenv`.
-- **`node:http`** instead of Express — there are only a handful of routes.
-- **`node --test`** instead of Jest/Mocha.
-- Twilio's REST API and webhook-signature check are both implemented directly
-  against their (published, stable) HTTP contract in `src/telephony/twilio.js`,
-  instead of pulling in the `twilio` npm package.
+![HelloBob landing page](docs/hellobob.jpg)
 
-This isn't a workaround you'll need to unwind later — it's genuinely simpler to
-deploy (nothing to `npm install` in production, no native binaries to rebuild
-per platform) and there's nothing here you couldn't hand to another developer
-without explanation. If you ever want the official Twilio SDK for something
-fancier (call recordings, TwiML Bins), that's a self-contained swap of one file.
+## Why I built it
 
-## Running it locally
+I've run service-style businesses — a restaurant, construction work — where the phone rings while your hands are busy, and a call you can't pick up is usually a job that goes to whoever answers next. HelloBob is the front desk I wished I'd had: it texts back within seconds, asks the questions a good dispatcher would ask, and books the visit against the technicians' real availability instead of guessing. I wanted something an owner could switch on without hiring anyone, and something I could stand behind on the compliance side.
 
-```bash
-npm test          # runs the whole test suite — no API keys needed
-npm start         # starts the server on :3000 (or $PORT)
-```
+## What it does
 
-With no `.env` file, or with `ANTHROPIC_API_KEY`/`TWILIO_ACCOUNT_SID` unset, the
-server starts in **dry-run mode**: it logs exactly what it would have sent to
-Claude and Twilio instead of actually calling them, and skips real webhook
-signature validation. That means you can run the whole thing, hit it with curl
-or Postman, and watch the compliance logic and conversation flow work end to
-end before you've paid for or configured anything. `npm test` always runs in
-dry-run mode regardless of your `.env`, so it never makes a real API call.
+- **Missed call or text → SMS conversation.** Twilio reports the unanswered call; HelloBob sends one text back and then holds the conversation using Claude, scoped to that one business's hours, services, pricing, and policies.
+- **Qualifies the job.** Bob asks what's needed and where, and only proposes times after checking what's actually open.
+- **Books against real availability.** Claude can call two tools, `check_availability` and `book_appointment`, but the in-house booking engine — not the model — decides which slots exist, filters out anything already taken or in the past, and blocks double-bookings at the moment of booking.
+- **Compliance gate in code.** Every outbound text passes through `canSend()` first: which consent type it needs (reply-consent vs. full-consent), the business's quiet hours, tighter per-state rules (FL, OK, WA, MD, CT, TX, NY), and STOP/unsubscribe. The yes/no consent answer is parsed by a regex, never by the AI.
+- **Owner dashboard.** Invite-only accounts (admin creates the business, owner gets a "set your password" email), scrypt-hashed passwords, HttpOnly session cookies. Owners manage technicians and hours, time off, appointments, and conversation transcripts.
+- **Website "Ask Bob" chat + sign-up.** The marketing site's chat runs on the same backend; when a visitor is ready, Bob captures their business name, email, and phone, saves it, and sends both a welcome email and an owner notification via Resend.
+- **Dry-run mode with no keys.** With no API keys set, the server logs exactly what it would have sent to Claude and Twilio instead of calling them — the whole flow can be exercised end to end before paying for anything.
 
-## Getting your own API keys
+## How it's built
 
-1. **Anthropic (Claude)** — this is what makes Bob's replies actually
-   intelligent instead of scripted. Sign up at
-   [console.anthropic.com](https://console.anthropic.com), add a payment
-   method, and create a key under Settings → API Keys. Put it in `.env` as
-   `ANTHROPIC_API_KEY`.
+| Layer | What's used |
+|---|---|
+| Runtime | Node.js 22 built-ins only: `node:sqlite` (database), global `fetch` (all outbound HTTP), `node:http` (server), `node:crypto` (password hashing, sessions, webhook signatures), `process.loadEnvFile()`, `node --test` |
+| AI | Anthropic Claude Messages API, called directly with `fetch`; tool use for `check_availability` and `book_appointment` |
+| Telephony | Twilio REST API for SMS, plus inbound webhook signature verification, both implemented directly against Twilio's HTTP contract (no `twilio` package) |
+| Email | Resend API, called directly with `fetch` (invite emails, welcome emails, owner notifications) |
+| Front ends | Static HTML/CSS: `docs/` marketing site + "Ask Bob" chat, `dashboard/` owner dashboard |
 
-2. **Twilio** — this is the phone number Bob answers/texts from. Sign up at
-   [twilio.com](https://www.twilio.com), and from the console dashboard copy
-   your **Account SID** and **Auth Token** into `.env`. Buy a phone number
-   under Phone Numbers → Buy a Number — **make sure both SMS and Voice are
-   enabled on it**, not just SMS (see the note in
-   `src/compliance/stateRules.js` about Florida/Oklahoma's callback-number
-   theory — the number itself needs to be callable, which this can't be
-   verified by code, only by how you buy the number).
-
-3. **A2P 10DLC registration** — before Twilio will carry real production SMS
-   traffic (beyond trial-mode messages to verified numbers), you need to
-   register a "brand" (your business) and a "campaign" (what kind of texts
-   you're sending) in the Twilio console under Messaging → Regulatory
-   Compliance. This takes real business details (EIN, business address) and
-   can take a day or more to get approved. It's an account-level step in
-   Twilio's own console — nothing in this codebase can do it for you. Dry-run
-   mode lets you build and test everything else while that's pending.
-
-4. Set `PUBLIC_BASE_URL` once you've deployed somewhere (see below), or to
-   whatever a local tunnel (ngrok, Cloudflare Tunnel) gives you for local
-   testing against real Twilio traffic. In the Twilio console, set your phone
-   number's webhooks to `{PUBLIC_BASE_URL}/webhooks/sms` (Messaging) and
-   `{PUBLIC_BASE_URL}/webhooks/voice` (Voice, "A call comes in") — and set the
-   Voice number's **status callback URL** (or the equivalent "call status
-   changes" webhook) to the same `/webhooks/voice` endpoint so a missed call
-   is reported back as `CallStatus=no-answer` and triggers the text-back.
-
-## Deploying
-
-Any host that runs a long-lived Node.js 22+ process and gives you a public
-URL works — Railway, Render, and Fly.io are all reasonable, low-effort
-choices for something this size. The general shape on any of them:
-
-1. Push this folder to a git repo.
-2. Point the platform at it; set the start command to `npm start`.
-3. Set the environment variables from `.env.example` in the platform's
-   dashboard (never commit your real `.env`).
-4. Mount a persistent volume for the `data/` directory (where the SQLite file
-   lives), or point `DB_PATH` at one — otherwise your data resets on every
-   deploy/restart. If you outgrow SQLite (more concurrent writes than one
-   file can comfortably handle), swap `src/db.js` for a Postgres client; every
-   other module only calls the functions that file exports, not raw SQL.
-5. Set `PUBLIC_BASE_URL` to the URL the platform gives you, and point Twilio's
-   webhooks at it as described above.
-
-## How a conversation actually flows
-
-1. A call to the business's Twilio number goes unanswered → Twilio hits
-   `/webhooks/voice` with `CallStatus=no-answer` → the missed-call customer
-   gets **one** reactive text (`src/compliance/consent.js`'s
-   `REPLY_TEXT_WORDING_TEMPLATE`), and that single text is what creates
-   **reply-consent** — good for exactly one thing: the back-and-forth that
-   follows, nothing else.
-2. Whatever the customer texts back goes to `/webhooks/sms`, which hands it to
-   the AI conversation engine (`src/ai/conversationEngine.js`). Bob (the AI)
-   is scoped to this one business's hours/services/pricing/policies (stored
-   as JSON on the `businesses` row — see `src/businessConfig.example.js`),
-   and can call a `book_appointment` tool once service, address, and time are
-   settled.
-3. The moment an appointment is booked, the code — not the AI — appends the
-   one-time **full-consent** question (`FULL_CONSENT_WORDING`), and the
-   customer's next yes/no reply is parsed by a plain regex
-   (`parseYesNo`), never by the model. That's deliberate: whether a customer
-   is opted in to reminders/invoices/review-requests should never depend on
-   how an AI feels like interpreting an ambiguous reply.
-4. Every single outbound message — the missed-call text, Bob's replies, a
-   reminder, whatever — goes through `canSend()` in
-   `src/compliance/consent.js` first. It checks opt-out status, which
-   consent type the message needs, and quiet hours (narrowed further per
-   state by `src/compliance/stateRules.js`). If it says no, the message
-   doesn't go out, full stop — this function never looks at what the AI
-   wrote, only at what's on file for this customer.
-5. Texting **STOP** (or unsubscribe/cancel/etc.) at any point revokes
-   everything at once, logged as its own event, and is checked before
-   anything else runs.
-
-## Project layout
+**Why no dependencies.** This was built in an environment where `npm install` couldn't reach the npm registry, so the whole backend uses only what Node.js 22 ships with. It turned out to be simpler to deploy — nothing to install in production, no native binaries to rebuild per platform — and there's nothing here another developer couldn't read without explanation. If the official Twilio SDK is ever wanted for something fancier (call recordings, TwiML Bins), that's a self-contained swap of one file.
 
 ```
 src/
+  server.js                  node:http server, routes, session cookies, static files
   config.js                  env vars, dry-run detection
   db.js                      SQLite schema + all data access
   businessConfig.example.js  shape of a business's config JSON
-  compliance/
-    consent.js                the canSend() gate — the most important file here
-    quietHours.js              quiet-hours window logic
-    stateRules.js               per-state overrides (NOT legal advice — see below)
   ai/
-    claude.js                  Anthropic API client
-    conversationEngine.js      builds Bob's system prompt, runs one turn
+    claude.js                Anthropic API client
+    conversationEngine.js    Bob's system prompt, one conversation turn, tool handling
+  booking/
+    scheduler.js             real slot generation, conflict checks, double-booking guard
+  compliance/
+    consent.js               the canSend() gate — the most important file here
+    quietHours.js            quiet-hours window logic
+    stateRules.js            per-state overrides (NOT legal advice — see below)
   telephony/
-    twilio.js                  Twilio REST client + webhook signature check
-    webhooks.js                 incoming SMS/voice handlers
-  routes/
-    api.js                      JSON endpoints for a real owner dashboard
-  server.js                     node:http server wiring it all together
-test/
-  consent.test.js               compliance gate logic
-  quietHours.test.js             quiet-hours window logic
-  webhooks.integration.test.js   full request/response flow, dry-run
+    twilio.js                Twilio REST client + webhook signature check
+    webhooks.js              incoming SMS/voice handlers
+  auth/auth.js               invites, scrypt password hashing, sessions
+  email/resend.js            Resend client
+  webchat/websiteChat.js     "Ask Bob" website chat + capture_signup
+  signup.js                  sign-up capture + welcome/notification emails
+  routes/api.js              JSON endpoints for the owner dashboard
+dashboard/                   owner dashboard (login, accept-invite, main view)
+docs/                        marketing site (GitHub Pages demo)
+test/                        46 tests, node --test
 ```
 
-## Not legal advice
+## Design decisions
 
-`src/compliance/stateRules.js` and the consent design in general reflect the
-research done during planning, not a lawyer's review. Get an actual attorney
-familiar with TCPA/state telemarketing law to sign off on the wording and
-rules in those two files specifically before relying on this for real
-customers, especially before scaling volume in Texas or New York (flagged in
-the code as `confirmBeforeScaling`).
+- **Rules live in code, not in the model.** Consent, quiet hours, per-state rules, and STOP are checked by `canSend()` before any message leaves, and that function never looks at what the AI wrote — only at what's on file for the customer. A bad AI response cannot bypass a compliance rule.
+- **The model proposes, the booking engine decides.** Claude asks for availability through a tool call, but the reply the customer sees is the scheduler's own deterministic slot listing, never the model's paraphrase. Booking re-validates the slot at the moment of writing, so two conversations can't take the same time.
+- **Dry-run first.** With no keys configured the server runs the full flow and logs what it would have sent. `npm test` always runs in dry-run mode, so the suite never makes a real API call or costs money.
+
+## Run it locally
+
+```bash
+cp .env.example .env   # optional — with no keys set, the server runs in dry-run mode
+npm test               # 46 tests, no API keys needed
+npm start              # serves on :3000 (or $PORT); dashboard at /dashboard
+```
+
+Real keys (Anthropic, Twilio, Resend) go in `.env` per the comments in `.env.example`. Twilio also needs A2P 10DLC brand/campaign registration in its own console before it will carry production SMS, and the number should have both SMS and Voice enabled — dry-run mode lets you build and test everything else while that's pending.
+
+## Tests
+
+`npm test` → 46 passing. They cover the consent gate and quiet-hours logic (`consent`, `quietHours`), the booking engine's slot generation and double-booking guard (`booking`), the conversation engine's tool handling (`conversationEngine`), the technician/availability API (`technicians`), the website chat and sign-up capture (`websiteChat`), and an end-to-end SMS/voice webhook flow against the real HTTP server in dry-run mode (`webhooks.integration`).
+
+## Deploy
+
+Any host that runs a long-lived Node.js 22+ process with a public URL works — Railway, Render, and Fly.io are all low-effort choices at this size. Set the start command to `npm start`, add the variables from `.env.example` in the platform's dashboard (never commit a real `.env`), mount a persistent volume for `data/` (or point `DB_PATH` at one) so the SQLite file survives restarts, then set `PUBLIC_BASE_URL` and point Twilio's Messaging and Voice webhooks (including the call-status callback) at `{PUBLIC_BASE_URL}/webhooks/sms` and `/webhooks/voice`. If SQLite is ever outgrown, `src/db.js` is the only file that speaks SQL.
+
+**Not legal advice.** `src/compliance/stateRules.js` and the consent wording reflect research done during planning, not an attorney's review. Get a lawyer familiar with TCPA and state telemarketing law to sign off before relying on this for real customers, especially before scaling in Texas or New York (flagged in code as `confirmBeforeScaling`).
+
+## Contact
+
+gilbertrenteria@yahoo.com · linkedin.com/in/gilbertrenteria · gilbertrenteria.dev
