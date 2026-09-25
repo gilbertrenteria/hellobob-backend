@@ -13,7 +13,7 @@ import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 
 const { createApp } = await import('../src/server.js');
-const { createBusiness, createUserInvite, setUserPassword, createSession } = await import('../src/db.js');
+const { db, createBusiness, createUserInvite, setUserPassword, createSession } = await import('../src/db.js');
 const { exampleBusinessConfig } = await import('../src/businessConfig.example.js');
 
 let server;
@@ -29,6 +29,11 @@ before(async () => {
     timezone: 'America/New_York',
     config: exampleBusinessConfig,
   });
+  // The missed-call text-back respects quiet hours (compliance/quietHours.js),
+  // so without this the "missed call" test below only passes when the suite
+  // happens to run between 8am and 9pm Eastern. A 0–24 window means "always
+  // allowed" for this fixture; FL has no state-level quiet-hours override.
+  db.prepare(`UPDATE businesses SET quiet_hours_start = 0, quiet_hours_end = 24 WHERE id = ?`).run(business.id);
 
   // The dashboard-data routes this test reads back from (conversations,
   // messages, compliance-summary) are gated by a real login now — see
