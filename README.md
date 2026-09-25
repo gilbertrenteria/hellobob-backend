@@ -8,6 +8,16 @@ Demo: https://gilbertrenteria.github.io/hellobob-backend/ · Built by Gilbert Re
 
 ![HelloBob landing page](docs/hellobob.jpg)
 
+## Screenshots
+
+Ask Bob website chat
+
+![Ask Bob website chat](docs/hellobob-chat.jpg)
+
+Owner dashboard (demo data)
+
+![Owner dashboard (demo data)](docs/hellobob-dashboard.jpg)
+
 ## Why I built it
 
 I've run service-style businesses — a restaurant, construction work — where the phone rings while your hands are busy, and a call you can't pick up is usually a job that goes to whoever answers next. HelloBob is the front desk I wished I'd had: it texts back within seconds, asks the questions a good dispatcher would ask, and books the visit against the technicians' real availability instead of guessing. I wanted something an owner could switch on without hiring anyone, and something I could stand behind on the compliance side.
