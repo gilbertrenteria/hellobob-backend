@@ -1,0 +1,124 @@
+# Render Blueprint for the HelloBob backend + public demo.
+# Docs: https://render.com/docs/blueprint-spec
+#
+# How it's used: in Render, New + → Blueprint → pick this repo. Render reads
+# this file, creates the service below, and prompts you for any env var
+# marked `sync: false` (just ANTHROPIC_API_KEY). See DEPLOY.md for the
+# click-by-click version.
+
+services:
+  - type: web
+    name: hellobob-backend
+    runtime: node
+    plan: free
+    region: oregon
+    # Zero npm dependencies, so this installs nothing — kept so Render's
+    # build step has something conventional to run.
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: NODE_VERSION
+        value: 22.12.0
+
+      # ---- Public demo -------------------------------------------------
+      # Seeds the "Coastline Air & Heat" sample workspace on boot when the
+      # database is empty, and shows the demo banner in the dashboard.
+      # Demo login: demo@hellobob.example / front-desk-demo (a public
+      # portfolio credential, not a secret — override with
+      # DEMO_OWNER_PASSWORD if you want a different one).
+      - key: DEMO_MODE
+        value: "true"
+
+      # The FREE plan has no persistent disk, so the SQLite file lives in
+      # /tmp and is wiped on every deploy/restart (and after the ~15 min
+      # idle spin-down). That's fine for the demo: DEMO_MODE re-seeds fresh
+      # sample data on every boot. For real data, see the Starter block below.
+      - key: DB_PATH
+        value: /tmp/hellobob.db
+
+      # Must match the service name above: https://<name>.onrender.com
+      - key: PUBLIC_BASE_URL
+        value: https://hellobob-backend.onrender.com
+
+      # Which sites may call /api/website-chat and /api/signup from a
+      # browser. "*" while the marketing site moves between hosts; tighten
+      # later to e.g.
+      # "https://gilbertrenteria.github.io,https://gilbertrenteria.dev"
+      # (comma-separated list is supported).
+      - key: WEBSITE_CHAT_ALLOWED_ORIGIN
+        value: "*"
+
+      # ---- Claude -------------------------------------------------------
+      # sync: false → Render asks you to paste this at Blueprint time and
+      # never stores it in the repo. With this set, "Ask Bob" and the SMS
+      # engine are live; with it blank, the server answers in dry-run mode.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: ANTHROPIC_MODEL
+        value: claude-sonnet-5
+
+      # Spending guardrails for the public chat endpoint (in-memory counters).
+      - key: WEBSITE_CHAT_DAILY_CAP
+        value: "300"
+      - key: WEBSITE_CHAT_MAX_PER_IP_PER_HOUR
+        value: "30"
+
+      # ---- Not set on purpose ------------------------------------------
+      # TWILIO_ACCOUNT_SID / TWILIO_AUTH_TOKEN / TWILIO_FROM_NUMBER: leave
+      # unset for the demo — SMS sends are logged and skipped, everything
+      # else runs. RESEND_API_KEY / EMAIL_FROM / NOTIFY_EMAIL: same, emails
+      # are logged instead of sent. ADMIN_KEY: unset disables the admin
+      # routes. Add any of these later in the Render dashboard → Environment.
+
+# ---------------------------------------------------------------------------
+# ALTERNATIVE: Starter plan with a persistent disk (real data that survives
+# restarts, no cold starts). Replace the service above with this block —
+# the only differences are `plan`, the `disk` section and DB_PATH.
+#
+# services:
+#   - type: web
+#     name: hellobob-backend
+#     runtime: node
+#     plan: starter
+#     region: oregon
+#     buildCommand: npm install
+#     startCommand: npm start
+#     healthCheckPath: /health
+#     autoDeploy: true
+#     disk:
+#       name: hellobob-data
+#       mountPath: /data
+#       sizeGB: 1
+#     envVars:
+#       - key: NODE_VERSION
+#         value: 22.12.0
+#       - key: DB_PATH
+#         value: /data/hellobob.db
+#       # Drop DEMO_MODE (or set it "false") once you onboard a real
+#       # business — the seed only ever runs on an EMPTY database anyway.
+#       - key: DEMO_MODE
+#         value: "false"
+#       - key: PUBLIC_BASE_URL
+#         value: https://hellobob-backend.onrender.com
+#       - key: WEBSITE_CHAT_ALLOWED_ORIGIN
+#         value: "https://gilbertrenteria.github.io,https://gilbertrenteria.dev"
+#       - key: ANTHROPIC_API_KEY
+#         sync: false
+#       - key: ANTHROPIC_MODEL
+#         value: claude-sonnet-5
+#       - key: WEBSITE_CHAT_DAILY_CAP
+#         value: "300"
+#       - key: WEBSITE_CHAT_MAX_PER_IP_PER_HOUR
+#         value: "30"
+#       - key: TWILIO_ACCOUNT_SID
+#         sync: false
+#       - key: TWILIO_AUTH_TOKEN
+#         sync: false
+#       - key: TWILIO_FROM_NUMBER
+#         sync: false
+#       - key: RESEND_API_KEY
+#         sync: false
+#       - key: ADMIN_KEY
+#         generateValue: true

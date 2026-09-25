@@ -2,7 +2,7 @@
 
 When an HVAC company misses a call, HelloBob texts the caller back within seconds, has a real conversation, qualifies the job, and books it into an open technician slot — with the texting-compliance rules enforced in code, not left to the AI.
 
-Demo: https://gilbertrenteria.github.io/hellobob-backend/ · Built by Gilbert Renteria · 46 automated tests, zero npm dependencies
+Demo: https://gilbertrenteria.github.io/hellobob-backend/ · Built by Gilbert Renteria · 64 automated tests, zero npm dependencies
 
 ## Screenshot
 
@@ -47,7 +47,8 @@ I've run service-style businesses — a restaurant, construction work — where 
 ```
 src/
   server.js                  node:http server, routes, session cookies, static files
-  config.js                  env vars, dry-run detection
+  config.js                  env vars, dry-run detection, demo mode
+  demoSeed.js                DEMO_MODE sample workspace, seeded on an empty DB
   db.js                      SQLite schema + all data access
   businessConfig.example.js  shape of a business's config JSON
   ai/
@@ -69,7 +70,7 @@ src/
   routes/api.js              JSON endpoints for the owner dashboard
 dashboard/                   owner dashboard (login, accept-invite, main view)
 docs/                        marketing site (GitHub Pages demo)
-test/                        46 tests, node --test
+test/                        64 tests, node --test
 ```
 
 ## Design decisions
@@ -78,23 +79,31 @@ test/                        46 tests, node --test
 - **The model proposes, the booking engine decides.** Claude asks for availability through a tool call, but the reply the customer sees is the scheduler's own deterministic slot listing, never the model's paraphrase. Booking re-validates the slot at the moment of writing, so two conversations can't take the same time.
 - **Dry-run first.** With no keys configured the server runs the full flow and logs what it would have sent. `npm test` always runs in dry-run mode, so the suite never makes a real API call or costs money.
 
+## Demo
+
+- Live dashboard: https://hellobob-backend.onrender.com/dashboard — log in as `demo@hellobob.example` / `front-desk-demo` (a public demo login, not a real account).
+- Set `DEMO_MODE=true` and an empty database is seeded on boot with a fictional HVAC business ("Coastline Air & Heat", Houston): 3 technicians, 6 customers, 3 SMS transcripts, consent history, and 8 appointments dated relative to today (`src/demoSeed.js`).
+- On Render's free plan the SQLite file lives in `/tmp`, so every restart or redeploy wipes the workspace and re-seeds it — anything added in the dashboard is gone after the next restart. Set `DEMO_OWNER_PASSWORD` to change the demo password.
+- Deploying it yourself: see [DEPLOY.md](DEPLOY.md) (Render Blueprint in `render.yaml`).
+
 ## Run it locally
 
 ```bash
 cp .env.example .env   # optional — with no keys set, the server runs in dry-run mode
-npm test               # 46 tests, no API keys needed
+npm test               # 64 tests, no API keys needed
 npm start              # serves on :3000 (or $PORT); dashboard at /dashboard
+DEMO_MODE=true npm start   # same, with the sample workspace seeded on first boot
 ```
 
 Real keys (Anthropic, Twilio, Resend) go in `.env` per the comments in `.env.example`. Twilio also needs A2P 10DLC brand/campaign registration in its own console before it will carry production SMS, and the number should have both SMS and Voice enabled — dry-run mode lets you build and test everything else while that's pending.
 
 ## Tests
 
-`npm test` → 46 passing. They cover the consent gate and quiet-hours logic (`consent`, `quietHours`), the booking engine's slot generation and double-booking guard (`booking`), the conversation engine's tool handling (`conversationEngine`), the technician/availability API (`technicians`), the website chat and sign-up capture (`websiteChat`), and an end-to-end SMS/voice webhook flow against the real HTTP server in dry-run mode (`webhooks.integration`).
+`npm test` → 64 passing. They cover the consent gate and quiet-hours logic (`consent`, `quietHours`), the booking engine's slot generation and double-booking guard (`booking`), the conversation engine's tool handling (`conversationEngine`), the technician/availability API (`technicians`), the website chat and sign-up capture (`websiteChat`), and an end-to-end SMS/voice webhook flow against the real HTTP server in dry-run mode (`webhooks.integration`), plus the demo seed (idempotent, owner can log in, dates stay relative) and deployment shape (`/health`, comma-list CORS, SMS log-and-skip when Twilio is unset) (`demo`, `deploy`).
 
 ## Deploy
 
-Any host that runs a long-lived Node.js 22+ process with a public URL works — Railway, Render, and Fly.io are all low-effort choices at this size. Set the start command to `npm start`, add the variables from `.env.example` in the platform's dashboard (never commit a real `.env`), mount a persistent volume for `data/` (or point `DB_PATH` at one) so the SQLite file survives restarts, then set `PUBLIC_BASE_URL` and point Twilio's Messaging and Voice webhooks (including the call-status callback) at `{PUBLIC_BASE_URL}/webhooks/sms` and `/webhooks/voice`. If SQLite is ever outgrown, `src/db.js` is the only file that speaks SQL.
+The quickest path is Render: `render.yaml` is a ready Blueprint and [DEPLOY.md](DEPLOY.md) walks through it click by click. More generally, any host that runs a long-lived Node.js 22+ process with a public URL works — Railway, Render, and Fly.io are all low-effort choices at this size. Set the start command to `npm start`, add the variables from `.env.example` in the platform's dashboard (never commit a real `.env`), mount a persistent volume for `data/` (or point `DB_PATH` at one) so the SQLite file survives restarts, then set `PUBLIC_BASE_URL` and point Twilio's Messaging and Voice webhooks (including the call-status callback) at `{PUBLIC_BASE_URL}/webhooks/sms` and `/webhooks/voice`. If SQLite is ever outgrown, `src/db.js` is the only file that speaks SQL.
 
 **Not legal advice.** `src/compliance/stateRules.js` and the consent wording reflect research done during planning, not an attorney's review. Get a lawyer familiar with TCPA and state telemarketing law to sign off before relying on this for real customers, especially before scaling in Texas or New York (flagged in code as `confirmBeforeScaling`).
 
