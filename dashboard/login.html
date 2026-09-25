@@ -19,8 +19,23 @@
         <button class="primary" type="submit">Log in</button>
       </form>
       <div class="error-msg" id="errorMsg"></div>
+      <p class="muted" id="demoHint" hidden style="margin:18px 0 0">
+        Demo workspace — sample data. Log in as <strong id="demoEmail"></strong> with the demo password from the project README.
+      </p>
     </div>
   </div>
+
+  <script>
+    // Public demo (DEMO_MODE=true): surface the demo email so visitors
+    // aren't guessing. The endpoint reveals nothing but the mode + email.
+    fetch('/api/demo-info').then((r) => r.json()).then((info) => {
+      if (!info.demo) return;
+      document.getElementById('demoEmail').textContent = info.ownerEmail;
+      document.getElementById('demoHint').hidden = false;
+      const email = document.getElementById('email');
+      if (!email.value) email.value = info.ownerEmail;
+    }).catch(() => {});
+  </script>
 
   <script>
     const form = document.getElementById('loginForm');

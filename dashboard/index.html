@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="/dashboard/style.css">
 </head>
 <body>
+  <div class="demo-banner" id="demoBanner" role="status" hidden>
+    <strong>Demo workspace</strong> — sample data, resets on redeploy. Feel free to add a technician or change hours; nothing here is real.
+  </div>
+
   <div class="topbar">
     <div>
       <span class="brand">HelloBob</span>
@@ -77,6 +81,9 @@
       const me = await res.json();
       businessId = me.businessId;
       document.getElementById('businessName').textContent = me.business.name;
+      // Public demo deployment (DEMO_MODE=true on the server) — show the
+      // persistent "sample data" banner so nobody mistakes this for real.
+      document.getElementById('demoBanner').hidden = !me.demo;
     }
 
     async function loadStats() {

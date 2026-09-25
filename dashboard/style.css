@@ -80,6 +80,21 @@ button.small { padding: 6px 10px; font-size: 13px; }
 }
 .error-msg.visible { display: block; }
 
+/* ---- Demo-mode banner (public sample workspace) ---- */
+
+.demo-banner {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: #fff4d6;
+  color: #5c4300;
+  border-bottom: 1px solid #efd58a;
+  padding: 8px 24px;
+  font-size: 13px;
+  text-align: center;
+}
+.demo-banner[hidden] { display: none; }
+
 /* ---- Main dashboard layout ---- */
 
 .topbar {
