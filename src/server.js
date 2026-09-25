@@ -233,7 +233,7 @@ export function createApp() {
       if (req.method === 'GET' && path === '/api/demo-info') {
         return sendJson(res, 200, {
           demo: config.demoMode,
-          ...(config.demoMode ? { ownerEmail: config.demoOwnerEmail, businessName: 'Coastline Air & Heat' } : {}),
+          ...(config.demoMode ? { ownerEmail: config.demoOwnerEmail, ownerPassword: config.demoOwnerPassword, businessName: 'Coastline Air & Heat' } : {}),
         });
       }
 
