@@ -24,6 +24,13 @@ export async function sendSms(toE164, body) {
     console.log(`[DRY RUN] Would send SMS to ${toE164}: ${body}`);
     return { sid: 'DRYRUN', status: 'dry_run' };
   }
+  // Claude may be live (ANTHROPIC_API_KEY set) while Twilio isn't set up
+  // yet — e.g. the public demo. Log and skip rather than throw, so the
+  // conversation is still recorded and the dashboard still shows it.
+  if (!config.twilioConfigured) {
+    console.log(`[twilio] not configured (TWILIO_* unset) — skipped SMS to ${toE164}: ${body}`);
+    return { sid: 'SKIPPED', status: 'skipped_unconfigured' };
+  }
 
   const params = new URLSearchParams({
     To: toE164,
