@@ -5664,6 +5664,8 @@
       launcher.setAttribute('aria-expanded', 'false');
     }
     launcher.addEventListener('click', open);
+    // Deep link: gilbertrenteria.dev sends visitors to #ask-bob to open the chat directly.
+    if (location.hash === '#ask-bob') { setTimeout(function(){ try { open(); } catch (e) {} }, 600); }
     if(closeBtn) closeBtn.addEventListener('click', close);
     panel.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
 
