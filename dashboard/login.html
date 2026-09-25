@@ -20,7 +20,9 @@
       </form>
       <div class="error-msg" id="errorMsg"></div>
       <p class="muted" id="demoHint" hidden style="margin:18px 0 0">
-        Demo workspace — sample data. Log in as <strong id="demoEmail"></strong> with the demo password from the project README.
+        Demo workspace — sample data, nothing here is real.<br>
+        Email: <strong id="demoEmail"></strong><br>
+        Password: <strong id="demoPassword"></strong>
       </p>
     </div>
   </div>
@@ -31,6 +33,7 @@
     fetch('/api/demo-info').then((r) => r.json()).then((info) => {
       if (!info.demo) return;
       document.getElementById('demoEmail').textContent = info.ownerEmail;
+      if (info.ownerPassword) document.getElementById('demoPassword').textContent = info.ownerPassword;
       document.getElementById('demoHint').hidden = false;
       const email = document.getElementById('email');
       if (!email.value) email.value = info.ownerEmail;
