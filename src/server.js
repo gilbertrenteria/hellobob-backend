@@ -23,7 +23,8 @@ import {
 } from './routes/api.js';
 import { handleWebsiteChat } from './webchat/websiteChat.js';
 import { captureSignup, SignupError } from './signup.js';
-import { listSignups, getTechnician, getConversation } from './db.js';
+import { db, listSignups, getTechnician, getConversation } from './db.js';
+import { seedDemoIfEmpty } from './demoSeed.js';
 import { login, logout, acceptInvite, createBusinessWithOwner, sessionFromToken, AuthError } from './auth/auth.js';
 
 const DASHBOARD_DIR = new URL('../dashboard/', import.meta.url).pathname;
@@ -146,10 +147,33 @@ function clientIp(req) {
 // unlike every other route here, which is only ever called server-to-server
 // (Twilio) or from your own dashboard. CORS headers are what let a browser
 // on a different origin call it at all.
-function setCors(res) {
-  res.setHeader('Access-Control-Allow-Origin', config.websiteChatAllowedOrigin);
+//
+// WEBSITE_CHAT_ALLOWED_ORIGIN is either '*' or a comma-separated list of
+// exact origins (e.g. "https://gilbertrenteria.github.io,https://gilbertrenteria.dev").
+// A browser only accepts ONE value in Access-Control-Allow-Origin, so for a
+// list we echo back the request's Origin when it's on the list (and send
+// Vary: Origin so caches keep the per-origin answers apart). An origin not on
+// the list gets no matching header, which is what makes the browser block it.
+const ALLOWED_ORIGINS = config.websiteChatAllowedOrigin
+  .split(',')
+  .map((o) => o.trim().replace(/\/$/, ''))
+  .filter(Boolean);
+
+/** @returns {string|null} the Access-Control-Allow-Origin value for this request, or null if the origin isn't allowed. */
+export function corsOriginFor(requestOrigin) {
+  if (ALLOWED_ORIGINS.includes('*')) return '*';
+  if (!requestOrigin) return null;
+  const normalized = requestOrigin.replace(/\/$/, '');
+  return ALLOWED_ORIGINS.some((o) => o.toLowerCase() === normalized.toLowerCase()) ? normalized : null;
+}
+
+function setCors(req, res) {
+  const allow = corsOriginFor(req.headers.origin);
+  if (allow) res.setHeader('Access-Control-Allow-Origin', allow);
+  if (allow !== '*') res.setHeader('Vary', 'Origin');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'content-type');
+  res.setHeader('Access-Control-Max-Age', '600');
 }
 
 export function createApp() {
@@ -199,7 +223,18 @@ export function createApp() {
         const session = currentSession(req);
         if (!session) return sendJson(res, 401, { error: 'not_authenticated' });
         const business = getBusinessRoute(session.businessId);
-        return sendJson(res, 200, { businessId: session.businessId, business: business.json });
+        return sendJson(res, 200, { businessId: session.businessId, business: business.json, demo: config.demoMode });
+      }
+
+      // Lets the dashboard (and the marketing site, if it wants to) know
+      // this is the public demo workspace, so it can show the sample-data
+      // banner. Public and unauthenticated on purpose — it reveals nothing
+      // but the mode.
+      if (req.method === 'GET' && path === '/api/demo-info') {
+        return sendJson(res, 200, {
+          demo: config.demoMode,
+          ...(config.demoMode ? { ownerEmail: config.demoOwnerEmail, businessName: 'Coastline Air & Heat' } : {}),
+        });
       }
 
       if (req.method === 'POST' && path === '/api/logout') {
@@ -326,12 +361,12 @@ export function createApp() {
 
       if (path === '/api/website-chat') {
         if (req.method === 'OPTIONS') {
-          setCors(res);
+          setCors(req, res);
           res.writeHead(204);
           return res.end();
         }
         if (req.method === 'POST') {
-          setCors(res);
+          setCors(req, res);
           const body = await readJsonBody(req);
           if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
           try {
@@ -356,12 +391,12 @@ export function createApp() {
       // capture_signup tool call, so both land in the exact same place.
       if (path === '/api/signup') {
         if (req.method === 'OPTIONS') {
-          setCors(res);
+          setCors(req, res);
           res.writeHead(204);
           return res.end();
         }
         if (req.method === 'POST') {
-          setCors(res);
+          setCors(req, res);
           const body = await readJsonBody(req);
           if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
           try {
@@ -408,8 +443,19 @@ export function createApp() {
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {
+  // The database (and its directory) is created/migrated when db.js is
+  // imported above, so it's ready by the time we get here.
+  if (config.demoMode) seedDemoIfEmpty(db, config);
+
   const app = createApp();
-  app.listen(config.port, () => {
-    console.log(`HelloBob backend listening on port ${config.port}${config.dryRun ? ' (DRY RUN — no API keys set)' : ''}`);
+  // 0.0.0.0 so the process is reachable from outside its container (Render,
+  // Docker, Fly, ...) — not just from localhost. PORT is provided by the host.
+  app.listen(config.port, '0.0.0.0', () => {
+    console.log(
+      `HelloBob backend listening on port ${config.port}` +
+      `${config.dryRun ? ' (DRY RUN — no API keys set)' : ''}` +
+      `${!config.dryRun && !config.twilioConfigured ? ' (Twilio not configured — SMS sends are logged, not sent)' : ''}` +
+      `${config.demoMode ? ' [DEMO MODE]' : ''}`
+    );
   });
 }

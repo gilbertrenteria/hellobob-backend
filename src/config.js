@@ -47,8 +47,27 @@ export const config = {
 
   // When true, Twilio and Anthropic calls are logged instead of actually
   // sent — lets you run the server and exercise the logic before you have
-  // real API keys. Defaults on if the keys aren't set.
+  // real API keys. Defaults on if NEITHER key is set. The two services are
+  // also checked individually (see twilioConfigured below and
+  // ai/claude.js): with only ANTHROPIC_API_KEY set, Claude is live while
+  // SMS sends are logged-and-skipped — which is exactly the public-demo
+  // setup on Render.
   dryRun: process.env.DRY_RUN === 'true' || (!process.env.ANTHROPIC_API_KEY && !process.env.TWILIO_ACCOUNT_SID),
+
+  // True only when all three Twilio values are present. telephony/twilio.js
+  // skips (and logs) a send when this is false instead of throwing, so a
+  // deployment with Claude but no Twilio yet still runs end to end.
+  twilioConfigured: !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER),
+
+  // Public demo workspace (see src/demoSeed.js). When true and the database
+  // is empty, the server seeds a fictional HVAC business with sample
+  // technicians, customers, conversations and appointments, plus a demo
+  // owner login, so the hosted dashboard has something to show. The demo
+  // password is a public portfolio credential shown on the marketing site,
+  // not a secret — override it with DEMO_OWNER_PASSWORD if you want.
+  demoMode: process.env.DEMO_MODE === 'true',
+  demoOwnerEmail: 'demo@hellobob.example',
+  demoOwnerPassword: process.env.DEMO_OWNER_PASSWORD || 'front-desk-demo',
 
   // The detailed 15-section setup questionnaire ("Let's Build Your Bob") —
   // still a real Jotform, kept as-is since it's already built out. The
