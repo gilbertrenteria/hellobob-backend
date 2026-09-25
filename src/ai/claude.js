@@ -16,7 +16,10 @@ const API_VERSION = '2023-06-01';
  * @returns {Promise<{text: string, toolCalls: Array<{name: string, input: object}>}>}
  */
 export async function callClaude({ system, messages, tools }) {
-  if (config.dryRun) {
+  // Also short-circuits when only Twilio is configured (no Anthropic key) —
+  // a request with an empty x-api-key would just 401, so answer with the
+  // dry-run placeholder instead of failing the whole turn.
+  if (config.dryRun || !config.anthropicApiKey) {
     console.log('[DRY RUN] Would call Claude with system prompt:', system.slice(0, 120), '...');
     const lastUser = [...messages].reverse().find((m) => m.role === 'user');
     return {
