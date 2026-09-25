@@ -81,7 +81,7 @@ test/                        64 tests, node --test
 
 ## Demo
 
-- Live dashboard: https://hellobob-backend.onrender.com/dashboard — log in as `demo@hellobob.example` / `front-desk-demo` (a public demo login, not a real account).
+- Live dashboard: https://hellobob-backend.onrender.com/dashboard — log in as `demo@hellobob.example` / `demo2` (a public demo login, not a real account).
 - Set `DEMO_MODE=true` and an empty database is seeded on boot with a fictional HVAC business ("Coastline Air & Heat", Houston): 3 technicians, 6 customers, 3 SMS transcripts, consent history, and 8 appointments dated relative to today (`src/demoSeed.js`).
 - On Render's free plan the SQLite file lives in `/tmp`, so every restart or redeploy wipes the workspace and re-seeds it — anything added in the dashboard is gone after the next restart. Set `DEMO_OWNER_PASSWORD` to change the demo password.
 - Deploying it yourself: see [DEPLOY.md](DEPLOY.md) (Render Blueprint in `render.yaml`).

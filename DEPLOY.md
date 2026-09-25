@@ -32,7 +32,7 @@ You need two things before you start:
    and log in with
 
    - Email: `demo@hellobob.example`
-   - Password: `front-desk-demo`
+   - Password: `demo2`
 
    You'll see the sample business "Coastline Air & Heat" with technicians,
    upcoming appointments and text conversations, plus a yellow *Demo

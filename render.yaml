@@ -25,7 +25,7 @@ services:
       # ---- Public demo -------------------------------------------------
       # Seeds the "Coastline Air & Heat" sample workspace on boot when the
       # database is empty, and shows the demo banner in the dashboard.
-      # Demo login: demo@hellobob.example / front-desk-demo (a public
+      # Demo login: demo@hellobob.example / demo2 (a public
       # portfolio credential, not a secret — override with
       # DEMO_OWNER_PASSWORD if you want a different one).
       - key: DEMO_MODE
