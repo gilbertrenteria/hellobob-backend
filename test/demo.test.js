@@ -42,7 +42,7 @@ after(async () => {
 test('config exposes demo mode and the default demo credentials', () => {
   assert.equal(config.demoMode, true);
   assert.equal(config.demoOwnerEmail, 'demo@hellobob.example');
-  assert.equal(config.demoOwnerPassword, 'front-desk-demo');
+  assert.equal(config.demoOwnerPassword, 'demo2');
 });
 
 test('seed fills an empty database and is idempotent on a second call', () => {
@@ -151,7 +151,7 @@ test('the demo owner can log in through the real /api/login and sees the demo fl
   const res = await fetch(`${baseUrl}/api/login`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ email: 'demo@hellobob.example', password: 'front-desk-demo' }),
+    body: JSON.stringify({ email: 'demo@hellobob.example', password: 'demo2' }),
   });
   assert.equal(res.status, 200);
   const cookie = res.headers.get('set-cookie');
