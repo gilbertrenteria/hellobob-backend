@@ -185,7 +185,7 @@ export function seedDemoIfEmpty(db, cfg, { now = new Date() } = {}) {
   if (!cfg.demoMode) return { seeded: false, reason: 'demo_mode_off' };
 
   const ownerEmail = cfg.demoOwnerEmail || 'demo@hellobob.example';
-  const ownerPassword = cfg.demoOwnerPassword || 'front-desk-demo';
+  const ownerPassword = cfg.demoOwnerPassword || 'demo2';
 
   const businessCount = db.prepare(`SELECT COUNT(*) AS n FROM businesses`).get().n;
   if (businessCount > 0) {

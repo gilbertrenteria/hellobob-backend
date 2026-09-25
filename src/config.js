@@ -67,7 +67,7 @@ export const config = {
   // not a secret — override it with DEMO_OWNER_PASSWORD if you want.
   demoMode: process.env.DEMO_MODE === 'true',
   demoOwnerEmail: 'demo@hellobob.example',
-  demoOwnerPassword: process.env.DEMO_OWNER_PASSWORD || 'front-desk-demo',
+  demoOwnerPassword: process.env.DEMO_OWNER_PASSWORD || 'demo2',
 
   // The detailed 15-section setup questionnaire ("Let's Build Your Bob") —
   // still a real Jotform, kept as-is since it's already built out. The
