@@ -1547,6 +1547,173 @@
     @media (max-width:560px){
           .hero-cta-row{ margin-bottom:80px; }
     }
+
+    /* ---------- Proof section (ported from the reference artifact) ---------- */
+  .proof{ padding-top:60px; padding-bottom:56px; }
+  .proof-panel[hidden]{ display:none; }
+  .proof-numbers-row{ display:flex; flex-wrap:wrap; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .proof-numbers-row .stat{ flex:1 1 200px; border-right:none; background:var(--black); }
+  .proof-numbers-row .stat-num{ font-size:34px; }
+  .proof-numbers-row .stat-label{ font-size:11px; }
+  .proof-note{ font-size:12.5px; color:var(--grey-dim); margin:16px 0 0; }
+  .fit-check{ background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--red); padding:22px 24px 24px; margin:0 0 32px; }
+  .fit-check-kicker{ font-family:var(--font-display); font-weight:800; text-transform:uppercase; font-size:19px; color:#fff; margin:0 0 14px; letter-spacing:0.01em; }
+  .fit-check-list{ list-style:none; margin:0 0 16px; padding:0; display:flex; flex-direction:column; gap:11px; }
+  .fit-check-list li{ display:flex; align-items:flex-start; gap:10px; font-size:14px; color:var(--grey); line-height:1.5; }
+  .fit-check-list li svg{ width:15px; height:15px; flex-shrink:0; margin-top:3px; color:var(--red); }
+  .fit-check-note{ font-size:13px; color:var(--grey-dim); margin:0; padding-top:14px; border-top:1px solid var(--line); }
+  .our-solution{ border-left-color:var(--status-green); }
+  .our-solution .fit-check-kicker{ color:var(--status-green); }
+  .our-solution .fit-check-list li svg{ color:var(--status-green); }
+  .proof-solo{ margin-top:34px; }
+  .proof-solo-badge{ display:inline-flex; font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; text-transform:uppercase; color:var(--status-green); background:rgba(57,214,122,0.1); border:1px solid rgba(57,214,122,0.3); border-radius:999px; padding:6px 14px; margin-bottom:16px; }
+  .proof-solo-quote{ border-left-color:var(--status-green); }
+  .proof-solo .proof-chip strong{ color:var(--status-green); }
+  .proof-crew-badge{ color:var(--status-green); background:rgba(57,214,122,0.1); border-color:rgba(57,214,122,0.3); }
+  .proof-sort{ background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--red); padding:20px 22px; margin:0 0 28px; }
+  .proof-sort-q{ margin:0 0 14px; font-size:14.5px; color:var(--white); font-weight:600; }
+  .proof-sort-opts{ display:flex; flex-wrap:wrap; gap:10px; }
+  .proof-sort-opt{
+    font-family:var(--font-mono); font-size:11.5px; letter-spacing:0.02em; text-transform:uppercase;
+    background:transparent; border:1px solid var(--line); border-radius:999px; padding:9px 16px;
+    color:var(--grey); cursor:pointer; transition:border-color .15s, color .15s, background .15s;
+  }
+  .proof-sort-opt:hover{ border-color:var(--red); color:var(--white); }
+  .proof-sort-opt.is-active{ background:var(--red); border-color:var(--red); color:#fff; }
+  .proof-sort-result{ margin:14px 0 0; font-size:12.5px; color:var(--grey); display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+  .proof-sort-result[hidden]{ display:none; }
+  .proof-sort-reset{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.02em; background:none; border:none; color:var(--red); cursor:pointer; padding:0; }
+  .proof-sort-reset:hover{ text-decoration:underline; }
+  .proof-examples{ display:flex; flex-direction:column; }
+  .proof-example:first-child .proof-solo{ margin-top:0; }
+  .proof-fit{ margin-top:20px; padding:20px 22px; background:var(--panel); border:1px solid var(--line); border-radius:10px; }
+  .proof-fit-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--grey-dim); margin:0 0 14px; }
+  .proof-fit-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
+  .proof-fit-list li{ display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:var(--grey); line-height:1.5; }
+  .proof-fit-list li svg{ width:14px; height:14px; flex-shrink:0; margin-top:3px; color:var(--status-green); }
+  .proof-trust-line{ font-size:12.5px; color:var(--grey-dim); text-align:center; margin:28px 0 0; padding-top:20px; border-top:1px solid var(--line); }
+  .proof-compare{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .proof-compare-col{ background:var(--black); padding:22px 24px; }
+  .proof-compare-col h4{ font-family:var(--font-mono); font-size:11.5px; text-transform:uppercase; letter-spacing:0.06em; margin:0 0 16px; }
+  .proof-compare-col.bad h4{ color:var(--red); }
+  .proof-compare-col.good h4{ color:var(--status-green); }
+  .proof-compare-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:12px; }
+  .proof-compare-col li{ display:flex; align-items:flex-start; gap:10px; font-size:13.5px; color:var(--grey); line-height:1.5; }
+  .proof-compare-col li svg{ width:15px; height:15px; flex-shrink:0; margin-top:2px; }
+  .proof-compare-col.bad li svg{ color:var(--red); }
+  .proof-compare-col.good li svg{ color:var(--status-green); }
+  @media (max-width:640px){ .proof-compare{ grid-template-columns:1fr; } }
+  .proof-quote-wrap{ border-left:3px solid var(--red); padding:4px 0 4px 26px; }
+  .proof-quote-wrap blockquote{ margin:0; font-family:var(--font-display); font-weight:700; font-size:clamp(19px,2.6vw,27px); line-height:1.32; color:#fff; text-wrap:balance; }
+  .proof-quote-cite{ display:block; margin-top:14px; font-family:var(--font-mono); font-size:12px; color:var(--grey-dim); font-style:normal; }
+  .proof-chip-row{ display:flex; flex-wrap:wrap; gap:10px; margin-top:26px; }
+  .proof-chip{ display:inline-flex; align-items:baseline; gap:6px; background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:8px 16px; }
+  .proof-chip strong{ font-family:var(--font-mono); color:var(--white); font-size:15px; font-variant-numeric:tabular-nums; }
+  .proof-chip span{ font-family:var(--font-mono); font-size:10px; color:var(--grey-dim); text-transform:uppercase; letter-spacing:0.03em; }
+
+    /* ---------- Tools showcase (Owner Dashboard / Website Builder / Guided Setup) ---------- */
+  .tools-showcase{ background:var(--panel); }
+  .tools-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line); margin-top:32px;
+  }
+  .tool-card{
+    background:var(--panel); padding:28px 26px 26px; display:flex; flex-direction:column; gap:14px;
+  }
+  .tool-card-tag{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--red);
+  }
+  .tool-card-head{
+    font-family:var(--font-display); font-weight:800; text-transform:uppercase;
+    font-size:21px; line-height:1.1; letter-spacing:0.01em; color:var(--white);
+  }
+  .tool-card-body{ color:var(--grey); font-size:14px; line-height:1.65; flex:1; }
+  .tool-card-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  .tool-card-list li{
+    font-family:var(--font-mono); font-size:11.5px; color:var(--grey-dim); letter-spacing:0.02em;
+    padding-left:14px; position:relative;
+  }
+  .tool-card-list li::before{ content:"\2192"; position:absolute; left:0; color:var(--red); }
+  .tool-card .btn{ margin-top:6px; text-align:center; }
+  .tools-group + .tools-group{ margin-top:40px; }
+  @media (max-width:900px){
+    .tools-grid{ grid-template-columns:1fr; }
+  }
+  .tool-callout{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;
+    background:var(--panel); border:1px solid var(--line); border-left:3px solid var(--red);
+    padding:16px 20px; margin:22px 0 28px;
+  }
+  .tool-callout p{ margin:0; font-size:13.5px; color:var(--grey); max-width:52ch; }
+  .tool-callout strong{ color:var(--white); }
+  .tool-callout .btn{ flex-shrink:0; white-space:nowrap; }
+  @media (max-width:560px){
+    .tool-callout{ flex-direction:column; align-items:flex-start; }
+    .tool-callout .btn{ width:100%; text-align:center; }
+  }
+
+  /* Multi-button variant: one callout, every real tool one tap away. */
+  .tool-callout-multi{ flex-direction:column; align-items:flex-start; }
+  .tool-callout-actions{ display:flex; flex-wrap:wrap; gap:10px; }
+  .tool-callout-actions .btn{ padding:10px 18px; font-size:11px; flex-shrink:0; white-space:nowrap; }
+  @media (max-width:560px){
+    .tool-callout-actions{ width:100%; }
+    .tool-callout-actions .btn{ width:100%; text-align:center; }
+  }
+
+    /* ---------- Footer legal links + modal (Terms of Service / Privacy Policy) ---------- */
+  .foot-legal{ display:flex; align-items:center; gap:8px; }
+  .foot-legal .linklike{
+    background:none; border:none; padding:0; margin:0; color:var(--grey-dim); font:inherit;
+    text-transform:inherit; letter-spacing:inherit; cursor:pointer; text-decoration:underline; text-underline-offset:3px;
+  }
+  .foot-legal .linklike:hover{ color:var(--white); }
+  .foot-legal .sep{ color:var(--grey-dim); }
+  .legal-modal{ position:fixed; inset:0; z-index:110; display:flex; align-items:center; justify-content:center; padding:24px; }
+  .legal-modal[hidden]{ display:none; }
+  .legal-modal-backdrop{ position:absolute; inset:0; background:rgba(6,6,7,0.82); }
+  .legal-modal-frame{
+    position:relative; width:min(680px, 100%); max-height:86vh; overflow-y:auto;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    box-shadow:0 50px 100px -20px rgba(0,0,0,0.65); padding:38px 34px 32px;
+  }
+  .legal-modal-close{
+    position:absolute; top:14px; right:14px; width:30px; height:30px; border-radius:50%;
+    background:var(--panel-2); color:var(--white); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .15s;
+  }
+  .legal-modal-close:hover{ background:var(--line); }
+  .legal-modal-close svg{ width:13px; height:13px; }
+  .legal-modal-head{
+    font-family:var(--font-display); font-weight:800; text-transform:uppercase;
+    font-size:26px; line-height:1.05; color:var(--white); margin:0 0 4px; padding-right:36px;
+  }
+  .legal-updated{
+    font-family:var(--font-mono); font-size:11px; color:var(--grey-dim);
+    text-transform:uppercase; letter-spacing:0.04em; margin:0 0 20px;
+  }
+  .legal-tabs{ display:flex; gap:18px; margin:0 0 22px; border-bottom:1px solid var(--line); }
+  .legal-tab{
+    font-family:var(--font-mono); font-size:12px; letter-spacing:0.05em; text-transform:uppercase;
+    color:var(--grey); background:none; border:none; padding:0 0 12px; cursor:pointer;
+    border-bottom:2px solid transparent; margin-bottom:-1px;
+  }
+  .legal-tab.is-active{ color:var(--white); border-bottom-color:var(--red); }
+  .legal-disclaimer{
+    background:var(--panel-2); border-left:3px solid var(--red); padding:13px 16px;
+    margin:0 0 24px; font-size:13px; color:var(--grey); line-height:1.55;
+  }
+  .legal-body h4{
+    font-family:var(--font-display); font-weight:700; text-transform:uppercase;
+    font-size:14.5px; letter-spacing:0.01em; color:var(--white); margin:22px 0 8px;
+  }
+  .legal-body h4:first-of-type{ margin-top:0; }
+  .legal-body p{ font-size:13.5px; line-height:1.68; color:var(--grey); margin:0 0 4px; }
+  @media (max-width:600px){
+    .legal-modal{ padding:12px; }
+    .legal-modal-frame{ padding:30px 20px 26px; max-height:92vh; }
+  }
+
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1691,6 +1858,109 @@
       </a>
       <a class="btn btn-ghost" href="#channels" data-goto="channels" data-i18n="hero.ctaSecondary">See A Live Demo</a>
     </div>
+  </div>
+</section>
+
+<section class="proof" data-page="home" id="proof">
+  <div class="wrap">
+    <p class="section-eyebrow" data-i18n="proof.eyebrow">Proof, Not Promises</p>
+    <h2 class="section-title" data-i18n="proof.title">Here's what actually happens.</h2>
+
+    <div class="fit-check">
+      <p class="fit-check-kicker" data-i18n="proof.fitCheck.kicker">Sound familiar?</p>
+      <ul class="fit-check-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item1">You're the one texting customers back at 9 PM because there's no one else.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item2">No website &mdash; or one you haven't touched since you started the business.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item3">Calls go to voicemail while you're up a ladder or under a unit.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item4">No dashboard &mdash; you have no idea how many calls, texts, or leads you're actually getting, let alone losing.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item5">Scheduling lives in your head, on paper, or in a group text &mdash; nothing that actually tracks what's booked.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item6">Once the truck pulls away, that's it &mdash; no reminder for the next tune-up, no nudge for repeat business.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item7">No system for asking happy customers to leave a review &mdash; so your rating just sits there.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item8">Texts and emails go out looking like they're from someone scrambling, not an established company.</span></li>
+      </ul>
+      <p class="fit-check-note" data-i18n="proof.fitCheck.note">Starting from nothing or upgrading from something that isn't working &mdash; either way, HelloBob replaces it, not adds another thing to check.</p>
+    </div>
+
+    <div class="fit-check our-solution">
+      <p class="fit-check-kicker" data-i18n="proof.ourSolution.kicker">Our Solution</p>
+      <ul class="fit-check-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item1">Bob answers every text, call, and chat in under 5 seconds &mdash; day or night, so you're not the one doing it.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item2">A real website, built for you in minutes and kept current &mdash; included, not extra.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item3">Every call that goes unanswered gets an instant text back with a live chat link &mdash; nobody just hits voicemail.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item4">One dashboard shows every lead, booking, and message, live &mdash; so nothing's a mystery anymore.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item5">Every job gets booked straight onto your calendar the moment it's confirmed &mdash; no more guessing what's on for tomorrow.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item6">Bob follows up automatically &mdash; appointment reminders, on-the-way texts, and a nudge for the next tune-up, without you lifting a finger.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item7">Every finished job gets an automatic review request &mdash; happy customers get a one-tap link to Google or Facebook.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item8">Every message, invoice, and reminder goes out clean and consistent &mdash; you look like the established company you already are.</span></li>
+      </ul>
+      <p class="fit-check-note" data-i18n="proof.ourSolution.note">One flat $99/month. No separate tools to juggle, no new habits to build &mdash; just fewer things falling through the cracks.</p>
+    </div>
+
+    <div class="proof-sort" id="proofSort">
+      <p class="proof-sort-q" data-i18n="proof.sort.q">Which one's you?</p>
+      <div class="proof-sort-opts" role="group" aria-label="Business size">
+        <button type="button" class="proof-sort-opt" data-proof-sort="solo" data-i18n="proof.sort.solo">Just me, one truck</button>
+        <button type="button" class="proof-sort-opt" data-proof-sort="crew" data-i18n="proof.sort.crew">A crew, growing fleet</button>
+      </div>
+      <p class="proof-sort-result" id="proofSortResult" hidden>
+        <span data-i18n="proof.sort.resultPrefix">Showing what fits you &mdash;</span>
+        <button type="button" class="proof-sort-reset" id="proofSortReset" data-i18n="proof.sort.reset">show both examples</button>
+      </p>
+    </div>
+
+    <div class="proof-examples" id="proofExamples">
+      <div class="proof-example" data-proof-example="crew">
+        <div class="proof-panel" data-proof-panel="numbers">
+          <span class="proof-solo-badge proof-crew-badge" data-i18n="proof.crew.badge">Growing Crew. Real Results.</span>
+          <div class="proof-quote-wrap proof-crew-quote">
+            <blockquote data-i18n="proof.crew.quoteText">&ldquo;We stopped losing jobs to whoever called back first. Now we're the ones who call back first &mdash; every time, even when nobody's actually at the phone.&rdquo;</blockquote>
+            <cite class="proof-quote-cite" data-i18n="proof.crew.quoteCite">&mdash; Owner, Coastline Air &amp; Heat (example account used throughout this page)</cite>
+          </div>
+          <div class="proof-chip-row">
+            <span class="proof-chip"><strong>38</strong><span data-i18n="proof.crew.chip1">Leads / Week</span></span>
+            <span class="proof-chip"><strong>&lt;5s</strong><span data-i18n="proof.crew.chip2">Reply Time</span></span>
+            <span class="proof-chip"><strong>63%</strong><span data-i18n="proof.crew.chip3">Booked, Not Just Answered</span></span>
+            <span class="proof-chip"><strong>0</strong><span data-i18n="proof.crew.chip4">Left Unanswered</span></span>
+          </div>
+          <p class="proof-note" data-i18n="proof.numNote">Pulled straight from Coastline Air &amp; Heat's own dashboard &mdash; the same example account used throughout this page.</p>
+        </div>
+        <div class="proof-fit">
+          <p class="proof-fit-kicker" data-i18n="proof.fitCrew.kicker">Built For A Growing Team</p>
+          <ul class="proof-fit-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item1">The dashboard isn't locked to one device or person &mdash; share the login with whoever on your team checks leads, bookings, or reviews.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item2">A separate crew view gives your techs what they need in the field, without digging through the owner's dashboard.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item3">Plugs into the dispatch software you already run &mdash; ServiceTitan, Housecall Pro, Jobber, FieldEdge, and more.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item4">One flat $99/month no matter how many trucks you add &mdash; it doesn't get more expensive as you grow.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="proof-example" data-proof-example="solo">
+        <div class="proof-solo">
+          <span class="proof-solo-badge" data-i18n="proof.solo.badge">One Truck. Real Results.</span>
+          <div class="proof-quote-wrap proof-solo-quote">
+            <blockquote data-i18n="proof.solo.quoteText">&ldquo;I don't have a website guy or someone answering phones. It's me, my truck, and now Bob. Customers can't tell we're a one-truck operation &mdash; and that's exactly the point.&rdquo;</blockquote>
+            <cite class="proof-quote-cite" data-i18n="proof.solo.quoteCite">&mdash; Tony Reyes, Owner-Operator, Reyes Heating &amp; Cooling (one truck, example account)</cite>
+          </div>
+          <div class="proof-chip-row">
+            <span class="proof-chip"><strong>1</strong><span data-i18n="proof.solo.chip1">Truck, Full-Time Front Desk</span></span>
+            <span class="proof-chip"><strong>$0</strong><span data-i18n="proof.solo.chip2">Spent On A Receptionist</span></span>
+            <span class="proof-chip"><strong>&lt;5s</strong><span data-i18n="proof.solo.chip3">Reply Time, Same As Any Size Shop</span></span>
+          </div>
+        </div>
+        <div class="proof-fit">
+          <p class="proof-fit-kicker" data-i18n="proof.fitSolo.kicker">Built For A One-Truck Shop</p>
+          <ul class="proof-fit-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item1">$99/month replaces a hire you could never justify alone &mdash; a full-time secretary runs $2,800+/month before payroll tax or a single sick day.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item2">Same flat price as a full fleet &mdash; you're never charged a "small business" markup for running just one truck.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item3">No contract, cancel anytime &mdash; nothing to be locked into while you figure out if it's worth it.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item4">Free website and Guided Setup, no tech skills needed &mdash; built for someone with zero time to learn new software.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <p class="proof-trust-line" data-i18n="proof.trustLine">No contract, no long-term commitment &mdash; $99/month flat, cancel anytime, whether you're one truck or ten.</p>
   </div>
 </section>
 
@@ -1846,6 +2116,16 @@
     <p class="section-eyebrow" data-i18n="ownerDash.eyebrow">For The Business Owner</p>
     <h2 class="section-title" data-i18n="ownerDash.title">You see everything I do.</h2>
     <p class="section-lede" data-i18n="ownerDash.lede">Customers only ever talk to me. Behind the scenes, you get a live dashboard of every lead, booking, and review I've logged &mdash; the same one you'd check from your phone between jobs. Here's what that looks like, tab by tab.</p>
+    <div class="tool-callout tool-callout-multi">
+      <p><strong>These aren't mockups.</strong> Every button below opens the actual product with sample data already loaded &mdash; click around, or chat with the real Bob right here on this page.</p>
+      <div class="tool-callout-actions">
+        <a class="btn btn-primary" href="https://claude.ai/code/artifact/916fba66-a396-4815-85c1-721f23bad463?org=0f296a40-4d85-4249-86e2-578d5a58ea21" target="_blank" rel="noopener">Open The Real Dashboard</a>
+        <a class="btn btn-primary" href="https://claude.ai/code/artifact/bc5a7adb-b6cd-4054-9b13-27e1b327cb29" target="_blank" rel="noopener">Open The Real Website Builder</a>
+        <a class="btn btn-primary" href="https://claude.ai/code/artifact/3c53f093-1566-462e-9b4d-0d95bb10437f" target="_blank" rel="noopener">Open The Real Guided Setup</a>
+        <button type="button" class="btn btn-primary" id="openRealChatBtn">Chat With The Real Bob</button>
+      </div>
+    </div>
+
 
     <nav class="jump-nav" aria-label="Jump to a dashboard tab">
       <a href="#dash-appt" data-goto="dash-appt" data-i18n="ownerDash.tab3.title">Appointments</a>
@@ -2992,6 +3272,53 @@
   </div>
 </section>
 
+<section class="tools-showcase" data-page="how">
+  <div class="wrap">
+    <p class="section-eyebrow">Three Real Tools, One Flat Price</p>
+    <h2 class="section-title">Not mockups. The actual product.</h2>
+    <p class="section-lede">Click through and use them yourself before you sign up for anything &mdash; your Guided Setup questionnaire comes straight to your inbox once you do.</p>
+
+    <div class="tools-group">
+      <div class="tools-grid">
+        <div class="tool-card">
+          <span class="tool-card-tag">Every Subscription</span>
+          <h3 class="tool-card-head">Owner Dashboard</h3>
+          <p class="tool-card-body">The real thing behind the mockup below &mdash; conversations, appointments, billing, technicians, and full customer records with equipment history, all in one place, plus a separate day-view for your crew.</p>
+          <ul class="tool-card-list">
+            <li>Overview, conversations, appointments, billing</li>
+            <li>Customer equipment &amp; follow-up tracking</li>
+            <li>A crew view for techs in the field</li>
+          </ul>
+          <a class="btn btn-primary" href="https://claude.ai/code/artifact/916fba66-a396-4815-85c1-721f23bad463?org=0f296a40-4d85-4249-86e2-578d5a58ea21" target="_blank" rel="noopener">Open The Owner Dashboard</a>
+        </div>
+        <div class="tool-card">
+          <span class="tool-card-tag">Included Free</span>
+          <h3 class="tool-card-head">Website Builder</h3>
+          <p class="tool-card-body">No site yet? Build one &mdash; pick from 100 templates across 10 trade-specific styles, swap colors and fonts, and your chat widget and booking are already wired in.</p>
+          <ul class="tool-card-list">
+            <li>100 templates, 10 categories</li>
+            <li>Live preview as you customize</li>
+            <li>Free as a lead capture page &mdash; unlocks your full Virtual Front Desk once you sign up</li>
+          </ul>
+          <a class="btn btn-primary" href="https://claude.ai/code/artifact/bc5a7adb-b6cd-4054-9b13-27e1b327cb29" target="_blank" rel="noopener">Open The Website Builder</a>
+        </div>
+        <div class="tool-card">
+          <span class="tool-card-tag">24/7</span>
+          <h3 class="tool-card-head">Virtual Front Desk</h3>
+          <p class="tool-card-body">Bob answers every website chat, text, and social message instantly, qualifies the job, and books it straight onto your calendar &mdash; nights, weekends, and holidays included.</p>
+          <ul class="tool-card-list">
+            <li>Unlimited conversations, day or night</li>
+            <li>Appointment booking synced to your calendar</li>
+            <li>Emergency triage and lead capture</li>
+          </ul>
+          <button type="button" class="btn btn-primary" data-goto="channels">See The Virtual Front Desk In Action</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
 <section class="why" data-page="home">
   <div class="wrap">
     <p class="section-eyebrow" data-i18n="why.eyebrow">Why Me</p>
@@ -3306,6 +3633,11 @@
   <div class="wrap foot-row">
     <span>HelloBob Virtual Front Desk</span>
     <span data-i18n="footer.tagline">Built for HVAC companies nationwide</span>
+    <div class="foot-legal">
+      <button type="button" class="linklike js-open-legal" data-doc="terms">Terms of Service</button>
+      <span class="sep" aria-hidden="true">&middot;</span>
+      <button type="button" class="linklike js-open-legal" data-doc="privacy">Privacy Policy</button>
+    </div>
     <div class="foot-social">
       <button type="button" class="social-link" data-social="facebook" aria-haspopup="dialog">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"></path></svg>
@@ -3318,6 +3650,92 @@
     </div>
   </div>
 </footer>
+
+<div class="legal-modal" id="legalModal" hidden>
+  <div class="legal-modal-backdrop" id="legalBackdrop"></div>
+  <div class="legal-modal-frame" role="dialog" aria-modal="true" aria-labelledby="legalHeading">
+    <button type="button" class="legal-modal-close" id="legalClose" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+    </button>
+    <h3 class="legal-modal-head" id="legalHeading">Legal</h3>
+    <p class="legal-updated">Last updated August 2026 &middot; Currently published in English &mdash; contact us for a Spanish translation.</p>
+    <div class="legal-tabs">
+      <button type="button" class="legal-tab is-active" id="legalTabTerms">Terms of Service</button>
+      <button type="button" class="legal-tab" id="legalTabPrivacy">Privacy Policy</button>
+    </div>
+    <div class="legal-disclaimer">This is a plain-language summary of how HelloBob works, not a substitute for legal advice. If you have specific legal questions about your business's use of HelloBob, please consult an attorney.</div>
+
+    <div class="legal-body" id="legalBodyTerms">
+      <h4>1. Acceptance of Terms</h4>
+      <p>By signing up for or using HelloBob, you agree to these Terms of Service. If you don't agree, please don't use the service.</p>
+
+      <h4>2. What HelloBob Is</h4>
+      <p>HelloBob is a subscription service for home-service businesses built around four parts: a Virtual Front Desk that answers customer messages across your website, texts, and social channels and books jobs on your calendar; a Website Builder that can create a full business website for you; Guided Setup, the questionnaire that configures everything around your real hours, services, and pricing; and an Owner Dashboard where you review conversations, appointments, reviews, and billing.</p>
+
+      <h4>3. Free Trial</h4>
+      <p>New subscriptions start with a 10-day free trial. No payment method is required to start the trial. Before the trial ends, you'll be prompted through an automated form to add a payment method to continue your subscription. If you don't provide payment information by the end of the 10 days, your access simply pauses until you do &mdash; you will never be charged without first entering payment details yourself.</p>
+
+      <h4>4. Subscription &amp; Billing</h4>
+      <p>After your trial, HelloBob is billed at one flat rate of $99 per month, the same price whether you run one truck or a full fleet. There is no long-term contract &mdash; you can cancel anytime, effective at the end of your current billing period.</p>
+
+      <h4>5. Call Recording &amp; Messaging Compliance</h4>
+      <p>HelloBob applies call-recording and texting rules automatically based on where your business operates. If your business is based in a two-party (all-party) consent state &mdash; including California, Connecticut, Delaware, Florida, Illinois, Maryland, Massachusetts, Montana, Nevada, New Hampshire, Pennsylvania, or Washington &mdash; call recording is handled to reflect that requirement. States with additional automated-texting rules (Florida, Washington, Oklahoma, and Texas) get the tighter limits those states require. You're responsible for making sure the information you provide during setup about your business's location and operations is accurate, since compliance settings are based on it.</p>
+
+      <h4>6. Acceptable Use</h4>
+      <p>You agree to use HelloBob for legitimate business communication with your own customers, and not to use it to send unlawful, harassing, or fraudulent messages, or to message people who haven't consented to be contacted.</p>
+
+      <h4>7. Content &amp; Ownership</h4>
+      <p>You own the business information, photos, and content you provide us to configure your Virtual Front Desk and build your website. You grant HelloBob permission to use that content solely to provide the service to you. If you cancel, you can request an export of your website content and customer records.</p>
+
+      <h4>8. Third-Party Integrations</h4>
+      <p>HelloBob can connect to field-service software you already use, such as ServiceTitan, Housecall Pro, Jobber, or FieldEdge. Those are your own accounts with those providers &mdash; HelloBob only syncs data between systems you've authorized us to connect to.</p>
+
+      <h4>9. Termination</h4>
+      <p>You may cancel your subscription at any time from your Owner Dashboard or by contacting us. We may suspend or terminate accounts that violate these terms, misuse the service, or fail to pay after the trial period.</p>
+
+      <h4>10. Disclaimers &amp; Limitation of Liability</h4>
+      <p>HelloBob is provided "as is." While we work to keep the Virtual Front Desk accurate and responsive, we don't guarantee it will catch or correctly handle every message, and you remain responsible for your business's customer relationships and legal compliance. To the fullest extent permitted by law, HelloBob isn't liable for indirect, incidental, or consequential damages arising from use of the service.</p>
+
+      <h4>11. Changes to These Terms</h4>
+      <p>We may update these terms from time to time. We'll post the updated version here with a new "last updated" date; continued use of HelloBob after a change means you accept the update.</p>
+
+      <h4>12. Contact</h4>
+      <p>Questions about these terms? Reach out through the sign-up form or the chat widget available on every page of this site.</p>
+    </div>
+
+    <div class="legal-body" id="legalBodyPrivacy" hidden>
+      <h4>1. Information We Collect</h4>
+      <p>We collect the business information you give us during setup (hours, services, pricing, service area), your contact details, and the conversations, bookings, and reviews your Virtual Front Desk handles on your behalf. We also collect basic usage data about how you use your Owner Dashboard.</p>
+
+      <h4>2. How We Use Information</h4>
+      <p>We use this information to operate the service: to configure and run your Virtual Front Desk, build and host your website if you use that feature, populate your Owner Dashboard, sync with field-service software you connect, and communicate with you about your account.</p>
+
+      <h4>3. Call &amp; Message Recording Consent</h4>
+      <p>Where your business operates in a state requiring two-party consent for call recording, or additional consent for automated texting, HelloBob is configured to seek and log the appropriate consent before recording calls or sending certain automated messages, and to honor opt-outs immediately, however they're worded.</p>
+
+      <h4>4. Sharing of Information</h4>
+      <p>We don't sell your business's information or your customers' information. We share data only with the field-service or other integrations you explicitly connect, and with service providers (such as hosting and messaging providers) who help us run HelloBob, under agreements that limit their use of it to providing the service.</p>
+
+      <h4>5. Data Retention</h4>
+      <p>We retain your account and customer conversation data for as long as your subscription is active, and for a reasonable period after cancellation in case you want to reactivate or export it, after which it's deleted or anonymized.</p>
+
+      <h4>6. Security</h4>
+      <p>We use industry-standard safeguards to protect your data, including encryption in transit. No system is perfectly secure, but we take reasonable steps to protect your business's and customers' information.</p>
+
+      <h4>7. Your Rights &amp; Choices</h4>
+      <p>You can review, update, or request deletion of your business's data by contacting us or through your Owner Dashboard. Your customers can opt out of automated texts at any time by replying to any message, in any wording.</p>
+
+      <h4>8. Children's Privacy</h4>
+      <p>HelloBob is a business tool intended for business owners and their customers, not for children, and we don't knowingly collect information from children under 13.</p>
+
+      <h4>9. Changes to This Policy</h4>
+      <p>We may update this policy from time to time. We'll post the updated version here with a new "last updated" date.</p>
+
+      <h4>10. Contact</h4>
+      <p>Questions about this policy or your data? Reach out through the sign-up form or the chat widget available on every page of this site.</p>
+    </div>
+  </div>
+</div>
 
 <div class="social-modal" id="socialModal" hidden>
   <div class="social-modal-backdrop" id="socialBackdrop"></div>
@@ -4057,6 +4475,41 @@
   socialBackdrop.addEventListener('click', closeSocial);
   socialClose.addEventListener('click', closeSocial);
   document.addEventListener('keydown', e => { if(e.key === 'Escape' && !socialModal.hidden) closeSocial(); });
+
+  // ---- Legal modal (Terms of Service / Privacy Policy) ----
+  const legalModal = document.getElementById('legalModal');
+  const legalBackdrop = document.getElementById('legalBackdrop');
+  const legalClose = document.getElementById('legalClose');
+  const legalBodyTerms = document.getElementById('legalBodyTerms');
+  const legalBodyPrivacy = document.getElementById('legalBodyPrivacy');
+  const legalTabTerms = document.getElementById('legalTabTerms');
+  const legalTabPrivacy = document.getElementById('legalTabPrivacy');
+  function showLegalDoc(doc){
+    const isTerms = doc !== 'privacy';
+    if(legalBodyTerms) legalBodyTerms.hidden = !isTerms;
+    if(legalBodyPrivacy) legalBodyPrivacy.hidden = isTerms;
+    if(legalTabTerms) legalTabTerms.classList.toggle('is-active', isTerms);
+    if(legalTabPrivacy) legalTabPrivacy.classList.toggle('is-active', !isTerms);
+  }
+  function openLegal(doc){
+    if(!legalModal) return;
+    showLegalDoc(doc);
+    legalModal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLegal(){
+    if(!legalModal) return;
+    legalModal.hidden = true;
+    document.body.style.overflow = '';
+  }
+  document.querySelectorAll('.js-open-legal').forEach(btn => {
+    btn.addEventListener('click', () => openLegal(btn.dataset.doc));
+  });
+  if(legalTabTerms) legalTabTerms.addEventListener('click', () => showLegalDoc('terms'));
+  if(legalTabPrivacy) legalTabPrivacy.addEventListener('click', () => showLegalDoc('privacy'));
+  if(legalBackdrop) legalBackdrop.addEventListener('click', closeLegal);
+  if(legalClose) legalClose.addEventListener('click', closeLegal);
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && legalModal && !legalModal.hidden) closeLegal(); });
 
   // ---- Live mini chat engine (shared by every "Beyond The Website" example) ----
   const MINI_SERVICES = {
@@ -5709,6 +6162,41 @@
 
   const jamieEngine = createJamieAssistant();
   if(jamieEngine) chatEngines.push(jamieEngine);
+
+  // The dashboard callout's "Chat With The Real Bob" button opens the same
+  // persistent Ask-Bob widget every visitor already has on this page.
+  const openRealChatBtn = document.getElementById('openRealChatBtn');
+  if(openRealChatBtn) openRealChatBtn.addEventListener('click', () => {
+    if(jamieEngine && jamieEngine.open) jamieEngine.open();
+  });
+
+  // Proof section: "Which one's you?" filters down to the matching proof
+  // example (crew vs. solo operator), each paired with its own "why this
+  // fits you" list. The other example is hidden, not just pushed down.
+  (function initProofSort(){
+    const sortWrap = document.getElementById('proofSort');
+    const examplesWrap = document.getElementById('proofExamples');
+    const resultEl = document.getElementById('proofSortResult');
+    const resetBtn = document.getElementById('proofSortReset');
+    if(!sortWrap || !examplesWrap || !resultEl || !resetBtn) return;
+
+    sortWrap.querySelectorAll('.proof-sort-opt').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.dataset.proofSort;
+        sortWrap.querySelectorAll('.proof-sort-opt').forEach(b => b.classList.toggle('is-active', b === btn));
+        examplesWrap.querySelectorAll('.proof-example').forEach(el => {
+          el.hidden = el.dataset.proofExample !== key;
+        });
+        resultEl.hidden = false;
+      });
+    });
+
+    resetBtn.addEventListener('click', () => {
+      sortWrap.querySelectorAll('.proof-sort-opt').forEach(b => b.classList.remove('is-active'));
+      examplesWrap.querySelectorAll('.proof-example').forEach(el => { el.hidden = false; });
+      resultEl.hidden = true;
+    });
+  })();
 
   // ---- Nav QR code: "scan to chat with Bob" ----
   // Replaces the old Get Started button with a real, scannable QR code so a
