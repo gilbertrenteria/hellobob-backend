@@ -1529,6 +1529,24 @@
     .jamie-launcher{ padding:8px; }
     .jamie-panel{ width:calc(100vw - 24px); height:min(76vh, 560px); }
   }
+
+    /* ---------- Mobile polish pass ---------- */
+    /* Root cause of the nav overflowing the viewport: .nav-links gets
+       order:3 + width:100% below 1010px so it drops onto its own row, but
+       its flex parent (.nav-right) was never told to wrap or given a
+       matching width:100%, so the browser had no correctly-sized second
+       line to put it on and kept it in the same row instead, pushing the
+       whole header wider than the screen. */
+    @media (max-width:1010px){
+          .nav-right{ flex-wrap:wrap; row-gap:10px; width:100%; justify-content:flex-end; }
+    }
+    /* The persistent chat launcher is fixed to the bottom-right corner
+       site-wide (by design), but on short mobile screens the hero's CTA
+       button lands in that same corner on first paint. Give it clearance
+       so the button and its "no card required" line are never covered. */
+    @media (max-width:560px){
+          .hero-cta-row{ margin-bottom:80px; }
+    }
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
