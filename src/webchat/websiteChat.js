@@ -179,13 +179,15 @@ export async function handleWebsiteChat({ ip, lang, history }, deps = {}) {
   }
 
   // Same shared path the plain on-page sign-up form uses (see signup.js) —
-  // one place saves the row and sends both emails, regardless of which UI
-  // a visitor signed up through.
-  const { signup, questionnaireUrl } = await captureSignupFn({
+  // one place saves the row and sends the welcome message, regardless of
+  // which UI a visitor signed up through. The chat doesn't currently ask
+  // for an email-vs-text preference, so this defaults to email — see
+  // signup.js's captureSignup().
+  const { signup, setupUrl } = await captureSignupFn({
     businessName, contactEmail, contactPhone, source: 'website_chat',
   });
 
-  return { text, signup, questionnaireUrl };
+  return { text, signup, setupUrl };
 }
 
 // Exported for tests only.
