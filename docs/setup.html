@@ -1,0 +1,1812 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="UTF-8">
+<title>HelloBob Guided Setup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#ECECE7; --card:#FFFFFF; --card-2:#F6F6F3;
+    --ink:#17181B; --ink-soft:#4B4E54; --muted:#6B6F76; --line:#DDDDD7;
+    --red:#E5231A; --red-deep:#A5170F; --red-soft:rgba(229,35,26,0.10);
+    --green:#1C8F52; --green-soft:rgba(28,143,82,0.10);
+    --amber:#966212; --amber-soft:rgba(214,146,20,0.14);
+    --steel:#2F4E67;
+    --font-display:'Big Shoulders Display','Arial Narrow',sans-serif;
+    --font-body:'Barlow',-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --page:#0E0E10; --card:#17181B; --card-2:#1D1F23;
+      --ink:#F5F5F3; --ink-soft:#C7C9CD; --muted:#9A9DA3; --line:#2A2C30;
+      --red:#E5231A; --red-deep:#FF6357; --red-soft:rgba(229,35,26,0.16);
+      --green:#39D67A; --green-soft:rgba(57,214,122,0.14);
+      --amber:#F0A93D; --amber-soft:rgba(240,169,61,0.14);
+      --steel:#8FB0CC;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page:#0E0E10; --card:#17181B; --card-2:#1D1F23;
+    --ink:#F5F5F3; --ink-soft:#C7C9CD; --muted:#9A9DA3; --line:#2A2C30;
+    --red:#E5231A; --red-deep:#FF6357; --red-soft:rgba(229,35,26,0.16);
+    --green:#39D67A; --green-soft:rgba(57,214,122,0.14);
+    --amber:#F0A93D; --amber-soft:rgba(240,169,61,0.14);
+    --steel:#8FB0CC;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--page); color:var(--ink); font-family:var(--font-body); -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  input, select, textarea{ font-family:inherit; }
+
+  /* ---------- Topbar ---------- */
+  .topbar{ position:sticky; top:0; z-index:20; background:var(--page); border-bottom:1px solid var(--line); }
+  .topbar-inner{ max-width:640px; margin:0 auto; padding:20px 24px 16px; }
+  .brand{ display:flex; flex-wrap:wrap; row-gap:8px; align-items:center; gap:10px; margin-bottom:18px; }
+  .brand-mark{
+    width:30px; height:30px; border-radius:8px; flex-shrink:0;
+    background:radial-gradient(circle at 32% 28%, #FF4536, var(--red) 60%, var(--red-deep) 100%);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:12px;
+    box-shadow:0 6px 14px -6px rgba(229,35,26,0.55);
+  }
+  .brand-word{ font-family:var(--font-display); font-weight:800; font-size:17px; letter-spacing:0.005em; }
+  .brand-word .hello{ color:var(--ink); } .brand-word .bob{ color:var(--red); }
+  .brand-word{ white-space:nowrap; }
+  .brand-tag{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-left:2px; white-space:nowrap; }
+
+  .stepper-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+  .stepper-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--muted); }
+  .stepper-name{ font-size:13.5px; font-weight:600; color:var(--ink-soft); }
+  .stepper-track{ display:flex; gap:4px; }
+  .stepper-seg{ cursor:pointer; }
+  .stepper-jump-hint{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); text-align:center; padding-top:6px; }
+  .stepper-seg{ flex:1; height:5px; border-radius:3px; background:var(--line); overflow:hidden; }
+  .stepper-seg-fill{ height:100%; width:0%; background:var(--red); border-radius:3px; transition:width .25s ease; }
+  .stepper-seg.is-done .stepper-seg-fill{ width:100%; }
+  .stepper-seg.is-current .stepper-seg-fill{ width:100%; background:var(--red); }
+
+  /* ---------- Main ---------- */
+  .main{ max-width:640px; margin:0 auto; padding:32px 24px 140px; }
+  .step-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 26px 30px; box-shadow:0 1px 2px rgba(0,0,0,0.05); }
+  .step-eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--red); margin:0 0 8px; }
+  .step-title{ font-family:var(--font-display); font-weight:800; font-size:26px; letter-spacing:-0.005em; margin:0 0 8px; text-wrap:balance; }
+  .step-sub{ font-size:14px; line-height:1.55; color:var(--ink-soft); margin:0 0 24px; max-width:52ch; }
+
+  .field{ margin-bottom:20px; }
+  .field:last-child{ margin-bottom:0; }
+  .field-label{ display:flex; align-items:baseline; gap:6px; font-size:13px; font-weight:600; margin-bottom:7px; }
+  .field-label .req{ color:var(--red); font-weight:700; }
+  .field-label .opt{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.03em; text-transform:uppercase; color:var(--muted); font-weight:500; }
+  .field-hint{ font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .field-row{ display:flex; gap:12px; }
+  .field-row > *{ flex:1; min-width:0; }
+
+  .trade-note{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:10px; background:var(--card-2); border:1px solid var(--line); border-radius:10px; padding:11px 13px; margin-bottom:20px; font-size:12.5px; line-height:1.5; color:var(--ink-soft); }
+  .trade-note-chip{ flex-shrink:0; font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--red-deep); background:var(--red-soft); border:1px solid rgba(229,35,26,0.25); border-radius:999px; padding:4px 10px; margin-top:1px; }
+  /* the note body sitting next to the fixed-width chip must be allowed to shrink below its
+     content size (browser default min-width:auto) or it overflows the card; flex-wrap lets it
+     drop to its own full-width line instead of being squeezed to a sliver when a long (e.g.
+     Spanish) chip label alone already fills most of the row at narrow widths. */
+  .trade-note > *:not(.trade-note-chip){ flex:1 1 200px; min-width:0; }
+
+  input[type="text"], input[type="tel"], input[type="url"], input[type="number"], input[type="email"], select, textarea{
+    width:100%; font-size:14.5px; color:var(--ink); background:var(--card-2);
+    border:1.5px solid var(--line); border-radius:10px; padding:11px 13px;
+    transition:border-color .15s;
+  }
+  textarea{ resize:vertical; min-height:64px; line-height:1.5; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible{ outline:none; border-color:var(--red); }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B6F76' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:14px; padding-right:34px; }
+  .field.invalid input, .field.invalid select, .field.invalid textarea{ border-color:var(--red); }
+  .field-error{ display:none; font-size:12px; color:var(--red); margin-top:6px; }
+  .field.invalid .field-error{ display:block; }
+
+  /* chips */
+  .chip-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+  .chip{
+    font-size:13px; font-weight:500; color:var(--ink-soft); background:var(--card-2);
+    border:1.5px solid var(--line); border-radius:999px; padding:8px 15px; cursor:pointer;
+    transition:background .12s, border-color .12s, color .12s;
+    -webkit-tap-highlight-color:transparent; user-select:none;
+  }
+  .chip.is-selected{ background:var(--red-soft); border-color:var(--red); color:var(--red-deep); font-weight:600; }
+  .chip-add-row{ display:flex; gap:8px; margin-top:10px; }
+  .chip-add-row input{ flex:1; }
+  .chip-add-btn{ flex-shrink:0; font-size:13px; font-weight:600; color:var(--ink-soft); background:var(--card-2); border:1.5px solid var(--line); border-radius:10px; padding:0 16px; cursor:pointer; }
+  .chip-add-btn:hover{ border-color:var(--muted); }
+
+  /* toggle (yes/no segmented) */
+  .seg-toggle{ display:inline-flex; flex-wrap:wrap; gap:3px; background:var(--card-2); border:1px solid var(--line); border-radius:999px; padding:3px; }
+  .seg-toggle button{ font-size:13px; font-weight:600; color:var(--muted); background:transparent; border:none; border-radius:999px; padding:8px 18px; cursor:pointer; }
+  .seg-toggle button.is-active{ background:var(--card); color:var(--ink); box-shadow:0 1px 3px rgba(0,0,0,0.1); }
+  .seg-toggle.tone button{ padding:8px 14px; }
+
+  /* tone selector (cards with a description + example line) */
+  .tone-card-list{ display:flex; flex-direction:column; gap:10px; }
+  .tone-card{
+    display:block; width:100%; text-align:left; cursor:pointer; font-family:inherit;
+    border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--card-2);
+    transition:border-color .15s, background .15s;
+  }
+  .tone-card:hover{ border-color:var(--muted); }
+  .tone-card.is-active{ border-color:var(--red); background:var(--red-soft); }
+  .tone-card-head{ display:flex; align-items:center; gap:9px; margin-bottom:5px; }
+  .tone-card-radio{ width:15px; height:15px; border-radius:50%; border:1.5px solid var(--muted); flex-shrink:0; position:relative; }
+  .tone-card.is-active .tone-card-radio{ border-color:var(--red); }
+  .tone-card.is-active .tone-card-radio::after{ content:''; position:absolute; inset:3px; border-radius:50%; background:var(--red); }
+  .tone-card-name{ font-size:13.5px; font-weight:700; color:var(--ink); }
+  .tone-card-desc{ font-size:12px; color:var(--muted); margin:0 0 7px; line-height:1.45; }
+  .tone-card-example{ font-size:12px; font-style:italic; color:var(--ink-soft); background:var(--card); border-radius:8px; padding:7px 10px; margin:0; }
+
+  /* switch */
+  .switch-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .switch-text strong{ display:block; font-size:14px; font-weight:600; margin-bottom:2px; }
+  .switch-text span{ font-size:12.5px; color:var(--muted); }
+  .switch{ position:relative; width:42px; height:25px; flex-shrink:0; }
+  .switch input{ position:absolute; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; }
+  .switch-track{ position:absolute; inset:0; background:var(--line); border-radius:999px; transition:background .15s; pointer-events:none; }
+  .switch-track::after{ content:''; position:absolute; top:2.5px; left:2.5px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); transition:transform .15s; }
+  .switch input:checked ~ .switch-track{ background:var(--green); }
+  .switch input:checked ~ .switch-track::after{ transform:translateX(17px); }
+  .switch input:disabled{ cursor:not-allowed; }
+  .switch input:disabled ~ .switch-track{ opacity:0.5; }
+
+  /* small "here's what that means" example shown under a yes/no setting */
+  .switch-example{ font-size:12px; font-style:italic; color:var(--ink-soft); background:var(--card); border-radius:8px; padding:8px 11px; margin-top:10px; border:1px solid var(--line); }
+
+  /* mock call transcript — the visual example for "Record and transcribe phone calls" */
+  .transcript-mock{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-top:12px; }
+  .transcript-mock-label{ display:flex; align-items:center; gap:6px; font-family:var(--font-mono); font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
+  .transcript-mock-label svg{ width:12px; height:12px; flex-shrink:0; }
+  .transcript-line{ font-size:12.5px; line-height:1.5; margin-bottom:9px; }
+  .transcript-line:last-child{ margin-bottom:0; }
+  .transcript-who{ display:block; font-weight:700; margin-bottom:1px; }
+  .transcript-who.caller{ color:var(--steel); }
+  .transcript-who.rep{ color:var(--red-deep); }
+
+  /* before/after mini mockup — the visual example on the website-upgrade offers */
+  .website-compare{ display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .website-compare-col{ flex:1; min-width:0; text-align:center; }
+  .website-compare-label{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.05em; text-transform:uppercase; color:var(--muted); margin-bottom:6px; }
+  .website-compare-arrow{ flex-shrink:0; color:var(--muted); font-size:16px; }
+  .website-compare-frame{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 10px; display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
+  .website-compare-frame.is-before{ opacity:0.7; }
+  .wf-line{ height:6px; width:100%; border-radius:3px; background:var(--line); }
+  .wf-line.strong{ height:8px; background:var(--ink-soft); }
+  .wf-block{ width:100%; height:18px; border-radius:4px; background:var(--line); margin:2px 0; }
+  .wf-cta{ margin-top:2px; font-size:10px; font-weight:700; color:#fff; background:var(--red); border-radius:999px; padding:4px 12px; }
+
+  .compliance-note{ display:flex; flex-wrap:wrap; align-items:flex-start; gap:10px; background:var(--amber-soft); border:1px solid rgba(150,98,18,0.3); border-radius:10px; padding:11px 13px; margin-top:12px; font-size:12.5px; line-height:1.5; color:var(--ink-soft); }
+  .compliance-note-chip{ flex-shrink:0; font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:0.04em; color:var(--amber); background:var(--card); border:1px solid rgba(150,98,18,0.3); border-radius:999px; padding:4px 10px; margin-top:1px; }
+  /* same fix as .trade-note above -- the note body next to the fixed-width chip needs to be
+     allowed to shrink instead of overflowing the card, and to wrap to its own full-width line
+     rather than being squeezed to a sliver when a long chip label already fills most of the
+     row at narrow widths (e.g. the longer Spanish compliance-chip text). */
+  .compliance-note > *:not(.compliance-note-chip){ flex:1 1 200px; min-width:0; }
+  .compliance-note.ok{ background:var(--green-soft); border-color:rgba(28,143,82,0.3); }
+  .compliance-note.ok .compliance-note-chip{ color:var(--green); border-color:rgba(28,143,82,0.3); }
+  .compliance-note-lang{ display:block; margin-top:4px; font-size:11px; opacity:0.75; font-style:italic; }
+  .gate-locked-note{ color:var(--amber); font-style:italic; }
+  .gate-locked-note .add-link{ font-style:normal; font-size:inherit; font-weight:700; text-decoration:underline; }
+
+  /* hours grid */
+  .hours-grid{ display:flex; flex-direction:column; gap:8px; }
+  .hours-row{ display:flex; align-items:center; gap:10px; }
+  .hours-day{ width:80px; flex-shrink:0; font-size:13.5px; font-weight:600; }
+  .hours-fields{ flex:1; display:flex; align-items:center; gap:8px; }
+  .hours-fields select{ flex:1; }
+  .hours-closed-label{ flex:1; font-size:13px; color:var(--muted); font-style:italic; }
+  .hours-check{ display:flex; align-items:center; gap:7px; width:74px; flex-shrink:0; }
+  .hours-check input{ width:16px; height:16px; accent-color:var(--green); cursor:pointer; }
+  .hours-check span{ font-size:11.5px; color:var(--ink-soft); }
+
+  /* checkbox list */
+  .check-list{ display:flex; flex-direction:column; gap:10px; }
+  .check-item{ display:flex; align-items:flex-start; gap:10px; }
+  .check-item input{ width:17px; height:17px; margin-top:1.5px; flex-shrink:0; accent-color:var(--red); cursor:pointer; }
+  .check-item label{ font-size:13.5px; line-height:1.5; color:var(--ink-soft); cursor:pointer; min-width:0; overflow-wrap:break-word; }
+  .check-item.sub{ margin-left:27px; margin-top:-2px; }
+  .check-item.sub input[type="text"]{ width:110px; margin-left:8px; }
+
+  /* dynamic sub-blocks */
+  .sub-block{ background:var(--card-2); border:1px dashed var(--line); border-radius:10px; padding:14px 16px; margin-top:12px; }
+  .sub-block-heading{ margin-bottom:14px; }
+  .sub-block-heading strong{ display:block; font-size:14px; margin-bottom:3px; }
+  .sub-block-heading span{ display:block; font-size:12px; color:var(--muted); line-height:1.5; }
+  .price-row{ display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--line); }
+  .price-row:last-child{ border-bottom:none; }
+  .price-row-name{ flex:1; font-size:13.5px; font-weight:500; }
+  .price-row input{ width:82px; text-align:right; padding:8px 10px; }
+  .price-row-sep{ color:var(--muted); font-size:13px; }
+
+  .method-block{ background:var(--card-2); border:1px solid var(--line); border-radius:10px; padding:12px 14px; margin-top:8px; }
+  .method-block-name{ font-size:13px; font-weight:600; margin-bottom:8px; }
+
+  .team-row{ display:flex; gap:8px; margin-bottom:8px; align-items:center; }
+  .team-row input{ flex:1; }
+  .team-remove{ flex-shrink:0; width:32px; height:32px; border-radius:8px; background:var(--card-2); border:1px solid var(--line); color:var(--muted); cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .team-remove:hover{ color:var(--red); border-color:var(--red); }
+  .add-link{ display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:var(--red); background:none; border:none; cursor:pointer; padding:6px 0; }
+  .add-link svg{ width:15px; height:15px; }
+
+  /* ---------- Footer nav ---------- */
+  .footer-nav{ position:fixed; left:0; right:0; bottom:0; background:var(--page); border-top:1px solid var(--line); z-index:20; }
+  .footer-nav-inner{ max-width:640px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+  .btn{ font-family:inherit; font-size:14px; font-weight:700; border-radius:10px; padding:13px 26px; cursor:pointer; border:none; transition:opacity .15s, transform .1s; flex-shrink:0; }
+  .btn:active{ transform:scale(0.98); }
+  .btn-back{ background:transparent; color:var(--ink-soft); border:1.5px solid var(--line); }
+  .btn-back:hover{ border-color:var(--muted); }
+  .btn-back:disabled{ opacity:0; pointer-events:none; }
+  .btn-next{ background:linear-gradient(155deg, #FF4536, var(--red) 55%, var(--red-deep) 100%); color:#fff; box-shadow:0 8px 18px -8px rgba(229,35,26,0.6); }
+  .btn-next:disabled{ opacity:0.4; cursor:default; box-shadow:none; }
+  .footer-progress-text{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+
+  /* ---------- Done screen ---------- */
+  .done-wrap{ max-width:560px; margin:64px auto 0; padding:0 24px; text-align:center; }
+  .done-icon{ width:64px; height:64px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
+  .done-icon svg{ width:30px; height:30px; }
+  .done-title{ font-family:var(--font-display); font-weight:800; font-size:30px; margin:0 0 12px; }
+  .done-sub{ font-size:15px; line-height:1.6; color:var(--ink-soft); margin:0 0 30px; }
+  .done-next{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; text-align:left; margin-bottom:26px; }
+  .done-next-label{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .done-next-item{ display:flex; gap:10px; font-size:13.5px; color:var(--ink-soft); padding:6px 0; }
+  .done-next-item b{ color:var(--ink); }
+  .done-website-cta{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:22px; text-align:left; margin-bottom:26px; }
+  .done-website-cta p{ font-size:13.5px; line-height:1.55; color:var(--ink-soft); margin:0 0 16px; }
+  .done-website-cta .btn{ width:100%; text-align:center; display:block; text-decoration:none; box-sizing:border-box; }
+  .submit-error{ font-family:var(--font-body); font-size:13px; color:var(--red-deep); text-align:center; margin:0; padding:10px 24px 0; }
+  .submit-saving{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--muted); }
+
+  [hidden]{ display:none !important; }
+
+  /* ---------- Language switcher (same pattern as the site & dashboard) ---------- */
+  .site-lang-wrap{ position:relative; display:inline-flex; flex-shrink:0; margin-left:auto; }
+  .site-lang-flag{ width:15px; height:11px; border-radius:2px; overflow:hidden; flex-shrink:0; display:flex; box-shadow:0 0 0 1px rgba(0,0,0,0.12); }
+  .site-lang-flag svg{ display:block; width:100%; height:100%; }
+  .site-lang-btn{
+    display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0.03em;
+    background:var(--card); color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:7px 11px; cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  .site-lang-btn:hover, .site-lang-btn[aria-expanded="true"]{ border-color:var(--red-deep); color:var(--red-deep); }
+  .site-lang-caret{ width:8px; height:8px; color:var(--muted); flex-shrink:0; transition:transform .15s; }
+  .site-lang-btn[aria-expanded="true"] .site-lang-caret{ transform:rotate(180deg); }
+  .site-lang-menu{
+    position:absolute; top:calc(100% + 6px); right:0; min-width:118px; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; padding:4px; margin:0; list-style:none; z-index:30; box-shadow:0 14px 30px -10px rgba(0,0,0,0.28);
+  }
+  .site-lang-menu[hidden]{ display:none; }
+  .site-lang-option{
+    display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:7px; cursor:pointer;
+    font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0.03em; color:var(--ink-soft); white-space:nowrap;
+    transition:background .12s, color .12s;
+  }
+  .site-lang-option:hover, .site-lang-option.is-active{ background:var(--card-2); color:var(--ink); }
+
+  /* ---------- Customer-language picker (a signup answer, not the form's own UI language) ---------- */
+  .lang-picker{ display:flex; gap:10px; flex-wrap:wrap; }
+  .lang-card{
+    display:flex; align-items:center; gap:10px; padding:12px 16px; border-radius:10px; border:1.5px solid var(--line);
+    background:var(--card-2); cursor:pointer; flex:1 1 180px; transition:border-color .15s, background .15s;
+  }
+  .lang-card .site-lang-flag{ width:22px; height:16px; }
+  .lang-card span.lang-card-label{ font-size:13.5px; font-weight:600; }
+  .lang-card:hover{ border-color:var(--red-deep); }
+  .lang-card.is-selected{ border-color:var(--red); background:var(--red-soft); }
+  .lang-card.is-selected span.lang-card-label{ color:var(--red-deep); }
+
+  @media (max-width:600px){
+    .step-title{ font-size:22px; }
+    .field-row{ flex-direction:column; }
+    .hours-day{ width:64px; font-size:12.5px; }
+    .site-lang-wrap{ margin-left:0; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">B</span>
+      <span class="brand-word"><span class="hello">Hello</span><span class="bob">Bob</span></span>
+      <span class="brand-tag" id="brandTag">Setting Up Your Bob</span>
+      <span class="site-lang-wrap" id="site-lang-wrap">
+        <button type="button" class="site-lang-btn" id="site-lang-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Form language">
+          <span class="site-lang-flag" id="site-lang-flag" aria-hidden="true"></span>
+          <span id="site-lang-code">EN</span>
+          <svg class="site-lang-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+        </button>
+        <ul class="site-lang-menu" id="site-lang-menu" role="listbox" aria-label="Form language" hidden>
+          <li class="site-lang-option is-active" role="option" data-lang="en" aria-selected="true" tabindex="-1">
+            <span class="site-lang-flag" aria-hidden="true"></span><span>EN</span>
+          </li>
+          <li class="site-lang-option" role="option" data-lang="es" aria-selected="false" tabindex="-1">
+            <span class="site-lang-flag" aria-hidden="true"></span><span>ES</span>
+          </li>
+        </ul>
+      </span>
+    </div>
+    <div class="stepper-row">
+      <span class="stepper-label" id="stepperLabel">STEP 1 / 8</span>
+      <span class="stepper-name" id="stepperName">Business Basics</span>
+    </div>
+    <div class="stepper-track" id="stepperTrack"></div>
+    <div class="stepper-jump-hint" id="stepperHint">Click any step above to jump straight to it — nothing needs to be filled in first.</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="step-card" id="stepCard"></div>
+</div>
+
+<div class="footer-nav">
+  <div class="footer-nav-inner">
+    <button class="btn btn-back" id="btnBack">Back</button>
+    <span class="footer-progress-text" id="footerProgressText"></span>
+    <button class="btn btn-next" id="btnNext">Continue</button>
+  </div>
+  <p class="submit-error" id="submitError" hidden></p>
+</div>
+
+<div class="done-wrap" id="doneScreen" hidden>
+  <div class="done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
+  <h1 class="done-title" id="doneTitle">Bob&rsquo;s ready.</h1>
+  <p class="done-sub" id="doneSub">Everything you just filled in is already loaded into <b id="doneBizName">your</b> Bob &mdash; we&rsquo;re building the rest around it.</p>
+  <div class="done-next">
+    <div class="done-next-label" id="doneNextLabel">What happens next</div>
+    <div class="done-next-item">📧&nbsp;&nbsp;<span id="doneNext1">A welcome email is on its way with your chat link, QR code, and dashboard login.</span></div>
+    <div class="done-next-item">✅&nbsp;&nbsp;<span id="doneNext2">The Go-Live Checklist walks you through turning on each channel &mdash; website, texts, Facebook &amp; more.</span></div>
+    <div class="done-next-item">⚙️&nbsp;&nbsp;<span id="doneNext3">Anything you entered here can be changed anytime from Settings &mdash; nothing&rsquo;s locked in.</span></div>
+  </div>
+  <div class="done-website-cta" id="doneWebsiteCta" hidden>
+    <p id="doneWebsiteCtaText">You said you don&rsquo;t have a website yet &mdash; want to build one now? It&rsquo;s included, takes about 10 minutes, and your chat widget &amp; booking are already wired in.</p>
+    <a class="btn btn-next" id="doneWebsiteCtaLink" href="#" target="_blank" rel="noopener">Build My Website</a>
+  </div>
+</div>
+
+<div class="done-wrap" id="noTokenScreen" hidden>
+  <div class="done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></div>
+  <h1 class="done-title" id="noTokenTitle">This link&rsquo;s missing something.</h1>
+  <p class="done-sub" id="noTokenSub">We couldn&rsquo;t find a signup for this link. Please use the Guided Setup link from your welcome email or text &mdash; or sign up for HelloBob first if you haven&rsquo;t yet.</p>
+</div>
+
+<script>
+(function(){
+
+  // Our own backend (see hellobob-backend's src/setupForms.js, POST
+  // /api/setup) — same host the rest of the marketing site talks to.
+  // Nothing here goes to Jotform or any other third party. SETUP_TOKEN
+  // identifies which signup this is; it comes from the real link sent in
+  // the welcome email/text (see signup.js's setupUrlFor()), never typed in
+  // by hand.
+  var HELLOBOB_API_BASE = 'https://hellobob-backend.onrender.com';
+  var SETUP_TOKEN = new URLSearchParams(location.search).get('t') || '';
+
+  var SERVICES_BY_TRADE = {
+    hvac: ['AC repair','No cool / no heat call','Furnace repair','AC installation','Furnace installation','Heat pump installation','Duct cleaning & repair','Maintenance tune-up','Thermostat install','Indoor air quality'],
+    plumbing: ['Drain cleaning','Leak repair','Water heater install','Pipe repair','Fixture installation','Sewer line service'],
+    electrical: ['Panel upgrade','Wiring repair','Outlet & switch install','Lighting install','EV charger install','Electrical inspection'],
+    landscaping: ['Lawn maintenance','Irrigation repair','Tree trimming','Landscape design','Sod installation','Seasonal cleanup'],
+    other: ['General repair','Installation','Maintenance','Inspection']
+  };
+  // Extra services that only get offered when the business does commercial work (merged into
+  // SERVICES_BY_TRADE's list on the Services & Pricing step, never replacing it).
+  var COMMERCIAL_SERVICES_BY_TRADE = {
+    hvac: ['RTU / rooftop unit service','Chiller service','Commercial refrigeration','VRF / VRV systems','Commercial boiler service','Preventive maintenance contracts'],
+    plumbing: ['Backflow testing & certification','Grease trap service','Commercial water heater service'],
+    electrical: ['Commercial panel service','Generator install & service','Lighting retrofits'],
+    landscaping: ['Commercial grounds contracts','Snow & ice management'],
+    other: []
+  };
+  var BRANDS_BY_TRADE = {
+    hvac: ['Trane','Carrier','Lennox','Goodman','Rheem','York','American Standard','Bryant','Amana','Mitsubishi'],
+    plumbing: ['Rheem','A.O. Smith','Moen','Kohler','Delta'],
+    electrical: ['Square D','Eaton','Siemens','Leviton'],
+    landscaping: [],
+    other: []
+  };
+  // Display-label translations for the canonical (English) service names above — the stored
+  // value in state.services/state.prices stays the English string either way, only the chip
+  // label shown to the owner changes with the form language. Brand names are proper nouns and
+  // aren't translated.
+  var SERVICE_NAME_ES = {
+    'AC repair': 'Reparación de A/C', 'No cool / no heat call': 'Llamada por falta de frío o calor',
+    'Furnace repair': 'Reparación de calefacción', 'AC installation': 'Instalación de A/C',
+    'Furnace installation': 'Instalación de calefacción', 'Heat pump installation': 'Instalación de bomba de calor',
+    'Duct cleaning & repair': 'Limpieza y reparación de ductos', 'Maintenance tune-up': 'Mantenimiento preventivo',
+    'Thermostat install': 'Instalación de termostato', 'Indoor air quality': 'Calidad del aire interior',
+    'RTU / rooftop unit service': 'Servicio de unidad en techo (RTU)', 'Chiller service': 'Servicio de enfriadores',
+    'Commercial refrigeration': 'Refrigeración comercial', 'VRF / VRV systems': 'Sistemas VRF / VRV',
+    'Commercial boiler service': 'Servicio de calderas comerciales', 'Preventive maintenance contracts': 'Contratos de mantenimiento preventivo',
+    'General repair': 'Reparación general', 'Installation': 'Instalación', 'Maintenance': 'Mantenimiento', 'Inspection': 'Inspección'
+  };
+  function serviceLabel(name){ return LANG === 'es' ? (SERVICE_NAME_ES[name] || name) : name; }
+  var US_STATES = [
+    ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],
+    ['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
+    ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],
+    ['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],
+    ['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],
+    ['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],
+    ['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
+    ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
+  ];
+  // Two-party (all-party) call-recording consent states -- kept in exact sync with the Owner
+  // Dashboard's TWO_PARTY_CONSENT_STATES. Only matters in "announce on every call" mode; a
+  // per-customer opt-in (the default here) works the same way in every state regardless.
+  var TWO_PARTY_CONSENT_STATES = new Set(['CA','CT','DE','FL','IL','MD','MA','MT','NV','NH','PA','WA']);
+  // States confirmed (Sept 2026 research) to have their own text-messaging consent statute beyond
+  // the federal TCPA -- kept in exact sync with the Owner Dashboard's MINI_TCPA_WATCH_STATES. Only
+  // gates the automatic review request specifically, since that's the one automated text that reads
+  // closest to a marketing solicitation; appointment reminders and check-ins aren't gated by it.
+  var MINI_TCPA_WATCH_STATES = new Set(['FL','WA','OK','TX']);
+  var PAYMENT_METHODS = ['cash_check','zelle','venmo','cash_app','paypal','square','custom'];
+  var TONE_OPTIONS = ['friendly','professional','warm','direct','neighborly','brand'];
+  var HANDOFF_DEFAULTS = [
+    {id:'upset', checked:true},
+    {id:'bigjob', checked:true, hasAmount:true},
+    {id:'insurance', checked:true},
+    {id:'unsure', checked:true}
+  ];
+  var DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  var state = {
+    bizName:'', trade:'hvac', ownerName:'', bizPhone:'', numberChoice:'new', currentPhoneSystem:'', voipProvider:'',
+    hasWebsite:'', website:'', websitePlatform:'', websiteBuildInterest:false, websiteBuildPriority:[], websiteBuildInclude:[], websiteBuildTimeline:'', websiteBuildNotes:'', websiteImproveInterest:false, websiteImprovePriority:[], websiteImproveInclude:[], websiteImproveTimeline:'', websiteImproveNotes:'', serviceCity:'', bizState:'', serviceRadius:'',
+    teamSize:'', locations:'single', otherLocations:'', propertyType:'residential',
+    hours: DAYS.map(function(d,i){ return { day:d, open:(i<5), from:'8:00 AM', to:'5:00 PM' }; }),
+    afterHours:'no', afterHoursFee:'',
+    services:[], prices:{}, brands:[], diagFee:'', maintPlan:'no', maintPrice:'', maintenanceReminders:true, financing:'no', freeEstimates:'yes', outOfScope:'',
+    fsm:'none', fsmOther:'', calendarSync:'none', slotLength:'2hr', leadTime:'sameday', notifyName:'', notifyContact:'',
+    paymentMethods:[], paymentLinks:{}, accountingSoftware:'none', accountingOtherText:'',
+    tone:'friendly', voiceNotes:'', licensing:'', customerLanguage:'en',
+    callRecording:false, callRecordingPanelOpen:false, callRecordingMode:'ask_optin', callRecordingAck:false,
+    escName:'', escContact:'', handoff: HANDOFF_DEFAULTS.map(function(h){ return Object.assign({},h); }), handoffAmount:'500',
+    liveTakeover:true, emergencyAlerts:true,
+    team:[],
+    gbpLink:'', fbLink:'', autoReviews:false, textingConsentAck:false, digitalCard:true,
+    miniTcpaAck:false
+  };
+
+  var steps = ['basics','hours','services','booking','payment','voice','escalation','reviews'];
+  function stepNames(){ return ['step.basics','step.hours','step.services','step.booking','step.payment','step.voice','step.escalation','step.reviews'].map(t); }
+  var current = 0;
+
+  var stepCard = document.getElementById('stepCard');
+  var stepperTrack = document.getElementById('stepperTrack');
+  var stepperLabel = document.getElementById('stepperLabel');
+  var stepperName = document.getElementById('stepperName');
+  var btnBack = document.getElementById('btnBack');
+  var btnNext = document.getElementById('btnNext');
+  var footerProgressText = document.getElementById('footerProgressText');
+
+  // build stepper segments once
+  steps.forEach(function(step, i){
+    var seg = document.createElement('div');
+    seg.className = 'stepper-seg';
+    seg.innerHTML = '<div class="stepper-seg-fill"></div>';
+    seg.addEventListener('click', function(){ current = i; window.scrollTo({top:0}); renderStep(); });
+    stepperTrack.appendChild(seg);
+  });
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function fieldHtml(label, req, inner, hint){
+    return '<div class="field">'+
+      '<div class="field-label">'+esc(label)+(req?' <span class="req">*</span>':' <span class="opt">'+t('opt')+'</span>')+'</div>'+
+      inner+
+      (hint?'<div class="field-hint">'+hint+'</div>':'')+
+      '<div class="field-error">'+t('req.hint')+'</div>'+
+    '</div>';
+  }
+
+  function renderChips(name, options, selected, labelFn){
+    return '<div class="chip-grid" data-chipgroup="'+name+'">'+
+      options.map(function(o){
+        var sel = selected.indexOf(o) > -1;
+        var label = labelFn ? labelFn(o) : o;
+        return '<button type="button" class="chip'+(sel?' is-selected':'')+'" data-chip-value="'+esc(o)+'">'+esc(label)+'</button>';
+      }).join('')+
+    '</div>';
+  }
+
+  function segToggleHtml(id, options, current){
+    return '<div class="seg-toggle" id="'+id+'">'+
+      options.map(function(o){
+        return '<button type="button" data-value="'+esc(o.value)+'" class="'+(current===o.value?'is-active':'')+'">'+esc(o.label)+'</button>';
+      }).join('')+
+    '</div>';
+  }
+
+  function wireSegToggle(id, setter){
+    var el = document.getElementById(id);
+    if (!el) return;
+    el.querySelectorAll('button').forEach(function(btn){
+      btn.addEventListener('click', function(){ setter(btn.getAttribute('data-value')); renderStep(); });
+    });
+  }
+
+  // The visual example on the website-upgrade offers below -- a tiny before/after
+  // mockup (no real screenshots, just a rough shape) so "faster and mobile-ready"
+  // means something concrete instead of just being a phrase in the offer copy.
+  function websiteCompareHtml(){
+    return '<div class="website-compare">'+
+      '<div class="website-compare-col"><div class="website-compare-label">'+t('basics.websiteCompareBefore')+'</div>'+
+        '<div class="website-compare-frame is-before">'+
+          '<div class="wf-line" style="width:70%"></div><div class="wf-line" style="width:90%"></div>'+
+          '<div class="wf-block"></div><div class="wf-line" style="width:50%"></div><div class="wf-line" style="width:65%"></div>'+
+        '</div></div>'+
+      '<span class="website-compare-arrow">&rarr;</span>'+
+      '<div class="website-compare-col"><div class="website-compare-label">'+t('basics.websiteCompareAfter')+'</div>'+
+        '<div class="website-compare-frame">'+
+          '<div class="wf-line strong" style="width:60%"></div><div class="wf-line" style="width:80%"></div>'+
+          '<span class="wf-cta">'+t('basics.websiteCompareCta')+'</span>'+
+        '</div></div>'+
+    '</div>';
+  }
+
+  function websiteImproveBriefHtml(){
+    var priorityOptions = ['more_leads','online_booking','modern_look','mobile_friendly','other'];
+    var priorityLabels = {
+      more_leads: t('basics.wsImpPriorityLeads'), online_booking: t('basics.wsImpPriorityBooking'),
+      modern_look: t('basics.wsImpPriorityLook'), mobile_friendly: t('basics.wsImpPriorityMobile'), other: t('basics.wsImpPriorityOther')
+    };
+    var includeOptions = ['gallery','reviews','map','before_after','financing','emergency','other'];
+    var includeLabels = {
+      gallery: t('basics.wsImpIncludeGallery'), reviews: t('basics.wsImpIncludeReviews'), map: t('basics.wsImpIncludeMap'),
+      before_after: t('basics.wsImpIncludeBeforeAfter'), financing: t('basics.wsImpIncludeFinancing'),
+      emergency: t('basics.wsImpIncludeEmergency'), other: t('basics.wsImpIncludeOther')
+    };
+    var timelineOptions = [
+      {value:'asap', label:t('basics.wsImpTimelineAsap')},
+      {value:'month', label:t('basics.wsImpTimelineMonth')},
+      {value:'no_rush', label:t('basics.wsImpTimelineNoRush')}
+    ];
+    return '<div class="sub-block" style="margin-top:12px">'+
+      '<div class="sub-block-heading"><strong>'+t('basics.wsImpBriefHeading')+'</strong><span>'+t('basics.wsImpBriefSub')+'</span></div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsImpPriorityLabel')+'</div>'+
+        renderChips('websiteImprovePriority', priorityOptions, state.websiteImprovePriority, function(o){ return priorityLabels[o]; })+
+      '</div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsImpIncludeLabel')+'</div>'+
+        renderChips('websiteImproveInclude', includeOptions, state.websiteImproveInclude, function(o){ return includeLabels[o]; })+
+      '</div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsImpTimelineLabel')+'</div>'+
+        segToggleHtml('wsImpTimelineToggle', timelineOptions, state.websiteImproveTimeline)+
+      '</div>'+
+      fieldHtml(t('basics.wsImpNotesLabel'), false, '<textarea id="in-websiteImproveNotes" placeholder="'+esc(t('basics.wsImpNotesPh'))+'">'+esc(state.websiteImproveNotes)+'</textarea>')+
+    '</div>';
+  }
+
+  function websiteBuildBriefHtml(){
+    var priorityOptions = ['more_leads','online_booking','professional_look','mobile_friendly','other'];
+    var priorityLabels = {
+      more_leads: t('basics.wsBldPriorityLeads'), online_booking: t('basics.wsBldPriorityBooking'),
+      professional_look: t('basics.wsBldPriorityLook'), mobile_friendly: t('basics.wsBldPriorityMobile'), other: t('basics.wsBldPriorityOther')
+    };
+    var includeOptions = ['gallery','reviews','map','before_after','financing','emergency','other'];
+    var includeLabels = {
+      gallery: t('basics.wsBldIncludeGallery'), reviews: t('basics.wsBldIncludeReviews'), map: t('basics.wsBldIncludeMap'),
+      before_after: t('basics.wsBldIncludeBeforeAfter'), financing: t('basics.wsBldIncludeFinancing'),
+      emergency: t('basics.wsBldIncludeEmergency'), other: t('basics.wsBldIncludeOther')
+    };
+    var timelineOptions = [
+      {value:'asap', label:t('basics.wsBldTimelineAsap')},
+      {value:'month', label:t('basics.wsBldTimelineMonth')},
+      {value:'no_rush', label:t('basics.wsBldTimelineNoRush')}
+    ];
+    return '<div class="sub-block" style="margin-top:12px">'+
+      '<div class="sub-block-heading"><strong>'+t('basics.wsBldBriefHeading')+'</strong><span>'+t('basics.wsBldBriefSub')+'</span></div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsBldPriorityLabel')+'</div>'+
+        renderChips('websiteBuildPriority', priorityOptions, state.websiteBuildPriority, function(o){ return priorityLabels[o]; })+
+      '</div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsBldIncludeLabel')+'</div>'+
+        renderChips('websiteBuildInclude', includeOptions, state.websiteBuildInclude, function(o){ return includeLabels[o]; })+
+      '</div>'+
+      '<div class="field" style="margin-bottom:14px"><div class="field-label">'+t('basics.wsBldTimelineLabel')+'</div>'+
+        segToggleHtml('wsBldTimelineToggle', timelineOptions, state.websiteBuildTimeline)+
+      '</div>'+
+      fieldHtml(t('basics.wsBldNotesLabel'), false, '<textarea id="in-websiteBuildNotes" placeholder="'+esc(t('basics.wsBldNotesPh'))+'">'+esc(state.websiteBuildNotes)+'</textarea>')+
+    '</div>';
+  }
+
+  function transcriptMockLinesHtml(){
+    var turns = [
+      {who:'caller', key:'voice.callRecordingExampleC1'}, {who:'rep', key:'voice.callRecordingExampleR1'},
+      {who:'caller', key:'voice.callRecordingExampleC2'}, {who:'rep', key:'voice.callRecordingExampleR2'},
+      {who:'caller', key:'voice.callRecordingExampleC3'}, {who:'rep', key:'voice.callRecordingExampleR3'},
+      {who:'caller', key:'voice.callRecordingExampleC4'}, {who:'rep', key:'voice.callRecordingExampleR4'}
+    ];
+    var repLabel = state.bizName || t('voice.callRecordingExampleRepFallback');
+    var callerLabel = t('voice.callRecordingExampleCallerLabel');
+    return turns.map(function(turn){
+      var label = turn.who === 'caller' ? callerLabel : repLabel;
+      return '<div class="transcript-line"><span class="transcript-who '+turn.who+'">'+esc(label)+'</span><span>'+esc(t(turn.key))+'</span></div>';
+    }).join('');
+  }
+
+  /* ============================================================
+     Form language (what the OWNER reads while filling this out) —
+     same flag+pill switcher as the site and dashboard. Separate
+     from "Customer language" (a question asked inside the Voice
+     step), which is the language Bob speaks with THIS business's
+     customers and never changes based on who's filling out setup.
+     ============================================================ */
+  var LANG = 'en';
+  try { var savedLang = localStorage.getItem('hellobob-wizard-lang'); if (savedLang === 'es' || savedLang === 'en') LANG = savedLang; } catch(e){}
+
+  var LANG_FLAGS = {
+    en: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#B22234"/><g fill="#fff"><rect y="1.08" width="20" height="1.08"/><rect y="3.23" width="20" height="1.08"/><rect y="5.38" width="20" height="1.08"/><rect y="7.54" width="20" height="1.08"/><rect y="9.69" width="20" height="1.08"/><rect y="11.85" width="20" height="1.08"/></g><rect width="8" height="7.54" fill="#3C3B6E"/></svg>',
+    es: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#fff"/><rect width="6.67" height="14" fill="#006847"/><rect x="13.33" width="6.67" height="14" fill="#CE1126"/><circle cx="10" cy="7" r="1.7" fill="#8B5A2B"/></svg>'
+  };
+
+  var STR = {
+    en: {
+      'brand.tag': 'Setting Up Your Bob',
+      'stepper.label': 'STEP {n} / {total}',
+      'stepper.hint': 'Click any step above to jump straight to it — nothing needs to be filled in first.',
+      'step.basics': 'Business Basics', 'step.hours': 'Hours & Availability', 'step.services': 'Services & Pricing',
+      'step.booking': 'Booking & Scheduling', 'step.payment': 'Payment Methods', 'step.voice': 'Bob’s Voice',
+      'step.escalation': 'Escalation & Team', 'step.reviews': 'Reviews',
+      'nav.back': 'Back', 'nav.continue': 'Continue', 'nav.finish': 'Finish Setup', 'nav.progress': 'Step {n} of {total}',
+      'opt': 'Optional', 'req.hint': 'This one’s needed to continue.',
+      'basics.title': 'Tell us about the business.', 'basics.sub': 'This is what Bob introduces itself with on every single chat.',
+      'basics.bizName': 'Business name', 'basics.bizNamePh': 'Coastline Heating &amp; Air',
+      'basics.tradeNote': 'HelloBob is built specifically for HVAC companies right now &mdash; that’s why every question from here on speaks your trade.',
+      'basics.ownerName': 'Owner / primary contact', 'basics.ownerNamePh': 'Jamie Rivera',
+      'basics.bizPhone': 'Business phone', 'basics.bizPhonePh': '(555) 010-2200',
+      'basics.numberChoiceLabel': 'Which number should Bob use for calls &amp; texts?',
+      'basics.numberChoiceNew': 'A new number from HelloBob',
+      'basics.numberChoiceNewSub': 'We’ll set up a dedicated number for Bob to answer calls and send texts from — nothing to change on your end.',
+      'basics.numberChoiceExisting': 'My current business number',
+      'basics.numberChoiceExistingSub': 'Keep the number your customers already know — we’ll help you bring it over, either by porting it in or forwarding calls to Bob.',
+      'basics.numberChoiceExistingNote': 'We’ll reach out after signup to walk through porting or forwarding. Either way, there’s still nothing for you to register yourself — texting gets verified automatically once it’s connected.',
+      'basics.currentPhoneSystem': 'What does that number run on today?', 'basics.currentPhoneSystemHint': 'Porting and forwarding work differently depending on this — helps us tell you exactly what to expect.',
+      'basics.currentPhoneSystemPick': 'Pick one…', 'basics.currentPhoneSystemCell': 'A cell phone', 'basics.currentPhoneSystemLandline': 'A landline', 'basics.currentPhoneSystemVoip': 'A VoIP service (Google Voice, RingCentral, Ooma, etc.)', 'basics.currentPhoneSystemUnsure': 'Not sure',
+      'basics.voipProvider': 'Which VoIP provider?', 'basics.voipProviderPh': 'e.g. Google Voice, RingCentral, Ooma',
+      'basics.hasWebsite': 'Do you have a website?', 'basics.hasWebsitePick': 'Pick one…', 'basics.hasWebsiteYes': 'Yes', 'basics.hasWebsiteYesUpgrade': 'Yes, and I’d like it upgraded', 'basics.hasWebsiteNo': 'Not yet', 'basics.hasWebsiteNoBuild': 'Not yet, but I’d like one built',
+      'basics.website': 'Website', 'basics.websitePh': 'coastlinehvac.com',
+      'basics.websitePlatform': 'Built with', 'basics.websitePlatformPick': 'Pick one…', 'basics.websitePlatformCustom': 'Custom-built', 'basics.websitePlatformOther': 'Something else / not sure',
+      'basics.websiteOfferChip': 'We can help', 'basics.websiteOfferBody': 'Most calls start with someone checking you out on their phone first. With no site to look at, some of them just call the next name on the list. HelloBob can build you a fast, mobile-ready site with online booking built in — free to ask, no commitment, and separate from the plan you’re signing up for here.',
+      'basics.websiteOfferAckLabel': 'Yes — show me what a HelloBob site could look like',
+      'basics.wsBldPriorityLabel': 'What matters most for the new site?',
+      'basics.wsBldPriorityLeads': 'Get more leads', 'basics.wsBldPriorityBooking': 'Online booking', 'basics.wsBldPriorityLook': 'A professional look',
+      'basics.wsBldPriorityMobile': 'Easy to use on phone', 'basics.wsBldPriorityOther': 'Something else',
+      'basics.wsBldBriefHeading': 'Let’s map it out', 'basics.wsBldBriefSub': 'A couple more quick ones — the more we know, the faster we can show you something real.',
+      'basics.wsBldIncludeLabel': 'What should we make sure to include?',
+      'basics.wsBldIncludeGallery': 'Photo gallery', 'basics.wsBldIncludeReviews': 'Customer reviews', 'basics.wsBldIncludeMap': 'Service area map',
+      'basics.wsBldIncludeBeforeAfter': 'Before & after photos', 'basics.wsBldIncludeFinancing': 'Financing info', 'basics.wsBldIncludeEmergency': 'Emergency service banner', 'basics.wsBldIncludeOther': 'Something else',
+      'basics.wsBldTimelineLabel': 'How soon would you like this live?',
+      'basics.wsBldTimelineAsap': 'ASAP', 'basics.wsBldTimelineMonth': 'Within a month', 'basics.wsBldTimelineNoRush': 'No rush — just exploring',
+      'basics.wsBldNotesLabel': 'Anything else you want us to know?', 'basics.wsBldNotesPh': 'e.g. specific pages, colors, examples of sites you like',
+      'basics.websiteImproveChip': 'Want it better?', 'basics.websiteImproveBody': 'A slow or outdated site quietly costs you jobs — especially on mobile. We’ll show you a faster, easier-to-book upgrade, free to look at, no commitment, and separate from the plan you’re signing up for here.',
+      'basics.websiteImproveAckLabel': 'Yes — show me an upgrade',
+      'basics.wsImpPriorityLabel': 'What matters most for the upgrade?',
+      'basics.wsImpPriorityLeads': 'Get more leads', 'basics.wsImpPriorityBooking': 'Online booking', 'basics.wsImpPriorityLook': 'A more modern look',
+      'basics.wsImpPriorityMobile': 'Easier to use on phone', 'basics.wsImpPriorityOther': 'Something else',
+      'basics.wsImpBriefHeading': 'Let’s scope it out', 'basics.wsImpBriefSub': 'A couple more quick ones — the more we know, the faster we can show you something real.',
+      'basics.wsImpIncludeLabel': 'What should we make sure to include?',
+      'basics.wsImpIncludeGallery': 'Photo gallery', 'basics.wsImpIncludeReviews': 'Customer reviews', 'basics.wsImpIncludeMap': 'Service area map',
+      'basics.wsImpIncludeBeforeAfter': 'Before & after photos', 'basics.wsImpIncludeFinancing': 'Financing info', 'basics.wsImpIncludeEmergency': 'Emergency service banner', 'basics.wsImpIncludeOther': 'Something else',
+      'basics.wsImpTimelineLabel': 'How soon would you like this live?',
+      'basics.wsImpTimelineAsap': 'ASAP', 'basics.wsImpTimelineMonth': 'Within a month', 'basics.wsImpTimelineNoRush': 'No rush — just exploring',
+      'basics.wsImpNotesLabel': 'Anything else you want us to know?', 'basics.wsImpNotesPh': 'e.g. specific pages, colors, examples of sites you like',
+      'basics.websiteCompareBefore': 'Before', 'basics.websiteCompareAfter': 'After', 'basics.websiteCompareCta': 'Book Now',
+      'basics.city': 'City', 'basics.cityPh': 'Tampa', 'basics.state': 'State', 'basics.statePick': 'Pick one…',
+      'basics.stateHint': 'Lets Bob follow your state’s texting &amp; consent rules automatically.',
+      'basics.radius': 'Radius (miles)', 'basics.radiusPh': '25',
+      'basics.crewSize': 'Crew size', 'basics.crewPick': 'Pick one…',
+      'basics.crewSolo': 'Just me — I’m the truck', 'basics.crew2to5': '2–5 technicians', 'basics.crew6to15': '6–15 technicians',
+      'basics.crew16to50': '16–50 technicians', 'basics.crew50plus': '50+ technicians / multiple crews',
+      'basics.crewHint': 'So Bob knows whether to say &ldquo;I’ll have Jamie call you&rdquo; or &ldquo;I’ll get a tech dispatched.&rdquo;',
+      'basics.multiLoc': 'More than one location', 'basics.multiLocSub': 'Multiple shops, branches, or crews covering different areas.',
+      'basics.multiLocExample': 'Example: Bob asks new callers which location is closest before booking, instead of assuming there’s only one.',
+      'basics.otherLoc': 'Other locations / branches', 'basics.otherLocPh': 'e.g. Tampa (HQ), Sarasota, Lakeland',
+      'basics.otherLocHint': 'One per line is fine — we’ll fold each into Bob’s setup.',
+      'hours.title': 'When you’re open.', 'hours.sub': 'Bob answers 24/7 either way — this just sets which appointment slots it can actually offer.',
+      'hours.label': 'Business hours', 'hours.to': 'to', 'hours.closed': 'Closed',
+      'hours.afterHours': 'Emergency / after-hours service', 'hours.afterHoursSub': 'Offer immediate dispatch outside business hours, not just next-day.',
+      'hours.afterHoursFee': 'After-hours fee note', 'hours.afterHoursFeePh': 'e.g. $75 after-hours callout fee',
+      'hours.afterHoursExample': 'Example: “We can get someone out tonight — there’s a $75 after-hours fee, does that work for you?”',
+      'services.title': 'Services &amp; pricing.', 'services.sub': 'Bob quotes ranges only — never a hard number. The real price always comes from the visit.',
+      'services.propertyQ': 'Residential, commercial, or both?', 'services.residential': 'Residential only', 'services.commercial': 'Commercial only', 'services.both': 'Both',
+      'services.propertyHint': 'Changes what Bob asks about — commercial jobs like RTUs and chillers get their own service list.',
+      'services.offered': 'Services offered', 'services.addPh': 'Add another service…', 'services.addBtn': 'Add', 'services.pickOne': 'Pick at least one.',
+      'services.priceRange': 'Typical price range', 'services.brands': 'Brands you service', 'services.addBrandPh': 'Add a brand…',
+      'services.diagFee': 'Diagnostic / trip fee ($)', 'services.maintPlan': 'Maintenance plan', 'services.maintPlanSub': 'Bob can offer it naturally.',
+      'services.maintPlanExample': 'Example: “We also have a $19/mo maintenance plan that covers your yearly tune-up — want me to add that?”',
+      'services.maintPrice': 'Maintenance plan price ($/mo)',
+      'services.maintenanceReminders': 'Automatically remind customers when their next tune-up is due',
+      'services.maintenanceRemindersSub': 'Sent automatically around a year after their last visit.',
+      'services.maintenanceRemindersExample': 'Example, sent automatically about a year later: “Hi Jamie, it’s about time for your AC’s yearly tune-up — want me to get you on the schedule?”',
+      'services.maintRemindersLockedNote': 'Reminders turn on automatically once your business info is set —',
+      'services.maintRemindersLockLinkText': 'add it on the Basics step',
+      'services.financing': 'Financing available', 'services.financingSub': 'Big-ticket installs, spread over time.',
+      'services.financingExample': 'Example: “That install runs about $8,500 — we do offer financing if you’d rather spread it out.”',
+      'services.freeEst': 'Free estimates on installs', 'services.freeEstSub': 'Bob can offer to come look at no charge.',
+      'services.freeEstExample': 'Example: “Happy to send someone out to take a look and give you a firm number — no charge either way.”',
+      'services.outOfScope': 'Out of scope', 'services.outOfScopePh': 'e.g. we don’t work on mobile homes or window units',
+      'services.outOfScopeHint': 'So Bob redirects instead of overpromising.',
+      'booking.title': 'Booking &amp; scheduling.', 'booking.sub': 'What actually turns a conversation into a job on the calendar.',
+      'booking.fsm': 'Field service software', 'booking.fsmHint': 'Connecting it is a later step — this just flags which one to sync to. Works fine with no software too.',
+      'booking.fsmNone': 'None yet — just me and a calendar', 'booking.fsmOther': 'Something else', 'booking.fsmOtherLabel': 'What do you use?',
+      'booking.fsmOtherPh': 'e.g. GorillaDesk, a shared spreadsheet, our own system',
+      'booking.slotLength': 'Appointment slot length', 'booking.slot1hr': '1 hour', 'booking.slot2hr': '2 hour window', 'booking.slot4hr': '4 hour window',
+      'booking.leadTime': 'Minimum lead time', 'booking.leadSameday': 'Same-day OK', 'booking.leadNextday': 'Next day', 'booking.lead24hr': '24 hours notice', 'booking.lead48hr': '48 hours notice',
+      'booking.notifyName': 'Who’s notified on a new booking', 'booking.notifyNamePh': 'Name or dispatch team',
+      'booking.notifyContact': 'Their contact', 'booking.notifyContactPh': 'Phone, email, or group inbox',
+      'booking.calendarSync': 'Calendar', 'booking.calendarSyncHint': 'A later step — this just flags which one to sync bookings to.',
+      'booking.calendarSyncNone': 'None — just the FSM/spreadsheet above', 'booking.calendarSyncGoogle': 'Google Calendar', 'booking.calendarSyncOutlook': 'Outlook / Microsoft 365', 'booking.calendarSyncOther': 'Something else',
+      'payment.title': 'How you get paid.', 'payment.sub': 'HelloBob never touches the money — this just powers the payment reminder Bob sends once a job’s marked complete.',
+      'payment.methods': 'Methods accepted', 'payment.pickOne': 'Pick at least one.', 'payment.linkLabel': ' handle or link',
+      'payment.customPh': 'https://…', 'payment.handlePh': '@handle', 'payment.cashAppPh': '$cashtag',
+      'payment.accounting': 'Accounting / invoicing software', 'payment.accountingHint': 'So a future invoice-sync feature knows where to send completed jobs. Skip it if you don’t use one.',
+      'payment.accountingNone': 'None / not sure', 'payment.accountingOther': 'Something else',
+      'payment.accountingOtherLabel': 'What do you use?', 'payment.accountingOtherPh': 'e.g. Wave, our bookkeeper’s own system',
+      'voice.title': 'Bob’s voice.', 'voice.sub': 'The same Bob, wearing this business’s tone.',
+      'voice.tone': 'Tone', 'voice.toneFriendly': 'Friendly &amp; casual', 'voice.toneProfessional': 'Professional &amp; polished', 'voice.toneBrand': 'Match my brand',
+      'tone.friendly.name': 'Friendly & casual', 'tone.friendly.desc': 'Warm and conversational — feels like texting a helpful neighbor.',
+      'tone.friendly.example': '“Hey! Yeah we can definitely get someone out today — what time works best?”',
+      'tone.professional.name': 'Professional & polished', 'tone.professional.desc': 'Formal and precise — reads like a well-run front office.',
+      'tone.professional.example': '“Good afternoon. We have availability this afternoon — would 2:00 or 4:00 work for you?”',
+      'tone.warm.name': 'Warm & reassuring', 'tone.warm.desc': 'Extra empathetic — built for stressful calls like a no-AC emergency in July.',
+      'tone.warm.example': "“I'm so sorry you're dealing with that — let's get this fixed fast. Tell me what's going on?”",
+      'tone.direct.name': 'Straight to the point', 'tone.direct.desc': 'Short and efficient — for customers who just want it handled, no small talk.',
+      'tone.direct.example': "“Got it. What's the address, and what time works today?”",
+      'tone.neighborly.name': 'Old-school & neighborly', 'tone.neighborly.desc': 'Down-to-earth and personal — like the owner picked up the phone themself.',
+      'tone.neighborly.example': "“Well hey there! Let's see what we can do for ya — what's going on with the unit?”",
+      'tone.brand.name': 'Match my brand', 'tone.brand.desc': 'Bob follows the notes you add below instead of a preset style.',
+      'tone.brand.example': 'Uses the phrases and style you specify in "Always / never say" below.',
+      'voice.notes': 'Always / never say', 'voice.notesPh': 'e.g. always mention our 5-star rating, never say ‘free’',
+      'voice.licensing': 'Licensing info', 'voice.licensingPh': 'Licensed &amp; insured — License #HV-04521', 'voice.licensingHint': 'Some states require this be disclosed on request.',
+      'voice.custLang': 'Customer language', 'voice.custLangSub': 'The one standard language Bob speaks with every customer of this business — not switched per conversation, and separate from the form language above.',
+      'voice.callRecording': 'Record and transcribe phone calls',
+      'voice.callRecordingWhat': 'Calls get automatically recorded and turned into a text transcript you can search later — handy for training, settling a dispute, or double-checking what a customer asked for.',
+      'voice.callRecordingExampleLabel': 'What a transcript looks like',
+      'voice.callRecordingExampleCallerLabel': 'Caller', 'voice.callRecordingExampleRepFallback': 'Your team',
+      'voice.callRecordingExampleC1': 'Hi, my AC just stopped working and it’s getting hot in here.',
+      'voice.callRecordingExampleR1': 'Sorry to hear that — let’s get someone out today. Can I get your name and address?',
+      'voice.callRecordingExampleC2': 'It’s Maria Lopez, 214 Palm Ave.',
+      'voice.callRecordingExampleR2': 'Got it, thanks Maria. Is the unit making any noise, or is it just not turning on at all?',
+      'voice.callRecordingExampleC3': 'Not turning on at all. I already checked the breaker and it’s fine.',
+      'voice.callRecordingExampleR3': 'Okay, that sounds like the thermostat or a bad capacitor — we’ll confirm on-site. I’ve got an opening today at 3 PM, does that work?',
+      'voice.callRecordingExampleC4': 'Yes, 3 PM works, thank you so much.',
+      'voice.callRecordingExampleR4': 'Perfect, you’re all set — we’ll text a confirmation and the tech’s name before they arrive.',
+      'voice.callRecordingModeLabel': 'How should we get consent to record?',
+      'voice.callRecordingModeOptIn': 'Ask each customer to opt in (recommended)',
+      'voice.callRecordingModeAnnounce': 'Announce it on every call instead',
+      'voice.callRecordingChipOptIn': 'Works in every state',
+      'voice.callRecordingOptInNote': 'New customers get a quick text early on asking if it’s okay to record their calls. Only customers who say yes are ever recorded — everyone else just hears the normal greeting. Since it’s their own opt-in, this works the same way in every state.',
+      'voice.callRecordingChip': 'Review needed first',
+      'voice.callRecordingAnnounceNote': 'Before you turn this on, we’ll need to review the consent language required in your state — recording laws vary, and some require every caller to be notified.',
+      'voice.callRecordingTwoPartyNote': '{state} requires every caller to be told the call may be recorded, every time, before recording starts — confirm your phone greeting does that before this goes live.',
+      'voice.callRecordingAckLabel': 'I confirm our phone greeting will clearly tell every caller the call may be recorded, before recording starts.',
+      'escalation.title': 'When Bob hands off.', 'escalation.sub': 'What Bob shouldn’t handle alone, and who it goes to instead.',
+      'escalation.name': 'Escalation contact', 'escalation.namePh': 'Name', 'escalation.contact': 'Their phone or email', 'escalation.contactPh': 'Phone or email',
+      'escalation.liveTakeover': 'Let me jump into a live conversation and take over from Bob at any time',
+      'escalation.liveTakeoverSub': 'Live on website chat. On text messages, this pauses Bob so you can reply as yourself.',
+      'escalation.liveTakeoverExample': 'Example: you see the same chat window they’re in from your dashboard, and can type your own reply anytime — Bob steps aside until you’re done.',
+      'escalation.emergencyAlerts': 'Text me immediately for true emergencies, even outside quiet hours',
+      'escalation.emergencyAlertsSub': 'Only where local rules allow it — Bob checks that automatically before sending.',
+      'escalation.emergencyAlertsExample': 'Example: a customer texts “my furnace is smoking” at 2am — you get an immediate alert instead of it waiting until morning.',
+      'escalation.alertChannelNote': 'These alerts are sent by text by default, no setup needed. Free web push notifications are also available — turn those on anytime from your dashboard’s Notifications settings.',
+      'escalation.handoffQ': 'Hand off to a human when…', 'escalation.amount': 'Amount ($)',
+      'escalation.team': 'Team members', 'escalation.addTeam': 'Add teammate',
+      'escalation.teamNamePh': 'Name', 'escalation.teamEmailPh': 'Email',
+      'reviews.title': 'Reviews.', 'reviews.sub': 'Where happy customers get sent.',
+      'reviews.gbp': 'Google Business Profile link', 'reviews.gbpPh': 'https://g.page/…',
+      'reviews.fb': 'Facebook Page link', 'reviews.fbPh': 'https://facebook.com/…',
+      'reviews.digitalCard': 'Also send customers a link to save your contact & follow your links',
+      'reviews.digitalCardSub': 'Sent at signup, and again in the review thank-you — but only after a 4–5 star review.',
+      'reviews.digitalCardExample': 'Example: after a 5-star review, they get a text with a simple page — your phone, address, and one-tap links to call, text, or find you again.',
+      'reviews.textingAck': 'We’ll ask each customer once — reminders, on-my-way alerts, invoices, and a review link, all in one ask — and only text the ones who say yes',
+      'reviews.autoReviews': 'Send review requests automatically', 'reviews.autoReviewsSub': '4–5 star customers get routed to leave one; lower ratings come to you privately.',
+      'reviews.autoReviewsExample': 'Example: “Thanks again for choosing us! Mind leaving a quick review?” — sent automatically, only to customers who rated 4–5 stars.',
+      'reviews.textingSetupChipActive': 'Texting active', 'reviews.textingSetupChipPending': 'Setting up',
+      'reviews.textingSetupActiveNote': 'We automatically verify your number for texting behind the scenes — no forms, no waiting on you. This one setup covers review requests, the post-visit check-in, and maintenance reminders all at once.',
+      'reviews.textingSetupActiveNoteExisting': 'Once your existing number is connected, we automatically verify it for texting behind the scenes — no forms, no waiting on you. This one setup covers review requests, the post-visit check-in, and maintenance reminders all at once.',
+      'reviews.textingSetupPendingNote': 'We finish verifying your number for texting automatically once your business name and state are filled in —',
+      'reviews.textingSetupPendingLinkText': 'add them on the Basics step',
+      'reviews.miniTcpaChip': 'One more step', 'reviews.miniTcpaChipDone': 'Confirmed',
+      'reviews.miniTcpaNote': '{state} has extra state-level texting rules on top of TCPA — keep your review-request frequency and consent records aligned with them.',
+      'reviews.miniTcpaAckLabel': 'I’ll keep my review-request frequency and consent records aligned with my state’s rules',
+      'reviews.gateTitle': 'One step first', 'reviews.gateBody': 'Check the box above once you’re set up to ask — the moment you do (and once the steps below are handled), this turns on automatically. You can still switch it back off here anytime.',
+      'reviews.gateVerifyTitle': 'Setting up', 'reviews.gateVerifyBody': 'We verify your number for texting automatically — review requests turn on the moment your business name and state are filled in on the Basics step.',
+      'reviews.gateMiniTcpaTitle': 'One more step', 'reviews.gateMiniTcpaBody': 'Check the box above to confirm you’ll follow {state}’s texting rules — review requests unlock the moment you do.',
+      'reviews.autoOnNoteAfter': 'Turned on automatically along with your consent and confirmations above. You can switch it back off here anytime.',
+      'reviews.handled': 'Handled for {state}', 'reviews.handledBody': 'You’re set to follow {state}’s texting rules on top of the federal ones.',
+      'reviews.goodTitle': 'Good to go', 'reviews.goodBody': 'Your state doesn’t have its own texting law beyond the federal rules — the consent above and an easy opt-out on every message covers you.',
+      'method.square': 'Square', 'method.venmo': 'Venmo', 'method.paypal': 'PayPal', 'method.zelle': 'Zelle', 'method.cash_app': 'Cash App', 'method.cash_check': 'Cash or check', 'method.custom': 'Custom link',
+      'handoff.upset': 'An upset or angry customer', 'handoff.bigjob': 'A job over a set dollar amount', 'handoff.insurance': 'Insurance or warranty questions', 'handoff.unsure': 'Anything Bob isn’t confident about',
+      'done.title': 'Bob’s ready.',
+      'done.subPrefix': 'Everything you just filled in is already loaded into ', 'done.subSuffix': ' — we’re building the rest around it.',
+      'done.yourBob': 'your Bob', 'done.possessiveSuffix': '’s Bob', 'done.possessivePrefix': '',
+      'done.next': 'What happens next',
+      'done.next1': 'A welcome email is on its way with your chat link, QR code, and dashboard login.',
+      'done.next2': 'The Go-Live Checklist walks you through turning on each channel — website, texts, Facebook &amp; more.',
+      'done.next3': 'Anything you entered here can be changed anytime from Settings — nothing’s locked in.',
+      'done.websiteCtaText': 'You said you don’t have a website yet — want to build one now? It’s included, takes about 10 minutes, and your chat widget &amp; booking are already wired in.',
+      'done.websiteCtaTextUpgrade': 'You said you’d like your website upgraded — want to start now? It’s included, takes about 10 minutes, and your chat widget &amp; booking are already wired in.',
+      'done.websiteCtaBtn': 'Build My Website',
+      'submit.saving': 'Saving…', 'submit.finish': 'Finish Setup',
+      'submit.error': 'Something went wrong saving your answers — please try again. Nothing you entered was lost.',
+      'noToken.title': 'This link’s missing something.',
+      'noToken.sub': 'We couldn’t find a signup for this link. Please use the Guided Setup link from your welcome email or text — or sign up for HelloBob first if you haven’t yet.',
+    },
+    es: {
+      'brand.tag': 'Configurando tu Bob',
+      'stepper.label': 'PASO {n} / {total}',
+      'stepper.hint': 'Haz clic en cualquier paso arriba para ir directo a él — no es necesario completar nada antes.',
+      'step.basics': 'Datos del negocio', 'step.hours': 'Horario y disponibilidad', 'step.services': 'Servicios y precios',
+      'step.booking': 'Reservas y programación', 'step.payment': 'Métodos de pago', 'step.voice': 'La voz de Bob',
+      'step.escalation': 'Escalamiento y equipo', 'step.reviews': 'Reseñas',
+      'nav.back': 'Atrás', 'nav.continue': 'Continuar', 'nav.finish': 'Finalizar configuración', 'nav.progress': 'Paso {n} de {total}',
+      'opt': 'Opcional', 'req.hint': 'Este dato es necesario para continuar.',
+      'basics.title': 'Cuéntanos sobre el negocio.', 'basics.sub': 'Esto es lo que Bob usa para presentarse en cada chat.',
+      'basics.bizName': 'Nombre del negocio', 'basics.bizNamePh': 'Coastline Heating &amp; Air',
+      'basics.tradeNote': 'Por ahora HelloBob está hecho especialmente para empresas de climatización (HVAC) — por eso cada pregunta de aquí en adelante habla el idioma de tu rubro.',
+      'basics.ownerName': 'Propietario / contacto principal', 'basics.ownerNamePh': 'Jamie Rivera',
+      'basics.bizPhone': 'Teléfono del negocio', 'basics.bizPhonePh': '(555) 010-2200',
+      'basics.numberChoiceLabel': '¿Qué número debería usar Bob para llamadas y mensajes de texto?',
+      'basics.numberChoiceNew': 'Un número nuevo de HelloBob',
+      'basics.numberChoiceNewSub': 'Configuraremos un número dedicado para que Bob conteste llamadas y envíe mensajes de texto — no tienes que cambiar nada de tu lado.',
+      'basics.numberChoiceExisting': 'Mi número de negocio actual',
+      'basics.numberChoiceExistingSub': 'Conserva el número que tus clientes ya conocen — te ayudaremos a transferirlo, ya sea portándolo o reenviando llamadas a Bob.',
+      'basics.numberChoiceExistingNote': 'Te contactaremos después del registro para explicarte cómo portar el número o configurar el reenvío. De cualquier forma, no tienes que registrar nada tú mismo — la mensajería de texto se verifica automáticamente en cuanto quede conectado.',
+      'basics.currentPhoneSystem': '¿En qué funciona ese número hoy?', 'basics.currentPhoneSystemHint': 'Portar o reenviar funciona distinto según esto — nos ayuda a decirte exactamente qué esperar.',
+      'basics.currentPhoneSystemPick': 'Elige uno…', 'basics.currentPhoneSystemCell': 'Un celular', 'basics.currentPhoneSystemLandline': 'Una línea fija', 'basics.currentPhoneSystemVoip': 'Un servicio VoIP (Google Voice, RingCentral, Ooma, etc.)', 'basics.currentPhoneSystemUnsure': 'No estoy seguro',
+      'basics.voipProvider': '¿Qué proveedor de VoIP?', 'basics.voipProviderPh': 'p. ej. Google Voice, RingCentral, Ooma',
+      'basics.hasWebsite': '¿Tienes un sitio web?', 'basics.hasWebsitePick': 'Elige uno…', 'basics.hasWebsiteYes': 'Sí', 'basics.hasWebsiteYesUpgrade': 'Sí, y me gustaría mejorarlo', 'basics.hasWebsiteNo': 'Todavía no', 'basics.hasWebsiteNoBuild': 'Todavía no, pero me gustaría uno',
+      'basics.website': 'Sitio web', 'basics.websitePh': 'coastlinehvac.com',
+      'basics.websitePlatform': 'Hecho con', 'basics.websitePlatformPick': 'Elige uno…', 'basics.websitePlatformCustom': 'Hecho a la medida', 'basics.websitePlatformOther': 'Otra cosa / no estoy seguro',
+      'basics.websiteOfferChip': 'Podemos ayudarte', 'basics.websiteOfferBody': 'La mayoría de las llamadas empiezan con alguien revisándote desde el celular. Si no hay un sitio que ver, algunos simplemente llaman al siguiente de la lista. HelloBob puede crearte un sitio rápido y listo para celular, con reservas en línea incluidas — sin costo por preguntar, sin compromiso, y aparte del plan al que te estás inscribiendo aquí.',
+      'basics.websiteOfferAckLabel': 'Sí — muéstrenme cómo se vería un sitio de HelloBob',
+      'basics.wsBldPriorityLabel': '¿Qué es lo más importante para el sitio nuevo?',
+      'basics.wsBldPriorityLeads': 'Conseguir más clientes', 'basics.wsBldPriorityBooking': 'Reservas en línea', 'basics.wsBldPriorityLook': 'Un aspecto profesional',
+      'basics.wsBldPriorityMobile': 'Fácil de usar en el celular', 'basics.wsBldPriorityOther': 'Algo más',
+      'basics.wsBldBriefHeading': 'Vamos a planearlo', 'basics.wsBldBriefSub': 'Un par más rápidas — mientras más sepamos, más rápido te mostramos algo real.',
+      'basics.wsBldIncludeLabel': '¿Qué no puede faltar?',
+      'basics.wsBldIncludeGallery': 'Galería de fotos', 'basics.wsBldIncludeReviews': 'Reseñas de clientes', 'basics.wsBldIncludeMap': 'Mapa del área de servicio',
+      'basics.wsBldIncludeBeforeAfter': 'Fotos de antes y después', 'basics.wsBldIncludeFinancing': 'Información de financiamiento', 'basics.wsBldIncludeEmergency': 'Aviso de servicio de emergencia', 'basics.wsBldIncludeOther': 'Algo más',
+      'basics.wsBldTimelineLabel': '¿Qué tan pronto te gustaría tenerlo listo?',
+      'basics.wsBldTimelineAsap': 'Lo antes posible', 'basics.wsBldTimelineMonth': 'Dentro de un mes', 'basics.wsBldTimelineNoRush': 'Sin prisa — solo explorando',
+      'basics.wsBldNotesLabel': '¿Algo más que debamos saber?', 'basics.wsBldNotesPh': 'ej. páginas específicas, colores, ejemplos de sitios que te gusten',
+      'basics.websiteImproveChip': '¿Quieres mejorarlo?', 'basics.websiteImproveBody': 'Un sitio lento o anticuado te cuesta trabajos sin que lo notes — sobre todo en celular. Te mostramos una mejora más rápida y fácil de reservar, sin costo por ver, sin compromiso, y aparte del plan al que te estás inscribiendo aquí.',
+      'basics.websiteImproveAckLabel': 'Sí — muéstrenme una mejora',
+      'basics.wsImpPriorityLabel': '¿Qué es lo más importante para la mejora?',
+      'basics.wsImpPriorityLeads': 'Conseguir más clientes', 'basics.wsImpPriorityBooking': 'Reservas en línea', 'basics.wsImpPriorityLook': 'Un aspecto más moderno',
+      'basics.wsImpPriorityMobile': 'Más fácil de usar en el celular', 'basics.wsImpPriorityOther': 'Algo más',
+      'basics.wsImpBriefHeading': 'Vamos a definirlo', 'basics.wsImpBriefSub': 'Un par más rápidas — mientras más sepamos, más rápido te mostramos algo real.',
+      'basics.wsImpIncludeLabel': '¿Qué no puede faltar?',
+      'basics.wsImpIncludeGallery': 'Galería de fotos', 'basics.wsImpIncludeReviews': 'Reseñas de clientes', 'basics.wsImpIncludeMap': 'Mapa del área de servicio',
+      'basics.wsImpIncludeBeforeAfter': 'Fotos de antes y después', 'basics.wsImpIncludeFinancing': 'Información de financiamiento', 'basics.wsImpIncludeEmergency': 'Aviso de servicio de emergencia', 'basics.wsImpIncludeOther': 'Algo más',
+      'basics.wsImpTimelineLabel': '¿Qué tan pronto te gustaría tenerlo listo?',
+      'basics.wsImpTimelineAsap': 'Lo antes posible', 'basics.wsImpTimelineMonth': 'Dentro de un mes', 'basics.wsImpTimelineNoRush': 'Sin prisa — solo explorando',
+      'basics.wsImpNotesLabel': '¿Algo más que debamos saber?', 'basics.wsImpNotesPh': 'ej. páginas específicas, colores, ejemplos de sitios que te gusten',
+      'basics.websiteCompareBefore': 'Antes', 'basics.websiteCompareAfter': 'Después', 'basics.websiteCompareCta': 'Reservar',
+      'basics.city': 'Ciudad', 'basics.cityPh': 'Tampa', 'basics.state': 'Estado', 'basics.statePick': 'Elige uno…',
+      'basics.stateHint': 'Permite que Bob siga automáticamente las reglas de mensajes de texto y consentimiento de tu estado.',
+      'basics.radius': 'Radio (millas)', 'basics.radiusPh': '25',
+      'basics.crewSize': 'Tamaño del equipo', 'basics.crewPick': 'Elige uno…',
+      'basics.crewSolo': 'Solo yo — yo soy la camioneta', 'basics.crew2to5': '2–5 técnicos', 'basics.crew6to15': '6–15 técnicos',
+      'basics.crew16to50': '16–50 técnicos', 'basics.crew50plus': '50+ técnicos / varios equipos',
+      'basics.crewHint': 'Así Bob sabe si decir &ldquo;le pediré a Jamie que te llame&rdquo; o &ldquo;despacharé a un técnico&rdquo;.',
+      'basics.multiLoc': 'Más de una ubicación', 'basics.multiLocSub': 'Varias sucursales o equipos que cubren distintas zonas.',
+      'basics.multiLocExample': 'Ejemplo: Bob les pregunta a los clientes nuevos cuál ubicación les queda más cerca antes de agendar, en lugar de asumir que solo hay una.',
+      'basics.otherLoc': 'Otras ubicaciones / sucursales', 'basics.otherLocPh': 'p. ej. Tampa (sede), Sarasota, Lakeland',
+      'basics.otherLocHint': 'Una por línea está bien — incorporaremos cada una a la configuración de Bob.',
+      'hours.title': 'Cuándo estás abierto.', 'hours.sub': 'Bob responde 24/7 de todas formas — esto solo define qué turnos de cita puede ofrecer realmente.',
+      'hours.label': 'Horario del negocio', 'hours.to': 'a', 'hours.closed': 'Cerrado',
+      'hours.afterHours': 'Servicio de emergencia / fuera de horario', 'hours.afterHoursSub': 'Ofrecer despacho inmediato fuera del horario laboral, no solo al día siguiente.',
+      'hours.afterHoursFee': 'Nota de tarifa fuera de horario', 'hours.afterHoursFeePh': 'p. ej. $75 por visita fuera de horario',
+      'hours.afterHoursExample': 'Ejemplo: “Podemos enviar a alguien esta noche — hay una tarifa de $75 fuera de horario, ¿te parece bien?”',
+      'services.title': 'Servicios y precios.', 'services.sub': 'Bob solo cotiza rangos — nunca un número fijo. El precio real siempre depende de la visita.',
+      'services.propertyQ': '¿Residencial, comercial o ambos?', 'services.residential': 'Solo residencial', 'services.commercial': 'Solo comercial', 'services.both': 'Ambos',
+      'services.propertyHint': 'Cambia lo que Bob pregunta — los trabajos comerciales como RTU y enfriadores tienen su propia lista de servicios.',
+      'services.offered': 'Servicios ofrecidos', 'services.addPh': 'Agregar otro servicio…', 'services.addBtn': 'Agregar', 'services.pickOne': 'Elige al menos uno.',
+      'services.priceRange': 'Rango de precio típico', 'services.brands': 'Marcas que reparas', 'services.addBrandPh': 'Agregar una marca…',
+      'services.diagFee': 'Tarifa de diagnóstico / visita ($)', 'services.maintPlan': 'Plan de mantenimiento', 'services.maintPlanSub': 'Bob puede ofrecerlo de forma natural.',
+      'services.maintPlanExample': 'Ejemplo: “También tenemos un plan de mantenimiento de $19/mes que cubre tu mantenimiento anual — ¿quieres que te lo agregue?”',
+      'services.maintPrice': 'Precio del plan de mantenimiento ($/mes)',
+      'services.maintenanceReminders': 'Recordar automáticamente a los clientes cuando les toque su próximo mantenimiento',
+      'services.maintenanceRemindersSub': 'Se envía automáticamente alrededor de un año después de su última visita.',
+      'services.maintenanceRemindersExample': 'Ejemplo, enviado automáticamente un año después: “Hola Jamie, ya casi es hora del mantenimiento anual de tu A/C — ¿quieres que te agende una cita?”',
+      'services.maintRemindersLockedNote': 'Los recordatorios se activan automáticamente en cuanto se complete la información del negocio —',
+      'services.maintRemindersLockLinkText': 'agrégala en el paso de Datos del negocio',
+      'services.financing': 'Financiamiento disponible', 'services.financingSub': 'Instalaciones grandes, pagadas con el tiempo.',
+      'services.financingExample': 'Ejemplo: “Esa instalación cuesta unos $8,500 — ofrecemos financiamiento si prefieres pagarlo poco a poco.”',
+      'services.freeEst': 'Presupuestos gratis en instalaciones', 'services.freeEstSub': 'Bob puede ofrecer ir a evaluar sin costo.',
+      'services.freeEstExample': 'Ejemplo: “Con gusto enviamos a alguien a revisarlo y darte un precio exacto — sin costo de todas formas.”',
+      'services.outOfScope': 'Fuera de alcance', 'services.outOfScopePh': 'p. ej. no trabajamos en casas móviles ni unidades de ventana',
+      'services.outOfScopeHint': 'Para que Bob redirija en lugar de prometer de más.',
+      'booking.title': 'Reservas y programación.', 'booking.sub': 'Lo que realmente convierte una conversación en un trabajo agendado.',
+      'booking.fsm': 'Software de gestión de servicio', 'booking.fsmHint': 'Conectarlo es un paso posterior — esto solo indica con cuál sincronizar. Funciona bien sin software también.',
+      'booking.fsmNone': 'Todavía ninguno — solo yo y un calendario', 'booking.fsmOther': 'Algo más', 'booking.fsmOtherLabel': '¿Qué usas?',
+      'booking.fsmOtherPh': 'p. ej. GorillaDesk, una hoja de cálculo compartida, nuestro propio sistema',
+      'booking.slotLength': 'Duración del turno de cita', 'booking.slot1hr': '1 hora', 'booking.slot2hr': 'Ventana de 2 horas', 'booking.slot4hr': 'Ventana de 4 horas',
+      'booking.leadTime': 'Tiempo mínimo de anticipación', 'booking.leadSameday': 'Mismo día está bien', 'booking.leadNextday': 'Al día siguiente', 'booking.lead24hr': '24 horas de aviso', 'booking.lead48hr': '48 horas de aviso',
+      'booking.notifyName': 'A quién se notifica una reserva nueva', 'booking.notifyNamePh': 'Nombre o equipo de despacho',
+      'booking.notifyContact': 'Su contacto', 'booking.notifyContactPh': 'Teléfono, correo o bandeja grupal',
+      'booking.calendarSync': 'Calendario', 'booking.calendarSyncHint': 'Un paso posterior — esto solo indica con cuál sincronizar las reservas.',
+      'booking.calendarSyncNone': 'Ninguno — solo el software/hoja de arriba', 'booking.calendarSyncGoogle': 'Google Calendar', 'booking.calendarSyncOutlook': 'Outlook / Microsoft 365', 'booking.calendarSyncOther': 'Algo más',
+      'payment.title': 'Cómo te pagan.', 'payment.sub': 'HelloBob nunca toca el dinero — esto solo activa el recordatorio de pago que Bob envía cuando un trabajo se marca como completado.',
+      'payment.methods': 'Métodos aceptados', 'payment.pickOne': 'Elige al menos uno.', 'payment.linkLabel': ': usuario o enlace',
+      'payment.customPh': 'https://…', 'payment.handlePh': '@usuario', 'payment.cashAppPh': '$usuario',
+      'payment.accounting': 'Software de contabilidad / facturación', 'payment.accountingHint': 'Para que una futura sincronización de facturas sepa a dónde enviar los trabajos completados. Puedes omitirlo si no usas ninguno.',
+      'payment.accountingNone': 'Ninguno / no estoy seguro', 'payment.accountingOther': 'Algo más',
+      'payment.accountingOtherLabel': '¿Cuál usas?', 'payment.accountingOtherPh': 'p. ej. Wave, el sistema propio de tu contador',
+      'voice.title': 'La voz de Bob.', 'voice.sub': 'El mismo Bob, con el tono de este negocio.',
+      'voice.tone': 'Tono', 'voice.toneFriendly': 'Amigable y casual', 'voice.toneProfessional': 'Profesional y pulido', 'voice.toneBrand': 'Igualar mi marca',
+      'tone.friendly.name': 'Amigable y casual', 'tone.friendly.desc': 'Cálido y conversacional — como escribirle a un vecino servicial.',
+      'tone.friendly.example': '“¡Hola! Sí, podemos enviar a alguien hoy mismo — ¿qué hora te viene mejor?”',
+      'tone.professional.name': 'Profesional y pulido', 'tone.professional.desc': 'Formal y preciso — como una oficina bien organizada.',
+      'tone.professional.example': '“Buenas tardes. Tenemos disponibilidad esta tarde — ¿le viene mejor a las 2:00 o a las 4:00?”',
+      'tone.warm.name': 'Cálido y tranquilizador', 'tone.warm.desc': 'Muy empático — pensado para llamadas de emergencia, como quedarse sin A/C en julio.',
+      'tone.warm.example': '“Lamento mucho que estés pasando por esto — vamos a resolverlo lo más rápido posible. Cuéntame qué está pasando.”',
+      'tone.direct.name': 'Directo y al grano', 'tone.direct.desc': 'Breve y eficiente — para clientes que solo quieren resolverlo, sin rodeos.',
+      'tone.direct.example': '“¿Cuál es la dirección y qué hora te funciona hoy?”',
+      'tone.neighborly.name': 'Tradicional y cercano', 'tone.neighborly.desc': 'Sencillo y personal — como si el propio dueño hubiera contestado el teléfono.',
+      'tone.neighborly.example': '“¡Qué tal! A ver qué podemos hacer por ti — ¿qué le pasa al equipo?”',
+      'tone.brand.name': 'Igualar mi marca', 'tone.brand.desc': 'Bob sigue las notas que agregues abajo en lugar de un estilo predefinido.',
+      'tone.brand.example': 'Usa las frases y el estilo que definas en "Qué decir siempre / nunca" más abajo.',
+      'voice.notes': 'Qué decir siempre / nunca', 'voice.notesPh': 'p. ej. menciona siempre nuestra calificación de 5 estrellas, nunca digas ‘gratis’',
+      'voice.licensing': 'Información de licencia', 'voice.licensingPh': 'Con licencia y seguro — Licencia #HV-04521', 'voice.licensingHint': 'Algunos estados exigen divulgar esto si lo piden.',
+      'voice.custLang': 'Idioma de atención al cliente', 'voice.custLangSub': 'El único idioma estándar que Bob habla con todos los clientes de este negocio — no cambia según la conversación, y es independiente del idioma del formulario de arriba.',
+      'voice.callRecording': 'Grabar y transcribir las llamadas telefónicas',
+      'voice.callRecordingWhat': 'Las llamadas se graban automáticamente y se convierten en una transcripción de texto que puedes buscar después — útil para capacitación, resolver una disputa, o confirmar qué pidió un cliente.',
+      'voice.callRecordingExampleLabel': 'Así se ve una transcripción',
+      'voice.callRecordingExampleCallerLabel': 'Cliente', 'voice.callRecordingExampleRepFallback': 'Tu equipo',
+      'voice.callRecordingExampleC1': 'Hola, mi A/C dejó de funcionar y está haciendo calor aquí.',
+      'voice.callRecordingExampleR1': 'Lamento escuchar eso — vamos a enviar a alguien hoy. ¿Me da su nombre y dirección?',
+      'voice.callRecordingExampleC2': 'Soy Maria Lopez, calle Palm 214.',
+      'voice.callRecordingExampleR2': 'Perfecto, gracias Maria. ¿El equipo hace algún ruido, o simplemente no enciende?',
+      'voice.callRecordingExampleC3': 'No enciende para nada. Ya revisé el interruptor y está bien.',
+      'voice.callRecordingExampleR3': 'Entiendo, podría ser el termostato o un capacitor dañado — lo confirmamos en el lugar. Tengo un espacio hoy a las 3 PM, ¿le funciona?',
+      'voice.callRecordingExampleC4': 'Sí, 3 PM está perfecto, muchas gracias.',
+      'voice.callRecordingExampleR4': 'Perfecto, ya quedó agendado — le enviaremos un mensaje de confirmación y el nombre del técnico antes de que llegue.',
+      'voice.callRecordingModeLabel': '¿Cómo debemos obtener el consentimiento para grabar?',
+      'voice.callRecordingModeOptIn': 'Pedir a cada cliente que dé su consentimiento (recomendado)',
+      'voice.callRecordingModeAnnounce': 'Anunciarlo en cada llamada en su lugar',
+      'voice.callRecordingChipOptIn': 'Funciona en todos los estados',
+      'voice.callRecordingOptInNote': 'Los clientes nuevos reciben un mensaje de texto breve preguntando si está bien grabar sus llamadas. Solo se graba a quienes responden que sí — todos los demás simplemente escuchan el saludo normal. Como es su propio consentimiento, esto funciona igual en todos los estados.',
+      'voice.callRecordingChip': 'Requiere revisión primero',
+      'voice.callRecordingAnnounceNote': 'Antes de activar esto, necesitamos revisar el lenguaje de consentimiento que exige tu estado — las leyes de grabación varían, y algunas exigen avisar a cada persona que llama.',
+      'voice.callRecordingTwoPartyNote': '{state} exige avisar a cada persona que llama que la llamada puede grabarse, cada vez, antes de que empiece la grabación — confirma que el saludo de tu teléfono lo hace antes de activar esto.',
+      'voice.callRecordingAckLabel': 'Confirmo que el saludo de nuestro teléfono le dirá claramente a cada persona que llama que la llamada puede grabarse, antes de que empiece la grabación.',
+      'escalation.title': 'Cuándo Bob transfiere.', 'escalation.sub': 'Qué no debería manejar Bob solo, y a quién se lo transfiere.',
+      'escalation.name': 'Contacto de escalamiento', 'escalation.namePh': 'Nombre', 'escalation.contact': 'Su teléfono o correo', 'escalation.contactPh': 'Teléfono o correo',
+      'escalation.liveTakeover': 'Déjame intervenir en una conversación en vivo y tomar el control de Bob en cualquier momento',
+      'escalation.liveTakeoverSub': 'En vivo en el chat del sitio web. En mensajes de texto, esto pausa a Bob para que puedas responder tú mismo.',
+      'escalation.liveTakeoverExample': 'Ejemplo: ves la misma conversación desde tu panel y puedes escribir tu propia respuesta cuando quieras — Bob se hace a un lado mientras tanto.',
+      'escalation.emergencyAlerts': 'Envíame un mensaje de texto de inmediato ante una emergencia real, incluso fuera del horario de silencio',
+      'escalation.emergencyAlertsSub': 'Solo donde las normas locales lo permiten — Bob lo verifica automáticamente antes de enviarlo.',
+      'escalation.emergencyAlertsExample': 'Ejemplo: un cliente escribe “mi calefacción está echando humo” a las 2am — te llega una alerta inmediata en lugar de esperar hasta la mañana.',
+      'escalation.alertChannelNote': 'Estas alertas se envían por mensaje de texto de forma predeterminada, sin configuración. También están disponibles notificaciones push gratuitas del navegador — actívalas cuando quieras desde la configuración de Notificaciones de tu panel.',
+      'escalation.handoffQ': 'Transferir a una persona cuando…', 'escalation.amount': 'Monto ($)',
+      'escalation.team': 'Miembros del equipo', 'escalation.addTeam': 'Agregar compañero',
+      'escalation.teamNamePh': 'Nombre', 'escalation.teamEmailPh': 'Correo electrónico',
+      'reviews.title': 'Reseñas.', 'reviews.sub': 'A dónde se envía a los clientes satisfechos.',
+      'reviews.gbp': 'Enlace del perfil de Google Business', 'reviews.gbpPh': 'https://g.page/…',
+      'reviews.fb': 'Enlace de la página de Facebook', 'reviews.fbPh': 'https://facebook.com/…',
+      'reviews.digitalCard': 'También enviar a los clientes un enlace para guardar tu contacto y seguir tus enlaces',
+      'reviews.digitalCardSub': 'Se envía al registrarte, y otra vez en el agradecimiento por la reseña — pero solo después de una reseña de 4 o 5 estrellas.',
+      'reviews.digitalCardExample': 'Ejemplo: después de una reseña de 5 estrellas, reciben un mensaje con una página sencilla — tu teléfono, dirección y enlaces directos para llamar, escribir o encontrarte de nuevo.',
+      'reviews.textingAck': 'Le preguntaremos a cada cliente una sola vez — recordatorios, avisos de "voy en camino", facturas y un enlace de reseña, todo en una sola pregunta — y solo enviaremos mensajes a quienes digan que sí',
+      'reviews.autoReviews': 'Pedir reseñas automáticamente', 'reviews.autoReviewsSub': 'Los clientes de 4–5 estrellas son dirigidos a dejar una; las calificaciones bajas te llegan a ti en privado.',
+      'reviews.autoReviewsExample': 'Ejemplo: “¡Gracias de nuevo por elegirnos! ¿Te importaría dejarnos una reseña rápida?” — enviado automáticamente solo a clientes que calificaron 4–5 estrellas.',
+      'reviews.textingSetupChipActive': 'Mensajería activa', 'reviews.textingSetupChipPending': 'Configurando',
+      'reviews.textingSetupActiveNote': 'Verificamos tu número para mensajería de texto automáticamente, sin formularios ni espera de tu parte. Esta única configuración cubre las solicitudes de reseña, el seguimiento posterior a la visita y los recordatorios de mantenimiento a la vez.',
+      'reviews.textingSetupActiveNoteExisting': 'En cuanto tu número actual quede conectado, lo verificamos para mensajería de texto automáticamente, sin formularios ni espera de tu parte. Esta única configuración cubre las solicitudes de reseña, el seguimiento posterior a la visita y los recordatorios de mantenimiento a la vez.',
+      'reviews.textingSetupPendingNote': 'Terminamos de verificar tu número para mensajería de texto automáticamente en cuanto se completen el nombre y el estado de tu negocio —',
+      'reviews.textingSetupPendingLinkText': 'agrégalos en el paso de Datos del negocio',
+      'reviews.miniTcpaChip': 'Un paso más', 'reviews.miniTcpaChipDone': 'Confirmado',
+      'reviews.miniTcpaNote': '{state} tiene reglas adicionales de mensajería de texto a nivel estatal además de la TCPA — mantén la frecuencia de solicitudes de reseña y los registros de consentimiento alineados con ellas.',
+      'reviews.miniTcpaAckLabel': 'Mantendré la frecuencia de solicitudes de reseña y los registros de consentimiento alineados con las reglas de mi estado',
+      'reviews.gateTitle': 'Un paso primero', 'reviews.gateBody': 'Marca la casilla de arriba en cuanto estés listo para preguntar — en cuanto lo hagas (y una vez resueltos los pasos de abajo), esto se activará automáticamente. Puedes desactivarlo aquí cuando quieras.',
+      'reviews.gateVerifyTitle': 'Configurando', 'reviews.gateVerifyBody': 'Verificamos tu número para mensajería de texto automáticamente — las solicitudes de reseña se activan en cuanto se completen el nombre y el estado de tu negocio en el paso de Datos del negocio.',
+      'reviews.gateMiniTcpaTitle': 'Un paso más', 'reviews.gateMiniTcpaBody': 'Marca la casilla de arriba para confirmar que seguirás las reglas de mensajería de texto de {state} — las solicitudes de reseña se desbloquean en cuanto lo hagas.',
+      'reviews.autoOnNoteAfter': 'Se activó automáticamente junto con tu consentimiento y confirmaciones de arriba. Puedes desactivarlo aquí cuando quieras.',
+      'reviews.handled': 'Resuelto para {state}', 'reviews.handledBody': 'Estás listo para seguir las reglas de mensajería de texto de {state} además de las federales.',
+      'reviews.goodTitle': 'Todo listo', 'reviews.goodBody': 'Tu estado no tiene su propia ley de mensajes de texto más allá de las reglas federales — el consentimiento de arriba y una forma fácil de darse de baja en cada mensaje te cubren.',
+      'method.square': 'Square', 'method.venmo': 'Venmo', 'method.paypal': 'PayPal', 'method.zelle': 'Zelle', 'method.cash_app': 'Cash App', 'method.cash_check': 'Efectivo o cheque', 'method.custom': 'Enlace personalizado',
+      'handoff.upset': 'Un cliente molesto o enojado', 'handoff.bigjob': 'Un trabajo que supera un monto determinado', 'handoff.insurance': 'Preguntas de seguro o garantía', 'handoff.unsure': 'Cualquier cosa de la que Bob no esté seguro',
+      'done.title': 'Bob está listo.',
+      'done.subPrefix': 'Todo lo que acabas de completar ya está cargado en ', 'done.subSuffix': ' — estamos construyendo el resto a partir de esto.',
+      'done.yourBob': 'tu Bob', 'done.possessivePrefix': 'el Bob de ', 'done.possessiveSuffix': '',
+      'done.next': 'Qué sigue',
+      'done.next1': 'Ya viene en camino un correo de bienvenida con tu enlace de chat, código QR y acceso al panel.',
+      'done.next2': 'La Lista de Lanzamiento te guía para activar cada canal — sitio web, mensajes de texto, Facebook y más.',
+      'done.next3': 'Cualquier cosa que hayas ingresado aquí se puede cambiar después desde Configuración — nada queda fijo.',
+      'done.websiteCtaText': 'Dijiste que todavía no tienes sitio web — ¿quieres crear uno ahora? Está incluido, toma unos 10 minutos, y tu chat y reservas ya están conectados.',
+      'done.websiteCtaTextUpgrade': 'Dijiste que te gustaría mejorar tu sitio web — ¿quieres empezar ahora? Está incluido, toma unos 10 minutos, y tu chat y reservas ya están conectados.',
+      'done.websiteCtaBtn': 'Crear Mi Sitio Web',
+      'submit.saving': 'Guardando…', 'submit.finish': 'Finalizar configuración',
+      'submit.error': 'Algo salió mal al guardar tus respuestas — por favor intenta de nuevo. No se perdió nada de lo que ingresaste.',
+      'noToken.title': 'A este enlace le falta algo.',
+      'noToken.sub': 'No encontramos una inscripción para este enlace. Usa el enlace de Configuración Guiada de tu correo o mensaje de bienvenida — o regístrate en HelloBob primero si aún no lo has hecho.',
+    }
+  };
+  function t(key){
+    var v = STR[LANG] && STR[LANG][key];
+    if (v !== undefined) return v;
+    v = STR.en[key];
+    return v !== undefined ? v : key;
+  }
+  function tf(key, vals){ var s = t(key); Object.keys(vals||{}).forEach(function(k){ s = s.replace('{'+k+'}', vals[k]); }); return s; }
+
+  var US_STATE_NAMES_ES = {
+    AL:'Alabama', AK:'Alaska', AZ:'Arizona', AR:'Arkansas', CA:'California', CO:'Colorado', CT:'Connecticut',
+    DE:'Delaware', DC:'Distrito de Columbia', FL:'Florida', GA:'Georgia', HI:'Hawái', ID:'Idaho', IL:'Illinois',
+    IN:'Indiana', IA:'Iowa', KS:'Kansas', KY:'Kentucky', LA:'Luisiana', ME:'Maine', MD:'Maryland',
+    MA:'Massachusetts', MI:'Michigan', MN:'Minnesota', MS:'Misisipi', MO:'Misuri', MT:'Montana', NE:'Nebraska',
+    NV:'Nevada', NH:'Nuevo Hampshire', NJ:'Nueva Jersey', NM:'Nuevo México', NY:'Nueva York', NC:'Carolina del Norte',
+    ND:'Dakota del Norte', OH:'Ohio', OK:'Oklahoma', OR:'Oregón', PA:'Pensilvania', RI:'Rhode Island',
+    SC:'Carolina del Sur', SD:'Dakota del Sur', TN:'Tennessee', TX:'Texas', UT:'Utah', VT:'Vermont', VA:'Virginia',
+    WA:'Washington', WV:'Virginia Occidental', WI:'Wisconsin', WY:'Wyoming'
+  };
+  function stateName(code){ return (LANG === 'es' ? US_STATE_NAMES_ES[code] : null) || (US_STATES.filter(function(s){ return s[0]===code; })[0]||[])[1] || ''; }
+
+  // Kept in sync with the Owner Dashboard: automated review requests, the post-visit check-in,
+  // and maintenance reminders all require the business's number to be verified for texting first.
+  // HelloBob handles that verification automatically in the background using the business name
+  // and state already collected on the Basics step -- there's nothing for the business owner to
+  // register or confirm themselves. This is only "not ready" in the rare case someone jumps ahead
+  // via the stepper before finishing Basics.
+  function textingSetupReady(){ return !!(state.bizName.trim() && state.bizState); }
+  function reviewsGateUnmet(){
+    if (!state.textingConsentAck) return 'consent';
+    if (!textingSetupReady()) return 'verify';
+    if (MINI_TCPA_WATCH_STATES.has(state.bizState) && !state.miniTcpaAck) return 'miniTcpa';
+    return null;
+  }
+
+  function renderStep(){
+    var id = steps[current];
+    stepperLabel.textContent = tf('stepper.label', { n: current+1, total: steps.length });
+    stepperName.textContent = stepNames()[current];
+    Array.prototype.forEach.call(stepperTrack.children, function(seg, i){
+      seg.classList.toggle('is-done', i < current);
+      seg.classList.toggle('is-current', i === current);
+    });
+    btnBack.disabled = (current === 0);
+    btnBack.textContent = t('nav.back');
+    btnNext.textContent = (current === steps.length - 1) ? t('nav.finish') : t('nav.continue');
+
+    var html = '';
+    if(id === 'basics'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('basics.title')+'</h1>';
+      html += '<p class="step-sub">'+t('basics.sub')+'</p>';
+      html += fieldHtml(t('basics.bizName'),true,'<input type="text" id="in-bizName" value="'+esc(state.bizName)+'" placeholder="'+t('basics.bizNamePh')+'">');
+      html += '<div class="trade-note"><span class="trade-note-chip">HVAC</span><span>'+t('basics.tradeNote')+'</span></div>';
+      html += fieldHtml(t('basics.ownerName'),true,'<input type="text" id="in-ownerName" value="'+esc(state.ownerName)+'" placeholder="'+t('basics.ownerNamePh')+'">');
+      html += fieldHtml(t('basics.bizPhone'),true,'<input type="tel" id="in-bizPhone" value="'+esc(state.bizPhone)+'" placeholder="'+t('basics.bizPhonePh')+'">');
+      html += '<div class="field"><div class="field-label">'+t('basics.numberChoiceLabel')+'</div>'+
+        '<div class="check-item" style="align-items:flex-start"><input type="radio" name="in-numberChoice" id="in-numberChoiceNew" value="new" '+(state.numberChoice!=='existing'?'checked':'')+'>'+
+          '<label for="in-numberChoiceNew"><strong>'+t('basics.numberChoiceNew')+'</strong><span class="field-hint" style="display:block;margin:2px 0 0">'+t('basics.numberChoiceNewSub')+'</span></label></div>'+
+        '<div class="check-item" style="align-items:flex-start;margin-top:8px"><input type="radio" name="in-numberChoice" id="in-numberChoiceExisting" value="existing" '+(state.numberChoice==='existing'?'checked':'')+'>'+
+          '<label for="in-numberChoiceExisting"><strong>'+t('basics.numberChoiceExisting')+'</strong><span class="field-hint" style="display:block;margin:2px 0 0">'+t('basics.numberChoiceExistingSub')+'</span></label></div>'+
+        (state.numberChoice === 'existing' ? '<p class="field-hint" style="margin:8px 0 0">'+t('basics.numberChoiceExistingNote')+'</p>' : '')+
+      '</div>';
+      if(state.numberChoice === 'existing'){
+        html += fieldHtml(t('basics.currentPhoneSystem'),false,'<select id="in-currentPhoneSystem">'+
+          ['::'+t('basics.currentPhoneSystemPick'),'cell::'+t('basics.currentPhoneSystemCell'),'landline::'+t('basics.currentPhoneSystemLandline'),'voip::'+t('basics.currentPhoneSystemVoip'),'unsure::'+t('basics.currentPhoneSystemUnsure')].map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.currentPhoneSystem===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>',t('basics.currentPhoneSystemHint'));
+        if(state.currentPhoneSystem === 'voip'){
+          html += fieldHtml(t('basics.voipProvider'),false,'<input type="text" id="in-voipProvider" value="'+esc(state.voipProvider)+'" placeholder="'+t('basics.voipProviderPh')+'">');
+        }
+      }
+      var hasWebsiteDisplayValue = state.hasWebsite === 'yes' ? (state.websiteImproveInterest ? 'yes_upgrade' : 'yes')
+        : state.hasWebsite === 'no' ? (state.websiteBuildInterest ? 'no_build' : 'no') : '';
+      html += fieldHtml(t('basics.hasWebsite'),false,'<select id="in-hasWebsite">'+
+        ['::'+t('basics.hasWebsitePick'),'yes::'+t('basics.hasWebsiteYes'),'yes_upgrade::'+t('basics.hasWebsiteYesUpgrade'),'no::'+t('basics.hasWebsiteNo'),'no_build::'+t('basics.hasWebsiteNoBuild')].map(function(o){
+          var p=o.split('::'); return '<option value="'+p[0]+'"'+(hasWebsiteDisplayValue===p[0]?' selected':'')+'>'+p[1]+'</option>';
+        }).join('')+'</select>');
+      if(state.hasWebsite === 'yes'){
+        html += '<div class="field-row">'+
+          fieldHtml(t('basics.website'),false,'<input type="url" id="in-website" value="'+esc(state.website)+'" placeholder="'+t('basics.websitePh')+'">')+
+          fieldHtml(t('basics.websitePlatform'),false,'<select id="in-websitePlatform">'+
+            ['::'+t('basics.websitePlatformPick'),'wix::Wix','squarespace::Squarespace','wordpress::WordPress','custom::'+t('basics.websitePlatformCustom'),'other::'+t('basics.websitePlatformOther')].map(function(o){
+              var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.websitePlatform===p[0]?' selected':'')+'>'+p[1]+'</option>';
+            }).join('')+'</select>')+
+        '</div>';
+        html += '<div class="trade-note" id="websiteImproveNote"><span class="trade-note-chip">'+t('basics.websiteImproveChip')+'</span><div>'+
+          '<span>'+t('basics.websiteImproveBody')+'</span>'+
+          websiteCompareHtml()+
+          '<div class="check-item" style="margin-top:10px"><input type="checkbox" id="in-websiteImproveInterest" '+(state.websiteImproveInterest?'checked':'')+'><label for="in-websiteImproveInterest">'+t('basics.websiteImproveAckLabel')+'</label></div>'+
+          (state.websiteImproveInterest ? websiteImproveBriefHtml() : '')+
+        '</div></div>';
+      } else if(state.hasWebsite === 'no'){
+        html += '<div class="trade-note" id="websiteOfferNote"><span class="trade-note-chip">'+t('basics.websiteOfferChip')+'</span><div>'+
+          '<span>'+t('basics.websiteOfferBody')+'</span>'+
+          websiteCompareHtml()+
+          '<div class="check-item" style="margin-top:10px"><input type="checkbox" id="in-websiteBuildInterest" '+(state.websiteBuildInterest?'checked':'')+'><label for="in-websiteBuildInterest">'+t('basics.websiteOfferAckLabel')+'</label></div>'+
+          (state.websiteBuildInterest ? websiteBuildBriefHtml() : '')+
+        '</div></div>';
+      }
+      html += '<div class="field-row">'+
+        fieldHtml(t('basics.city'),true,'<input type="text" id="in-serviceCity" value="'+esc(state.serviceCity)+'" placeholder="'+t('basics.cityPh')+'">')+
+        fieldHtml(t('basics.state'),true,'<select id="in-bizState">'+
+          ['::'+t('basics.statePick')].concat(US_STATES.map(function(s){ return s[0]+'::'+stateName(s[0]); })).map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.bizState===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>',t('basics.stateHint'))+
+      '</div>';
+      html += '<div class="field-row">'+
+        fieldHtml(t('basics.radius'),true,'<input type="number" id="in-serviceRadius" min="1" value="'+esc(state.serviceRadius)+'" placeholder="'+t('basics.radiusPh')+'">')+
+        fieldHtml(t('basics.crewSize'),false,'<select id="in-teamSize">'+
+          ['::'+t('basics.crewPick'),'solo::'+t('basics.crewSolo'),'2-5::'+t('basics.crew2to5'),'6-15::'+t('basics.crew6to15'),'16-50::'+t('basics.crew16to50'),'50+::'+t('basics.crew50plus')].map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.teamSize===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>',t('basics.crewHint'))+
+      '</div>';
+      html += '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('basics.multiLoc')+'</strong><span>'+t('basics.multiLocSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-multiLocation" '+(state.locations==='multi'?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('basics.multiLocExample')+'</div></div>';
+      if(state.locations === 'multi'){
+        html += fieldHtml(t('basics.otherLoc'),false,'<textarea id="in-otherLocations" placeholder="'+t('basics.otherLocPh')+'">'+esc(state.otherLocations)+'</textarea>',t('basics.otherLocHint'));
+      }
+    }
+
+    else if(id === 'hours'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('hours.title')+'</h1>';
+      html += '<p class="step-sub">'+t('hours.sub')+'</p>';
+      var hoursOptions = ['6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM','7:00 PM','8:00 PM'];
+      html += '<div class="field"><div class="field-label">'+t('hours.label')+' <span class="req">*</span></div><div class="hours-grid">';
+      state.hours.forEach(function(row, i){
+        html += '<div class="hours-row">'+
+          '<div class="hours-check"><input type="checkbox" id="hr-open-'+i+'" '+(row.open?'checked':'')+'><span>'+row.day+'</span></div>';
+        if(row.open){
+          html += '<div class="hours-fields">'+
+            '<select id="hr-from-'+i+'">'+hoursOptions.map(function(h){ return '<option'+(h===row.from?' selected':'')+'>'+h+'</option>'; }).join('')+'</select>'+
+            '<span style="color:var(--muted);font-size:12px;">'+t('hours.to')+'</span>'+
+            '<select id="hr-to-'+i+'">'+hoursOptions.map(function(h){ return '<option'+(h===row.to?' selected':'')+'>'+h+'</option>'; }).join('')+'</select>'+
+          '</div>';
+        } else {
+          html += '<div class="hours-closed-label">'+t('hours.closed')+'</div>';
+        }
+        html += '</div>';
+      });
+      html += '</div></div>';
+      html += '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('hours.afterHours')+'</strong><span>'+t('hours.afterHoursSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-afterHours" '+(state.afterHours==='yes'?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('hours.afterHoursExample')+'</div></div>';
+      if(state.afterHours === 'yes'){
+        html += fieldHtml(t('hours.afterHoursFee'),false,'<input type="text" id="in-afterHoursFee" value="'+esc(state.afterHoursFee)+'" placeholder="'+t('hours.afterHoursFeePh')+'">');
+      }
+    }
+
+    else if(id === 'services'){
+      var opts = (SERVICES_BY_TRADE[state.trade] || SERVICES_BY_TRADE.other).slice();
+      if(state.propertyType === 'commercial' || state.propertyType === 'both'){
+        (COMMERCIAL_SERVICES_BY_TRADE[state.trade] || []).forEach(function(s){ if(opts.indexOf(s) === -1) opts.push(s); });
+      }
+      state.services.forEach(function(s){ if(opts.indexOf(s) === -1) opts.push(s); });
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('services.title')+'</h1>';
+      html += '<p class="step-sub">'+t('services.sub')+'</p>';
+      html += '<div class="field"><div class="field-label">'+t('services.propertyQ')+' <span class="req">*</span></div><div class="seg-toggle" id="propertyToggle">'+
+        ['residential::'+t('services.residential'),'commercial::'+t('services.commercial'),'both::'+t('services.both')].map(function(o){
+          var p=o.split('::'); return '<button type="button" data-property="'+p[0]+'" class="'+(state.propertyType===p[0]?'is-active':'')+'">'+p[1]+'</button>';
+        }).join('')+'</div><div class="field-hint">'+t('services.propertyHint')+'</div></div>';
+      html += '<div class="field"><div class="field-label">'+t('services.offered')+' <span class="req">*</span></div>'+
+        renderChips('services', opts, state.services, serviceLabel);
+      html += '<div class="chip-add-row"><input type="text" id="in-serviceCustom" placeholder="'+t('services.addPh')+'"><button type="button" class="chip-add-btn" id="btnAddService">'+t('services.addBtn')+'</button></div>';
+      html += '<div class="field-error">'+t('services.pickOne')+'</div></div>';
+
+      if(state.services.length){
+        html += '<div class="field"><div class="field-label">'+t('services.priceRange')+'</div><div class="sub-block">';
+        state.services.forEach(function(s){
+          var p = state.prices[s] || {low:'',high:''};
+          html += '<div class="price-row"><span class="price-row-name">'+esc(serviceLabel(s))+'</span>'+
+            '<input type="number" data-price-low="'+esc(s)+'" placeholder="150" value="'+esc(p.low)+'">'+
+            '<span class="price-row-sep">&ndash;</span>'+
+            '<input type="number" data-price-high="'+esc(s)+'" placeholder="500" value="'+esc(p.high)+'">'+
+          '</div>';
+        });
+        html += '</div></div>';
+      }
+
+      var brandOpts = (BRANDS_BY_TRADE[state.trade] || []).slice();
+      state.brands.forEach(function(b){ if(brandOpts.indexOf(b) === -1) brandOpts.push(b); });
+      if(brandOpts.length || state.brands.length){
+        html += '<div class="field"><div class="field-label">'+t('services.brands')+'</div>'+
+          renderChips('brands', brandOpts, state.brands)+
+          '<div class="chip-add-row"><input type="text" id="in-brandCustom" placeholder="'+t('services.addBrandPh')+'"><button type="button" class="chip-add-btn" id="btnAddBrand">'+t('services.addBtn')+'</button></div></div>';
+      }
+
+      html += '<div class="field-row">'+
+        fieldHtml(t('services.diagFee'),false,'<input type="number" id="in-diagFee" value="'+esc(state.diagFee)+'" placeholder="89">')+
+        '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('services.maintPlan')+'</strong><span>'+t('services.maintPlanSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-maintPlan" '+(state.maintPlan==='yes'?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('services.maintPlanExample')+'</div></div>'+
+      '</div>';
+      if(state.maintPlan === 'yes'){
+        html += fieldHtml(t('services.maintPrice'),false,'<input type="number" id="in-maintPrice" value="'+esc(state.maintPrice)+'" placeholder="19">');
+        var mrLocked = !textingSetupReady();
+        if (mrLocked && state.maintenanceReminders) state.maintenanceReminders = false;
+        html += '<div class="field"><div class="check-item"><input type="checkbox" id="in-maintenanceReminders" '+(state.maintenanceReminders?'checked':'')+(mrLocked?' disabled':'')+'><label for="in-maintenanceReminders">'+t('services.maintenanceReminders')+'</label></div>'+
+          (mrLocked
+            ? '<p class="field-hint gate-locked-note" style="margin-left:27px" id="maintRemindersLockNote">'+t('services.maintRemindersLockedNote')+' <button type="button" class="add-link" id="jumpToBasicsBtn" style="display:inline;padding:0;font-size:inherit">'+t('services.maintRemindersLockLinkText')+'</button>.</p>'
+            : '<div class="field-hint" style="margin-left:27px">'+t('services.maintenanceRemindersSub')+'</div><div class="switch-example" style="margin-left:27px">'+t('services.maintenanceRemindersExample')+'</div>')+
+        '</div>';
+      }
+      html += '<div class="field-row">'+
+        '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('services.financing')+'</strong><span>'+t('services.financingSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-financing" '+(state.financing==='yes'?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('services.financingExample')+'</div></div>'+
+        '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('services.freeEst')+'</strong><span>'+t('services.freeEstSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-freeEstimates" '+(state.freeEstimates==='yes'?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('services.freeEstExample')+'</div></div>'+
+      '</div>';
+      html += fieldHtml(t('services.outOfScope'),false,'<textarea id="in-outOfScope" placeholder="'+t('services.outOfScopePh')+'">'+esc(state.outOfScope)+'</textarea>',t('services.outOfScopeHint'));
+    }
+
+    else if(id === 'booking'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('booking.title')+'</h1>';
+      html += '<p class="step-sub">'+t('booking.sub')+'</p>';
+      html += fieldHtml(t('booking.fsm'),false,'<select id="in-fsm">'+
+        ['none::'+t('booking.fsmNone'),'servicetitan::ServiceTitan','housecallpro::Housecall Pro','jobber::Jobber','fieldedge::FieldEdge','servicefusion::Service Fusion','successware::Successware','other::'+t('booking.fsmOther')].map(function(o){
+          var parts=o.split('::'); return '<option value="'+parts[0]+'"'+(state.fsm===parts[0]?' selected':'')+'>'+parts[1]+'</option>';
+        }).join('')+'</select>',t('booking.fsmHint'));
+      if(state.fsm === 'other'){
+        html += fieldHtml(t('booking.fsmOtherLabel'),false,'<input type="text" id="in-fsmOther" value="'+esc(state.fsmOther)+'" placeholder="'+t('booking.fsmOtherPh')+'">');
+      }
+      html += fieldHtml(t('booking.calendarSync'),false,'<select id="in-calendarSync">'+
+        ['none::'+t('booking.calendarSyncNone'),'google::'+t('booking.calendarSyncGoogle'),'outlook::'+t('booking.calendarSyncOutlook'),'other::'+t('booking.calendarSyncOther')].map(function(o){
+          var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.calendarSync===p[0]?' selected':'')+'>'+p[1]+'</option>';
+        }).join('')+'</select>',t('booking.calendarSyncHint'));
+      html += '<div class="field-row">'+
+        fieldHtml(t('booking.slotLength'),true,'<select id="in-slotLength">'+
+          ['1hr::'+t('booking.slot1hr'),'2hr::'+t('booking.slot2hr'),'4hr::'+t('booking.slot4hr')].map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.slotLength===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>')+
+        fieldHtml(t('booking.leadTime'),true,'<select id="in-leadTime">'+
+          ['sameday::'+t('booking.leadSameday'),'nextday::'+t('booking.leadNextday'),'24hr::'+t('booking.lead24hr'),'48hr::'+t('booking.lead48hr')].map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.leadTime===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>')+
+      '</div>';
+      html += '<div class="field-row">'+
+        fieldHtml(t('booking.notifyName'),true,'<input type="text" id="in-notifyName" value="'+esc(state.notifyName)+'" placeholder="'+t('booking.notifyNamePh')+'">')+
+        fieldHtml(t('booking.notifyContact'),true,'<input type="text" id="in-notifyContact" value="'+esc(state.notifyContact)+'" placeholder="'+t('booking.notifyContactPh')+'">')+
+      '</div>';
+    }
+
+    else if(id === 'payment'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('payment.title')+'</h1>';
+      html += '<p class="step-sub">'+t('payment.sub')+'</p>';
+      html += '<div class="field"><div class="field-label">'+t('payment.methods')+' <span class="req">*</span></div>'+
+        renderChips('payment', PAYMENT_METHODS, state.paymentMethods, function(m){ return t('method.'+m); })+
+        '<div class="field-error">'+t('payment.pickOne')+'</div></div>';
+      state.paymentMethods.forEach(function(m){
+        if(m === 'cash_check') return;
+        var ph = m === 'custom' ? t('payment.customPh') : m === 'cash_app' ? t('payment.cashAppPh') : t('payment.handlePh');
+        html += '<div class="method-block"><div class="method-block-name">'+esc(t('method.'+m))+t('payment.linkLabel')+'</div>'+
+          '<input type="text" data-method-link="'+esc(m)+'" value="'+esc(state.paymentLinks[m]||'')+'" placeholder="'+ph+'"></div>';
+      });
+      html += fieldHtml(t('payment.accounting'),false,'<select id="in-accountingSoftware">'+
+        ['none::'+t('payment.accountingNone'),'quickbooks::QuickBooks','xero::Xero','freshbooks::FreshBooks','other::'+t('payment.accountingOther')].map(function(o){
+          var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.accountingSoftware===p[0]?' selected':'')+'>'+p[1]+'</option>';
+        }).join('')+'</select>',t('payment.accountingHint'));
+      if(state.accountingSoftware === 'other'){
+        html += fieldHtml(t('payment.accountingOtherLabel'),false,'<input type="text" id="in-accountingOtherText" value="'+esc(state.accountingOtherText)+'" placeholder="'+t('payment.accountingOtherPh')+'">');
+      }
+    }
+
+    else if(id === 'voice'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('voice.title')+'</h1>';
+      html += '<p class="step-sub">'+t('voice.sub')+'</p>';
+      html += '<div class="field"><div class="field-label">'+t('voice.tone')+' <span class="req">*</span></div><div class="tone-card-list" id="toneCardList">'+
+        TONE_OPTIONS.map(function(id){
+          return '<button type="button" class="tone-card'+(state.tone===id?' is-active':'')+'" data-tone="'+id+'">'+
+            '<div class="tone-card-head"><span class="tone-card-radio"></span><span class="tone-card-name">'+esc(t('tone.'+id+'.name'))+'</span></div>'+
+            '<p class="tone-card-desc">'+esc(t('tone.'+id+'.desc'))+'</p>'+
+            '<p class="tone-card-example">'+esc(t('tone.'+id+'.example'))+'</p>'+
+          '</button>';
+        }).join('')+
+      '</div></div>';
+      html += fieldHtml(t('voice.notes'),false,'<textarea id="in-voiceNotes" placeholder="'+t('voice.notesPh')+'">'+esc(state.voiceNotes)+'</textarea>');
+      html += fieldHtml(t('voice.licensing'),false,'<input type="text" id="in-licensing" value="'+esc(state.licensing)+'" placeholder="'+t('voice.licensingPh')+'">',t('voice.licensingHint'));
+      html += '<div class="field"><div class="field-label">'+t('voice.custLang')+' <span class="req">*</span></div>'+
+        '<p class="field-hint" style="margin:0 0 10px">'+t('voice.custLangSub')+'</p>'+
+        '<div class="lang-picker" id="custLangPicker">'+
+          ['en','es'].map(function(code){
+            return '<div class="lang-card'+(state.customerLanguage===code?' is-selected':'')+'" data-custlang="'+code+'">'+
+              '<span class="site-lang-flag" aria-hidden="true"></span><span class="lang-card-label">'+(code==='en'?'English':'Español')+'</span></div>';
+          }).join('')+
+        '</div></div>';
+      html += '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('voice.callRecording')+'</strong><span>'+t('voice.callRecordingWhat')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-callRecording" '+(state.callRecording?'checked':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="transcript-mock"><div class="transcript-mock-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4"></path></svg>'+t('voice.callRecordingExampleLabel')+'</div>'+
+        transcriptMockLinesHtml()+
+      '</div>';
+      // Panel visibility tracks "has this been opened", not "is recording literally on" -- so
+      // reverting the checkbox for a missing two-party ack doesn't also hide the mode picker and
+      // ack checkbox the owner needs in order to fix it.
+      if (state.callRecordingPanelOpen) {
+        html += '<div style="margin:12px 0 0 27px">';
+        html += '<div class="field-label" style="margin-bottom:7px">'+t('voice.callRecordingModeLabel')+'</div>';
+        html += '<select id="in-callRecordingMode" style="margin-bottom:10px">'+
+          ['ask_optin::'+t('voice.callRecordingModeOptIn'),'announce_all::'+t('voice.callRecordingModeAnnounce')].map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.callRecordingMode===p[0]?' selected':'')+'>'+p[1]+'</option>';
+          }).join('')+'</select>';
+        if (state.callRecordingMode === 'ask_optin') {
+          html += '<div class="compliance-note ok"><span class="compliance-note-chip">'+t('voice.callRecordingChipOptIn')+'</span><span>'+t('voice.callRecordingOptInNote')+'</span></div>';
+        } else if (TWO_PARTY_CONSENT_STATES.has(state.bizState)) {
+          html += '<div class="compliance-note"><span class="compliance-note-chip">'+t('voice.callRecordingChip')+'</span><div>'+
+            '<span>'+tf('voice.callRecordingTwoPartyNote',{state:esc(stateName(state.bizState))})+'</span>'+
+            '<div class="check-item" style="margin-top:10px"><input type="checkbox" id="in-callRecordingAck" '+(state.callRecordingAck?'checked':'')+'><label for="in-callRecordingAck">'+t('voice.callRecordingAckLabel')+'</label></div>'+
+          '</div></div>';
+        } else {
+          html += '<div class="compliance-note"><span class="compliance-note-chip">'+t('voice.callRecordingChip')+'</span><span>'+t('voice.callRecordingAnnounceNote')+'</span></div>';
+        }
+        html += '</div>';
+      }
+      html += '</div>';
+    }
+
+    else if(id === 'escalation'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('escalation.title')+'</h1>';
+      html += '<p class="step-sub">'+t('escalation.sub')+'</p>';
+      html += '<div class="field-row">'+
+        fieldHtml(t('escalation.name'),true,'<input type="text" id="in-escName" value="'+esc(state.escName)+'" placeholder="'+t('escalation.namePh')+'">')+
+        fieldHtml(t('escalation.contact'),true,'<input type="text" id="in-escContact" value="'+esc(state.escContact)+'" placeholder="'+t('escalation.contactPh')+'">')+
+      '</div>';
+      html += '<div class="field"><div class="check-item"><input type="checkbox" id="in-liveTakeover" '+(state.liveTakeover?'checked':'')+'><label for="in-liveTakeover">'+t('escalation.liveTakeover')+'</label></div>'+
+        '<div class="field-hint" style="margin-left:27px">'+t('escalation.liveTakeoverSub')+'</div>'+
+        '<div class="switch-example" style="margin-left:27px">'+t('escalation.liveTakeoverExample')+'</div></div>';
+      html += '<div class="field"><div class="check-item"><input type="checkbox" id="in-emergencyAlerts" '+(state.emergencyAlerts?'checked':'')+'><label for="in-emergencyAlerts">'+t('escalation.emergencyAlerts')+'</label></div>'+
+        '<div class="field-hint" style="margin-left:27px">'+t('escalation.emergencyAlertsSub')+'</div>'+
+        '<div class="switch-example" style="margin-left:27px">'+t('escalation.emergencyAlertsExample')+'</div></div>';
+      html += '<p class="field-hint" style="margin:-6px 0 18px">'+t('escalation.alertChannelNote')+'</p>';
+      html += '<div class="field"><div class="field-label">'+t('escalation.handoffQ')+' <span class="req">*</span></div><div class="check-list">';
+      state.handoff.forEach(function(h){
+        html += '<div class="check-item"><input type="checkbox" id="hf-'+h.id+'" '+(h.checked?'checked':'')+'><label for="hf-'+h.id+'">'+esc(t('handoff.'+h.id))+'</label></div>';
+        if(h.hasAmount && h.checked){
+          html += '<div class="check-item sub"><label style="color:var(--muted);font-size:12.5px;">'+t('escalation.amount')+'</label><input type="number" id="in-handoffAmount" value="'+esc(state.handoffAmount)+'"></div>';
+        }
+      });
+      html += '</div></div>';
+      html += '<div class="field"><div class="field-label">'+t('escalation.team')+'</div><div id="teamRows"></div>'+
+        '<button type="button" class="add-link" id="btnAddTeam"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"></path></svg>'+t('escalation.addTeam')+'</button></div>';
+    }
+
+    else if(id === 'reviews'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('reviews.title')+'</h1>';
+      html += '<p class="step-sub">'+t('reviews.sub')+'</p>';
+      html += fieldHtml(t('reviews.gbp'),false,'<input type="url" id="in-gbpLink" value="'+esc(state.gbpLink)+'" placeholder="'+t('reviews.gbpPh')+'">');
+      html += fieldHtml(t('reviews.fb'),false,'<input type="url" id="in-fbLink" value="'+esc(state.fbLink)+'" placeholder="'+t('reviews.fbPh')+'">');
+      html += '<div class="field"><div class="check-item"><input type="checkbox" id="in-digitalCard" '+(state.digitalCard?'checked':'')+'><label for="in-digitalCard">'+t('reviews.digitalCard')+'</label></div>'+
+        '<div class="field-hint" style="margin-left:27px">'+t('reviews.digitalCardSub')+'</div>'+
+        '<div class="switch-example" style="margin-left:27px">'+t('reviews.digitalCardExample')+'</div></div>';
+      var stateDisplayName = stateName(state.bizState);
+      var inWatchList = MINI_TCPA_WATCH_STATES.has(state.bizState);
+      var textingReady = textingSetupReady();
+      html += '<div class="field">'+
+        '<div class="check-item"><input type="checkbox" id="in-textingAck" '+(state.textingConsentAck?'checked':'')+'>'+
+        '<label for="in-textingAck">'+t('reviews.textingAck')+'</label></div>'+
+      '</div>';
+      // Texting setup is automatic -- HelloBob verifies the business's number for texting behind
+      // the scenes using the name & state already collected on Basics. Nothing for the owner to
+      // register or confirm; this note just reflects status. Kept in sync with the Owner Dashboard.
+      var activeNoteKey = state.numberChoice === 'existing' ? 'reviews.textingSetupActiveNoteExisting' : 'reviews.textingSetupActiveNote';
+      html += '<div class="compliance-note'+(textingReady?' ok':'')+'" id="textingSetupNote">'+
+        '<span class="compliance-note-chip">'+t(textingReady ? 'reviews.textingSetupChipActive' : 'reviews.textingSetupChipPending')+'</span>'+
+        '<div>'+
+          '<span>'+t(textingReady ? activeNoteKey : 'reviews.textingSetupPendingNote')+
+            (textingReady ? '' : ' <button type="button" class="add-link" id="jumpToBasicsFromReviewsBtn" style="display:inline;padding:0;font-size:inherit">'+t('reviews.textingSetupPendingLinkText')+'</button>.')+
+          '</span>'+
+        '</div>'+
+      '</div>';
+      // Mini-TCPA-style state watch list -- only shown (and only gates the auto review request,
+      // not the other two texts) for the same four states the Owner Dashboard flags.
+      if (inWatchList) {
+        html += '<div class="compliance-note'+(state.miniTcpaAck?' ok':'')+'" id="miniTcpaNote">'+
+          '<span class="compliance-note-chip">'+t(state.miniTcpaAck ? 'reviews.miniTcpaChipDone' : 'reviews.miniTcpaChip')+'</span>'+
+          '<div>'+
+            '<span>'+tf('reviews.miniTcpaNote',{state:esc(stateDisplayName)})+'</span>'+
+            '<div class="check-item" style="margin-top:10px"><input type="checkbox" id="in-miniTcpaAck" '+(state.miniTcpaAck?'checked':'')+'><label for="in-miniTcpaAck">'+t('reviews.miniTcpaAckLabel')+'</label></div>'+
+          '</div>'+
+        '</div>';
+      } else if (state.miniTcpaAck) {
+        state.miniTcpaAck = false; // stale ack from a previously-selected watch-list state
+      }
+      var gateUnmet = reviewsGateUnmet();
+      if (gateUnmet && state.autoReviews) state.autoReviews = false;
+      html += '<div class="field"><div class="switch-row"><div class="switch-text"><strong>'+t('reviews.autoReviews')+'</strong><span>'+t('reviews.autoReviewsSub')+'</span></div>'+
+        '<label class="switch"><input type="checkbox" id="in-autoReviews" '+(state.autoReviews?'checked':'')+(gateUnmet?' disabled':'')+'><span class="switch-track"></span></label></div>'+
+        '<div class="switch-example">'+t('reviews.autoReviewsExample')+'</div>'+
+        (!gateUnmet ? '<p class="field-hint" style="margin:8px 0 0">'+t('reviews.autoOnNoteAfter')+'</p>' : '')+
+        (gateUnmet === 'consent'
+          ? '<div class="compliance-note"><span class="compliance-note-chip">'+t('reviews.gateTitle')+'</span><span>'+t('reviews.gateBody')+'</span></div>'
+          : gateUnmet === 'verify'
+            ? '<div class="compliance-note"><span class="compliance-note-chip">'+t('reviews.gateVerifyTitle')+'</span><span>'+t('reviews.gateVerifyBody')+'</span></div>'
+            : gateUnmet === 'miniTcpa'
+              ? '<div class="compliance-note"><span class="compliance-note-chip">'+t('reviews.gateMiniTcpaTitle')+'</span><span>'+tf('reviews.gateMiniTcpaBody',{state:esc(stateDisplayName)})+'</span></div>'
+              : inWatchList
+                ? '<div class="compliance-note ok"><span class="compliance-note-chip">'+tf('reviews.handled',{state:esc(stateDisplayName)})+'</span><span>'+tf('reviews.handledBody',{state:esc(stateDisplayName)})+'</span></div>'
+                : '<div class="compliance-note ok"><span class="compliance-note-chip">'+t('reviews.goodTitle')+'</span><span>'+t('reviews.goodBody')+'</span></div>'
+        )+
+      '</div>';
+    }
+
+    stepCard.innerHTML = html;
+    wireStep(id);
+    updateNextState();
+  }
+
+  function wireStep(id){
+    if(id === 'basics'){
+      bind('in-bizName', 'bizName'); bind('in-ownerName','ownerName'); bind('in-bizPhone','bizPhone');
+      bind('in-website','website'); bind('in-serviceCity','serviceCity'); bind('in-serviceRadius','serviceRadius');
+      document.getElementById('in-bizState').addEventListener('change', function(e){ state.bizState = e.target.value; updateNextState(); });
+      Array.prototype.forEach.call(document.querySelectorAll('input[name="in-numberChoice"]'), function(r){
+        r.addEventListener('change', function(e){ state.numberChoice = e.target.value; renderStep(); });
+      });
+      document.getElementById('in-teamSize').addEventListener('change', function(e){ state.teamSize = e.target.value; });
+      document.getElementById('in-multiLocation').addEventListener('change', function(e){ state.locations = e.target.checked?'multi':'single'; renderStep(); });
+      var otherLoc = document.getElementById('in-otherLocations'); if(otherLoc) otherLoc.addEventListener('input', function(e){ state.otherLocations = e.target.value; });
+      var phoneSystemSel = document.getElementById('in-currentPhoneSystem');
+      if (phoneSystemSel) phoneSystemSel.addEventListener('change', function(e){ state.currentPhoneSystem = e.target.value; renderStep(); });
+      var voipProviderInput = document.getElementById('in-voipProvider'); if(voipProviderInput) voipProviderInput.addEventListener('input', function(e){ state.voipProvider = e.target.value; });
+      var hasWebsiteSel = document.getElementById('in-hasWebsite');
+      if (hasWebsiteSel) hasWebsiteSel.addEventListener('change', function(e){
+        var v = e.target.value;
+        if (v === 'yes_upgrade') { state.hasWebsite = 'yes'; state.websiteImproveInterest = true; state.websiteBuildInterest = false; }
+        else if (v === 'no_build') { state.hasWebsite = 'no'; state.websiteBuildInterest = true; state.websiteImproveInterest = false; }
+        else if (v === 'yes') { state.hasWebsite = 'yes'; state.websiteImproveInterest = false; }
+        else if (v === 'no') { state.hasWebsite = 'no'; state.websiteBuildInterest = false; }
+        else { state.hasWebsite = ''; state.websiteImproveInterest = false; state.websiteBuildInterest = false; }
+        renderStep();
+      });
+      var websitePlatformSel = document.getElementById('in-websitePlatform');
+      if (websitePlatformSel) websitePlatformSel.addEventListener('change', function(e){ state.websitePlatform = e.target.value; });
+      var websiteInterestBox = document.getElementById('in-websiteBuildInterest');
+      if (websiteInterestBox) websiteInterestBox.addEventListener('change', function(e){ state.websiteBuildInterest = e.target.checked; renderStep(); });
+      if (state.websiteBuildInterest) {
+        wireChips('websiteBuildPriority', state.websiteBuildPriority, function(){ renderStep(); });
+        wireChips('websiteBuildInclude', state.websiteBuildInclude, function(){ renderStep(); });
+        wireSegToggle('wsBldTimelineToggle', function(v){ state.websiteBuildTimeline = v; });
+        bind('in-websiteBuildNotes', 'websiteBuildNotes');
+      }
+      var websiteImproveBox = document.getElementById('in-websiteImproveInterest');
+      if (websiteImproveBox) websiteImproveBox.addEventListener('change', function(e){ state.websiteImproveInterest = e.target.checked; renderStep(); });
+      if (state.websiteImproveInterest) {
+        wireChips('websiteImprovePriority', state.websiteImprovePriority, function(){ renderStep(); });
+        wireChips('websiteImproveInclude', state.websiteImproveInclude, function(){ renderStep(); });
+        wireSegToggle('wsImpTimelineToggle', function(v){ state.websiteImproveTimeline = v; });
+        bind('in-websiteImproveNotes', 'websiteImproveNotes');
+      }
+    }
+    else if(id === 'hours'){
+      state.hours.forEach(function(row, i){
+        document.getElementById('hr-open-'+i).addEventListener('change', function(e){ row.open = e.target.checked; renderStep(); });
+        var fromEl = document.getElementById('hr-from-'+i), toEl = document.getElementById('hr-to-'+i);
+        if(fromEl) fromEl.addEventListener('change', function(e){ row.from = e.target.value; });
+        if(toEl) toEl.addEventListener('change', function(e){ row.to = e.target.value; });
+      });
+      document.getElementById('in-afterHours').addEventListener('change', function(e){ state.afterHours = e.target.checked?'yes':'no'; renderStep(); });
+      var fee = document.getElementById('in-afterHoursFee'); if(fee) fee.addEventListener('input', function(e){ state.afterHoursFee = e.target.value; });
+    }
+    else if(id === 'services'){
+      document.querySelectorAll('#propertyToggle button').forEach(function(btn){
+        btn.addEventListener('click', function(){ state.propertyType = btn.getAttribute('data-property'); renderStep(); });
+      });
+      wireChips('services', state.services, function(){ renderStep(); });
+      document.getElementById('btnAddService').addEventListener('click', function(){
+        var input = document.getElementById('in-serviceCustom');
+        var v = input.value.trim();
+        if(v && state.services.indexOf(v) === -1){ state.services.push(v); renderStep(); }
+      });
+      document.querySelectorAll('[data-price-low]').forEach(function(el){
+        el.addEventListener('input', function(e){ var s=el.getAttribute('data-price-low'); state.prices[s]=state.prices[s]||{}; state.prices[s].low=e.target.value; });
+      });
+      document.querySelectorAll('[data-price-high]').forEach(function(el){
+        el.addEventListener('input', function(e){ var s=el.getAttribute('data-price-high'); state.prices[s]=state.prices[s]||{}; state.prices[s].high=e.target.value; });
+      });
+      bind('in-diagFee','diagFee');
+      document.getElementById('in-maintPlan').addEventListener('change', function(e){ state.maintPlan = e.target.checked?'yes':'no'; renderStep(); });
+      var mp = document.getElementById('in-maintPrice'); if(mp) mp.addEventListener('input', function(e){ state.maintPrice = e.target.value; });
+      var mr = document.getElementById('in-maintenanceReminders'); if(mr) mr.addEventListener('change', function(e){ state.maintenanceReminders = e.target.checked; });
+      var jumpBtn = document.getElementById('jumpToBasicsBtn');
+      if (jumpBtn) jumpBtn.addEventListener('click', function(){ current = steps.indexOf('basics'); window.scrollTo({top:0, behavior:'smooth'}); renderStep(); });
+      var oos = document.getElementById('in-outOfScope'); if(oos) oos.addEventListener('input', function(e){ state.outOfScope = e.target.value; });
+      wireChips('brands', state.brands, function(){ renderStep(); });
+      var btnAddBrand = document.getElementById('btnAddBrand');
+      if(btnAddBrand) btnAddBrand.addEventListener('click', function(){
+        var input = document.getElementById('in-brandCustom');
+        var v = input.value.trim();
+        if(v && state.brands.indexOf(v) === -1){ state.brands.push(v); renderStep(); }
+      });
+      var fin = document.getElementById('in-financing'); if(fin) fin.addEventListener('change', function(e){ state.financing = e.target.checked?'yes':'no'; });
+      var fe = document.getElementById('in-freeEstimates'); if(fe) fe.addEventListener('change', function(e){ state.freeEstimates = e.target.checked?'yes':'no'; });
+    }
+    else if(id === 'booking'){
+      document.getElementById('in-fsm').addEventListener('change', function(e){ state.fsm = e.target.value; renderStep(); });
+      var fsmOther = document.getElementById('in-fsmOther'); if(fsmOther) fsmOther.addEventListener('input', function(e){ state.fsmOther = e.target.value; });
+      document.getElementById('in-calendarSync').addEventListener('change', function(e){ state.calendarSync = e.target.value; });
+      document.getElementById('in-slotLength').addEventListener('change', function(e){ state.slotLength = e.target.value; updateNextState(); });
+      document.getElementById('in-leadTime').addEventListener('change', function(e){ state.leadTime = e.target.value; updateNextState(); });
+      bind('in-notifyName','notifyName'); bind('in-notifyContact','notifyContact');
+    }
+    else if(id === 'payment'){
+      wireChips('payment', state.paymentMethods, function(){ renderStep(); });
+      document.querySelectorAll('[data-method-link]').forEach(function(el){
+        el.addEventListener('input', function(e){ state.paymentLinks[el.getAttribute('data-method-link')] = e.target.value; });
+      });
+      document.getElementById('in-accountingSoftware').addEventListener('change', function(e){ state.accountingSoftware = e.target.value; renderStep(); });
+      var acctOther = document.getElementById('in-accountingOtherText'); if(acctOther) acctOther.addEventListener('input', function(e){ state.accountingOtherText = e.target.value; });
+    }
+    else if(id === 'voice'){
+      document.querySelectorAll('#toneCardList .tone-card').forEach(function(btn){
+        btn.addEventListener('click', function(){ state.tone = btn.getAttribute('data-tone'); renderStep(); });
+      });
+      var vn = document.getElementById('in-voiceNotes'); if(vn) vn.addEventListener('input', function(e){ state.voiceNotes = e.target.value; });
+      bind('in-licensing','licensing');
+      document.getElementById('in-callRecording').addEventListener('change', function(e){
+        var cb = e.target;
+        if (cb.checked) {
+          state.callRecordingPanelOpen = true;
+          // Same gate as the Owner Dashboard: turning recording ON in "announce on every call"
+          // mode, in a two-party-consent state, requires the greeting acknowledgment first --
+          // the checkbox reverts, but the panel (and the ack checkbox that fixes this) stays open.
+          if (state.callRecordingMode === 'announce_all' && TWO_PARTY_CONSENT_STATES.has(state.bizState) && !state.callRecordingAck) {
+            cb.checked = false;
+          }
+        } else {
+          state.callRecordingPanelOpen = false; // deliberate turn-off -- collapse the panel
+        }
+        state.callRecording = cb.checked;
+        renderStep();
+      });
+      var crMode = document.getElementById('in-callRecordingMode');
+      if (crMode) crMode.addEventListener('change', function(e){ state.callRecordingMode = e.target.value; renderStep(); });
+      var crAck = document.getElementById('in-callRecordingAck');
+      if (crAck) crAck.addEventListener('change', function(e){
+        // While the two-party ack gate applies, the ack checkbox directly drives whether
+        // recording is on -- checking it turns recording on immediately, unchecking it turns it
+        // back off, consistent with every other consent flip in this wizard and the dashboard.
+        state.callRecordingAck = e.target.checked;
+        if (state.callRecordingMode === 'announce_all' && TWO_PARTY_CONSENT_STATES.has(state.bizState)) {
+          state.callRecording = e.target.checked;
+        }
+        renderStep();
+      });
+      document.querySelectorAll('#custLangPicker .lang-card').forEach(function(card){
+        card.querySelector('.site-lang-flag').innerHTML = LANG_FLAGS[card.getAttribute('data-custlang')];
+        card.addEventListener('click', function(){ state.customerLanguage = card.getAttribute('data-custlang'); renderStep(); });
+      });
+    }
+    else if(id === 'escalation'){
+      bind('in-escName','escName'); bind('in-escContact','escContact');
+      document.getElementById('in-liveTakeover').addEventListener('change', function(e){ state.liveTakeover = e.target.checked; });
+      document.getElementById('in-emergencyAlerts').addEventListener('change', function(e){ state.emergencyAlerts = e.target.checked; });
+      state.handoff.forEach(function(h){
+        document.getElementById('hf-'+h.id).addEventListener('change', function(e){ h.checked = e.target.checked; renderStep(); });
+      });
+      var amt = document.getElementById('in-handoffAmount'); if(amt) amt.addEventListener('input', function(e){ state.handoffAmount = e.target.value; });
+      renderTeamRows();
+      document.getElementById('btnAddTeam').addEventListener('click', function(){ state.team.push({name:'',email:''}); renderTeamRows(); });
+    }
+    else if(id === 'reviews'){
+      bind('in-gbpLink','gbpLink'); bind('in-fbLink','fbLink');
+      document.getElementById('in-digitalCard').addEventListener('change', function(e){ state.digitalCard = e.target.checked; });
+      document.getElementById('in-textingAck').addEventListener('change', function(e){
+        // One-step: consent turns review requests on automatically as long as the other gates
+        // (texting setup, and the state-specific ack where it applies) are already met, rather
+        // than requiring a second manual toggle. Revoking consent turns it back off either way.
+        state.textingConsentAck = e.target.checked;
+        state.autoReviews = e.target.checked && !reviewsGateUnmet();
+        renderStep();
+      });
+      var jumpToBasicsFromReviews = document.getElementById('jumpToBasicsFromReviewsBtn');
+      if (jumpToBasicsFromReviews) jumpToBasicsFromReviews.addEventListener('click', function(){ current = steps.indexOf('basics'); window.scrollTo({top:0, behavior:'smooth'}); renderStep(); });
+      var miniTcpaBox = document.getElementById('in-miniTcpaAck');
+      if (miniTcpaBox) miniTcpaBox.addEventListener('change', function(e){
+        state.miniTcpaAck = e.target.checked;
+        if (e.target.checked && state.textingConsentAck && !reviewsGateUnmet()) state.autoReviews = true;
+        renderStep();
+      });
+      document.getElementById('in-autoReviews').addEventListener('change', function(e){ state.autoReviews = e.target.checked; });
+    }
+  }
+
+  function bind(elId, key){
+    var el = document.getElementById(elId);
+    if(!el) return;
+    el.addEventListener('input', function(e){ state[key] = e.target.value; updateNextState(); });
+  }
+
+  function wireChips(group, arr, after){
+    document.querySelectorAll('[data-chipgroup="'+group+'"] .chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        var v = chip.getAttribute('data-chip-value');
+        var idx = arr.indexOf(v);
+        if(idx > -1) arr.splice(idx,1); else arr.push(v);
+        after();
+      });
+    });
+  }
+
+  function renderTeamRows(){
+    var wrap = document.getElementById('teamRows');
+    if(!wrap) return;
+    wrap.innerHTML = state.team.map(function(member, i){
+      return '<div class="team-row">'+
+        '<input type="text" placeholder="'+esc(t('escalation.teamNamePh'))+'" value="'+esc(member.name)+'" data-team-name="'+i+'">'+
+        '<input type="email" placeholder="'+esc(t('escalation.teamEmailPh'))+'" value="'+esc(member.email)+'" data-team-email="'+i+'">'+
+        '<button type="button" class="team-remove" data-team-remove="'+i+'">&times;</button>'+
+      '</div>';
+    }).join('');
+    wrap.querySelectorAll('[data-team-name]').forEach(function(el){ el.addEventListener('input', function(e){ state.team[+el.getAttribute('data-team-name')].name = e.target.value; }); });
+    wrap.querySelectorAll('[data-team-email]').forEach(function(el){ el.addEventListener('input', function(e){ state.team[+el.getAttribute('data-team-email')].email = e.target.value; }); });
+    wrap.querySelectorAll('[data-team-remove]').forEach(function(el){ el.addEventListener('click', function(){ state.team.splice(+el.getAttribute('data-team-remove'),1); renderTeamRows(); }); });
+  }
+
+  function stepValid(){
+    var id = steps[current];
+    if(id === 'basics'){
+      return state.bizName.trim() && state.ownerName.trim() && state.bizPhone.trim() && state.serviceCity.trim() && state.bizState && state.serviceRadius;
+    }
+    if(id === 'hours'){ return true; }
+    if(id === 'services'){ return state.services.length > 0; }
+    if(id === 'booking'){ return state.notifyName.trim() && state.notifyContact.trim(); }
+    if(id === 'payment'){ return state.paymentMethods.length > 0; }
+    if(id === 'voice'){ return !!state.tone && !!state.customerLanguage; }
+    if(id === 'escalation'){ return state.escName.trim() && state.escContact.trim(); }
+    if(id === 'reviews'){ return true; }
+    return true;
+  }
+
+  function updateNextState(){
+    // Every step stays reachable regardless of validation — tightening this
+    // to require fields before advancing is a known follow-up, not done yet.
+    btnNext.disabled = false;
+    footerProgressText.textContent = current < steps.length ? tf('nav.progress', { n: current+1, total: steps.length }) : '';
+  }
+
+  // Maps the wizard's own 'yes'/'no' + improve/build-interest fields to the
+  // three-way answer the backend actually needs (see setupForms.js) — kept
+  // as a pure function of state so it's always in sync with what's on screen.
+  function computeWebsiteChoice(){
+    if (state.hasWebsite === 'yes') return state.websiteImproveInterest ? 'wants_upgrade' : 'has_website';
+    if (state.hasWebsite === 'no') return 'no_website';
+    return 'has_website'; // unanswered — safe default, no false Website Builder follow-up
+  }
+
+  var lastSubmitResult = null;
+
+  function submitSetup(){
+    var errorEl = document.getElementById('submitError');
+    errorEl.hidden = true;
+
+    if (!SETUP_TOKEN){
+      errorEl.textContent = t('noToken.sub');
+      errorEl.hidden = false;
+      return;
+    }
+
+    btnNext.disabled = true;
+    btnNext.textContent = t('submit.saving');
+
+    fetch(HELLOBOB_API_BASE + '/api/setup', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: SETUP_TOKEN, answers: state, websiteChoice: computeWebsiteChoice() }),
+    })
+      .then(function(res){ if (!res.ok) throw new Error('setup submit failed'); return res.json(); })
+      .then(function(result){
+        lastSubmitResult = result;
+        showDone();
+      })
+      .catch(function(){
+        btnNext.disabled = false;
+        btnNext.textContent = t('nav.finish');
+        errorEl.textContent = t('submit.error');
+        errorEl.hidden = false;
+      });
+  }
+
+  btnNext.addEventListener('click', function(){
+    if(current === steps.length - 1){ submitSetup(); return; }
+    current++; window.scrollTo({top:0, behavior:'smooth'}); renderStep();
+  });
+  btnBack.addEventListener('click', function(){
+    if(current === 0) return;
+    current--; window.scrollTo({top:0, behavior:'smooth'}); renderStep();
+  });
+
+  function showDone(){
+    document.querySelector('.topbar').hidden = true;
+    document.querySelector('.main').hidden = true;
+    document.querySelector('.footer-nav').hidden = true;
+    applyDoneScreenText();
+    document.getElementById('doneScreen').hidden = false;
+    window.scrollTo({top:0});
+  }
+
+  function applyDoneScreenText(){
+    document.getElementById('doneTitle').innerHTML = t('done.title');
+    var bizPhrase = state.bizName ? (t('done.possessivePrefix') + esc(state.bizName) + t('done.possessiveSuffix')) : t('done.yourBob');
+    document.getElementById('doneSub').innerHTML = esc(t('done.subPrefix')) + '<b>' + bizPhrase + '</b>' + esc(t('done.subSuffix'));
+    document.getElementById('doneNextLabel').textContent = t('done.next');
+    document.getElementById('doneNext1').innerHTML = t('done.next1');
+    document.getElementById('doneNext2').innerHTML = t('done.next2');
+    document.getElementById('doneNext3').innerHTML = t('done.next3');
+
+    var ctaBox = document.getElementById('doneWebsiteCta');
+    var websiteBuilderUrl = lastSubmitResult && lastSubmitResult.websiteBuilderUrl;
+    if (websiteBuilderUrl){
+      document.getElementById('doneWebsiteCtaText').innerHTML = computeWebsiteChoice() === 'wants_upgrade' ? t('done.websiteCtaTextUpgrade') : t('done.websiteCtaText');
+      var ctaLink = document.getElementById('doneWebsiteCtaLink');
+      ctaLink.href = websiteBuilderUrl;
+      ctaLink.textContent = t('done.websiteCtaBtn');
+      ctaBox.hidden = false;
+    } else {
+      ctaBox.hidden = true;
+    }
+  }
+
+  /* ============================================================
+     Language switcher — same dropdown pattern as the site & dashboard.
+     Re-renders whichever screen is currently visible (step card or
+     the done screen) in the new language; doesn't touch any answer
+     the owner has already typed in.
+     ============================================================ */
+  function applyFormLanguage(lang){
+    LANG = (lang === 'es') ? 'es' : 'en';
+    try { localStorage.setItem('hellobob-wizard-lang', LANG); } catch(e){}
+    document.documentElement.lang = LANG;
+    document.getElementById('site-lang-code').textContent = LANG.toUpperCase();
+    document.getElementById('site-lang-flag').innerHTML = LANG_FLAGS[LANG];
+    document.querySelectorAll('#site-lang-menu .site-lang-option').forEach(function(opt){
+      var active = opt.getAttribute('data-lang') === LANG;
+      opt.classList.toggle('is-active', active);
+      opt.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.getElementById('brandTag').textContent = t('brand.tag');
+    document.getElementById('stepperHint').textContent = t('stepper.hint');
+    if (document.getElementById('doneScreen').hidden) { renderStep(); }
+    else { applyDoneScreenText(); }
+  }
+
+  (function initFormLangSwitcher(){
+    var btn = document.getElementById('site-lang-btn');
+    var menu = document.getElementById('site-lang-menu');
+    var options = Array.prototype.slice.call(menu.querySelectorAll('.site-lang-option'));
+    function closeMenu(){ menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    function openMenu(){ menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); menu.hidden ? openMenu() : closeMenu(); });
+    options.forEach(function(opt){
+      opt.querySelector('.site-lang-flag').innerHTML = LANG_FLAGS[opt.getAttribute('data-lang')];
+      opt.addEventListener('click', function(){ applyFormLanguage(opt.getAttribute('data-lang')); closeMenu(); });
+    });
+    document.addEventListener('click', function(e){ if (!document.getElementById('site-lang-wrap').contains(e.target)) closeMenu(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+  })();
+
+  if (!SETUP_TOKEN){
+    // No ?t= in the URL at all — nothing could ever be saved from this
+    // visit. Show a plain explanation instead of a wizard that silently
+    // goes nowhere; see submitSetup()'s own check for a token that's
+    // present but turns out to be invalid/unknown (that one comes back
+    // from the server, this one we can catch immediately).
+    document.querySelector('.topbar').hidden = true;
+    document.querySelector('.main').hidden = true;
+    document.querySelector('.footer-nav').hidden = true;
+    document.getElementById('noTokenTitle').textContent = t('noToken.title');
+    document.getElementById('noTokenSub').textContent = t('noToken.sub');
+    document.getElementById('noTokenScreen').hidden = false;
+  } else {
+    applyFormLanguage(LANG);
+  }
+})();
+</script>
+
+</body></html>
