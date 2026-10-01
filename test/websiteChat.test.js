@@ -1,9 +1,10 @@
 // Covers the marketing-site "Ask Bob" chat endpoint: the public
 // /api/website-chat route and its abuse guards (via real HTTP, dry-run
-// Claude), plus the capture_signup hand-off that replaces the old Jotform
-// quick sign-up (tested directly against handleWebsiteChat with injected
-// fakes for callClaude/sendEmail — see that function's `deps` param for why:
-// ESM named exports can't be redefined by node:test's mock.method).
+// Claude), plus the capture_signup hand-off — our own signups table and
+// our own Guided Setup page, no third party involved (tested directly
+// against handleWebsiteChat with injected fakes for callClaude/sendEmail —
+// see that function's `deps` param for why: ESM named exports can't be
+// redefined by node:test's mock.method).
 
 process.env.DB_PATH = ':memory:';
 process.env.DRY_RUN = 'true';
@@ -71,23 +72,26 @@ test('/api/signups is hidden without the right admin key', async () => {
 });
 
 // ---- The plain on-page "Start My Free Trial" form — the OTHER path in ----
-test('POST /api/signup (the plain form, not chat) saves a row and returns the questionnaire link', async () => {
+test('POST /api/signup (the plain form, not chat) saves a row and returns our own setup link', async () => {
   const before = listSignups().length;
   const res = await fetch(`${baseUrl}/api/signup`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ businessName: 'Desert Air LLC', contactEmail: 'owner@desertair.com', contactPhone: '480-555-0111' }),
+    body: JSON.stringify({ businessName: 'Desert Air LLC', contactEmail: 'owner@desertair.com', contactPhone: '480-555-0111', contactPref: 'text' }),
   });
   const json = await res.json();
   assert.equal(res.status, 200);
   assert.ok(json.signup?.id);
-  assert.equal(json.questionnaireUrl, 'https://form.jotform.com/262458290659065');
+  assert.match(json.setupUrl, /\/setup\.html\?t=[0-9a-f]{40}$/);
 
   const rows = listSignups();
   assert.equal(rows.length, before + 1);
   const saved = rows.find((r) => r.id === json.signup.id);
   assert.equal(saved?.source, 'website_form');
   assert.equal(saved?.business_name, 'Desert Air LLC');
+  assert.equal(saved?.contact_pref, 'text');
+  assert.ok(saved?.setup_token);
+  assert.equal(saved?.trial_ends_at, null, 'the trial only starts once Guided Setup is completed, not at signup');
 });
 
 test('POST /api/signup rejects a missing field with 400', async () => {
@@ -110,7 +114,7 @@ test('a capture_signup tool call saves a real row and emails both parties — no
       input: { businessName: 'Sunrise Air & Heat', contactEmail: 'mike@sunriseair.com', contactPhone: '619-555-0148' },
     }],
   });
-  const fakeCreateSignup = (row) => ({ id: 42, ...row });
+  const fakeCreateSignup = (row) => ({ id: 42, setup_token: 'faketoken123', ...row });
   const fakeSendEmail = async ({ to, subject }) => {
     sentEmails.push({ to, subject });
     return { sent: true };
@@ -132,7 +136,7 @@ test('a capture_signup tool call saves a real row and emails both parties — no
   );
 
   assert.equal(result.signup.id, 42);
-  assert.equal(result.questionnaireUrl, 'https://form.jotform.com/262458290659065');
+  assert.equal(result.setupUrl, 'https://gilbertrenteria.github.io/hellobob-backend/setup.html?t=faketoken123');
   assert.equal(sentEmails.length, 2);
   assert.ok(sentEmails.some((e) => e.to === 'mike@sunriseair.com'), 'visitor gets the welcome email');
   assert.ok(sentEmails.some((e) => e.subject.includes('Sunrise Air & Heat')), 'Gilbert gets a notification email');
