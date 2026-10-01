@@ -25,7 +25,7 @@ import { createSupportRequest, getSupportRequestByRecordingSid, setSupportReques
 import { runSupportTurn } from '../ai/supportConversationEngine.js';
 import { escapeHtml } from '../util/html.js';
 
-const GREETING = "Hey there, thanks so much for calling — this is Bob from HelloBob! I'm happy to help with pricing, getting set up, or anything you're running into. What can I do for you today?";
+const GREETING = "Thanks for calling HelloBob — the 24/7 front desk that answers every call, even the ones you miss. We text your customers back in seconds, book the job, and keep you compliant, so no lead ever slips through the cracks. This is Bob from HelloBob — what can I do for you today?";
 const MAX_TURNS = 6; // bounds both the call length and the Claude usage per call
 const STALE_CALL_MS = 10 * 60 * 1000; // 10 minutes — see pruneStaleCalls below
 
