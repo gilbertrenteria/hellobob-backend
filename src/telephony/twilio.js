@@ -118,7 +118,7 @@ export function whisperXml(message) {
 // asking about or already using HelloBob), not a per-business customer line.
 // A single neural voice, picked once here so every prompt in that flow
 // sounds consistent — swap this one constant to change it everywhere.
-export const SUPPORT_VOICE = 'Polly.Matthew-Neural';
+export const SUPPORT_VOICE = 'Polly.Gregory-Neural';
 
 /**
  * One turn of the support line's back-and-forth: say something, then listen
