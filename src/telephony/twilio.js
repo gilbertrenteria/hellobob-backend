@@ -111,3 +111,87 @@ export function dialWithWhisperXml(ownerPhoneE164, whisperUrl) {
 export function whisperXml(message) {
   return `<?xml version="1.0" encoding="UTF-8"?><Response><Say>${escapeHtml(message)}</Say></Response>`;
 }
+
+// ---- HelloBob support/sales voice line (telephony/supportVoiceWebhooks.js) -
+// A completely separate call flow from everything above: this is "Bob from
+// HelloBob" answering calls to GILBERT's own support/sales number (people
+// asking about or already using HelloBob), not a per-business customer line.
+// A single neural voice, picked once here so every prompt in that flow
+// sounds consistent — swap this one constant to change it everywhere.
+export const SUPPORT_VOICE = 'Polly.Matthew-Neural';
+
+/**
+ * One turn of the support line's back-and-forth: say something, then listen
+ * for the caller's next sentence. `actionOnEmptyResult="true"` is the part
+ * that's easy to miss — without it, Twilio silently skips `action` on a
+ * timeout (no speech heard) and just falls through to whatever TwiML verb
+ * comes next, so a quiet caller would get no response at all instead of
+ * being re-prompted. With it, our action route always gets a hit — with an
+ * empty SpeechResult — so the silence-handling logic lives in one place
+ * (supportVoiceWebhooks.js's turn handler), not duplicated in TwiML.
+ */
+export function gatherSpeechXml({ sayText, actionUrl, timeoutSeconds = 6 }) {
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?><Response>` +
+    `<Gather input="speech" action="${escapeHtml(actionUrl)}" method="POST" speechTimeout="auto" timeout="${timeoutSeconds}" actionOnEmptyResult="true">` +
+    `<Say voice="${SUPPORT_VOICE}">${escapeHtml(sayText)}</Say>` +
+    `</Gather>` +
+    `</Response>`
+  );
+}
+
+/** Same idea as gatherSpeechXml, but also accepts a single keypress — used for the "callback vs. voice message" menu. */
+export function gatherSpeechOrDigitXml({ sayText, actionUrl, timeoutSeconds = 6 }) {
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?><Response>` +
+    `<Gather input="speech dtmf" numDigits="1" action="${escapeHtml(actionUrl)}" method="POST" speechTimeout="auto" timeout="${timeoutSeconds}" actionOnEmptyResult="true">` +
+    `<Say voice="${SUPPORT_VOICE}">${escapeHtml(sayText)}</Say>` +
+    `</Gather>` +
+    `</Response>`
+  );
+}
+
+/**
+ * The "leave a voice message" path. `transcribe`/`transcribeCallback` queue
+ * Twilio's own speech-to-text (English only, recordings under 2 minutes —
+ * see maxLength) as a SEPARATE async callback that can land seconds after
+ * the call has already ended; recording-complete (this response's `action`)
+ * fires first, as soon as the caller stops talking, and is what we use to
+ * notify Gilbert right away so he isn't waiting on transcription to hear
+ * about it.
+ */
+export function recordVoiceMessageXml({ sayText, actionUrl, transcribeCallbackUrl }) {
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?><Response>` +
+    `<Say voice="${SUPPORT_VOICE}">${escapeHtml(sayText)}</Say>` +
+    `<Record action="${escapeHtml(actionUrl)}" method="POST" maxLength="120" playBeep="true" trim="trim-silence" ` +
+    `transcribe="true" transcribeCallback="${escapeHtml(transcribeCallbackUrl)}" />` +
+    `</Response>`
+  );
+}
+
+/** Says a final line, then ends the call — used once a callback/voice-message has been captured. */
+export function sayAndHangupXml(message) {
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Say voice="${SUPPORT_VOICE}">${escapeHtml(message)}</Say><Hangup/></Response>`;
+}
+
+/**
+ * Fetches a call recording's actual audio bytes from Twilio, using this
+ * account's own credentials — this is what lets /api/admin/voice-messages/:id
+ * hand Gilbert a working link without him ever needing Twilio credentials
+ * himself. Recordings are never downloaded or stored anywhere else; this is
+ * called on demand, each time that link is opened.
+ */
+export async function fetchRecordingAudio(recordingSid) {
+  if (!config.twilioConfigured) {
+    return { ok: false, status: 404 };
+  }
+  const res = await fetch(`${API_BASE}/Accounts/${config.twilioAccountSid}/Recordings/${recordingSid}.mp3`, {
+    headers: { Authorization: authHeader() },
+  });
+  if (!res.ok) {
+    return { ok: false, status: res.status };
+  }
+  const buffer = Buffer.from(await res.arrayBuffer());
+  return { ok: true, status: 200, buffer, contentType: 'audio/mpeg' };
+}
