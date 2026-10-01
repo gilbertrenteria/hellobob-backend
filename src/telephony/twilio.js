@@ -6,6 +6,7 @@
 
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { config } from '../config.js';
+import { escapeHtml } from '../util/html.js';
 
 const API_BASE = 'https://api.twilio.com/2010-04-01';
 
@@ -86,4 +87,27 @@ export function isValidTwilioSignature(url, params, signatureHeader) {
 /** Minimal TwiML response so Twilio's voice webhook gets a valid reply. */
 export function emptyVoiceResponseXml() {
   return `<?xml version="1.0" encoding="UTF-8"?><Response></Response>`;
+}
+
+/**
+ * Forwards an incoming call to the owner's real phone, with a "whisper" —
+ * a short message only the owner hears (the caller just hears normal
+ * ringing) confirming this is a HelloBob business call before they're
+ * bridged in. `whisperUrl` is this same server's own /webhooks/voice-whisper
+ * endpoint (built in webhooks.js) — Twilio fetches it fresh the moment the
+ * owner picks up. `answerOnBridge="true"` is what delays "answered" from the
+ * caller's perspective until after the whisper + bridge, not the instant the
+ * owner's phone picks up — without it the whisper itself would count as
+ * billable/answered time and the caller could hear a sliver of dead air.
+ * If the owner doesn't pick up, Twilio reports this call as no-answer, which
+ * re-invokes handleIncomingVoice and falls into the existing missed-call
+ * text-back path below — no separate "missed" handling needed here.
+ */
+export function dialWithWhisperXml(ownerPhoneE164, whisperUrl) {
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Dial answerOnBridge="true"><Number url="${escapeHtml(whisperUrl)}">${escapeHtml(ownerPhoneE164)}</Number></Dial></Response>`;
+}
+
+/** The whisper TwiML itself — played only to the owner, only once they answer. */
+export function whisperXml(message) {
+  return `<?xml version="1.0" encoding="UTF-8"?><Response><Say>${escapeHtml(message)}</Say></Response>`;
 }

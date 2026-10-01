@@ -3,7 +3,7 @@
 // keeps this file testable without spinning up a real HTTP server.
 
 import { config } from '../config.js';
-import { isValidTwilioSignature, sendSms, emptyVoiceResponseXml } from './twilio.js';
+import { isValidTwilioSignature, sendSms, emptyVoiceResponseXml, dialWithWhisperXml } from './twilio.js';
 import {
   getBusinessByPhone,
   upsertCustomer,
@@ -86,11 +86,14 @@ export async function handleIncomingSms({ url, params, signatureHeader }) {
 }
 
 /**
- * Incoming voice webhook. We don't build an IVR — Bob's job happens over SMS
- * — so every call gets a short "call is coming" message and, once Twilio
- * reports the call as unanswered/completed-without-pickup, this same
- * handler (called again with CallStatus=no-answer/busy/failed, per the
- * StatusCallback configured on the number) triggers the reactive text-back.
+ * Incoming voice webhook. There's no AI voice/IVR here — Bob's job happens
+ * over SMS — so a call either rings through to the owner's real phone (with
+ * a "HelloBob call" whisper only they hear, so they know it's the business
+ * line before picking up) when OWNER_FORWARD_PHONE is configured, or — if
+ * that's unset, or once the owner doesn't pick up and Twilio reports this
+ * same call again with CallStatus=no-answer/busy/failed per the
+ * StatusCallback configured on the number — this handler sends the caller a
+ * reactive text-back instead.
  */
 export async function handleIncomingVoice({ url, params, signatureHeader }) {
   if (!isValidTwilioSignature(url, params, signatureHeader)) {
@@ -119,6 +122,14 @@ export async function handleIncomingVoice({ url, params, signatureHeader }) {
       // window in a fuller implementation; for the MVP we log and skip.
       console.warn(`[compliance] missed-call text-back deferred for ${customer.phone_e164}: ${decision.reason}`);
     }
+    return { status: 200, body: emptyVoiceResponseXml() };
+  }
+
+  // Not yet a terminal status — this is the call actually coming in. Ring
+  // the owner's phone instead of silently disconnecting, if they've set one.
+  if (config.ownerForwardPhone) {
+    const whisperUrl = `${config.publicBaseUrl}/webhooks/voice-whisper`;
+    return { status: 200, body: dialWithWhisperXml(config.ownerForwardPhone, whisperUrl) };
   }
 
   return { status: 200, body: emptyVoiceResponseXml() };
