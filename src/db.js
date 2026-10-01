@@ -234,11 +234,35 @@ db.exec(`
     expires_at TEXT NOT NULL
   );
 
+  -- One row per "I'd like to talk to a human" moment on the HelloBob
+  -- support/sales line (telephony/supportVoiceWebhooks.js) — NOT the
+  -- per-business customer lines in telephony/webhooks.js. A caller gets one
+  -- of two kinds: 'callback' (name + reason captured live in the call) or
+  -- 'voice_message' (a recorded message, transcribed asynchronously —
+  -- transcript starts NULL and is filled in once Twilio's transcribeCallback
+  -- arrives). recording_sid is the lookup key for that update, and also
+  -- what /api/admin/voice-messages/:id uses to fetch the actual audio from
+  -- Twilio on demand (never stored locally — this stays zero-dependency).
+  CREATE TABLE IF NOT EXISTS support_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kind TEXT NOT NULL CHECK (kind IN ('callback', 'voice_message')),
+    call_sid TEXT NOT NULL,
+    phone_e164 TEXT NOT NULL,
+    name TEXT,
+    reason TEXT,
+    recording_sid TEXT,
+    recording_duration_seconds INTEGER,
+    transcript TEXT,
+    notified_at TEXT,
+    created_at TEXT NOT NULL DEFAULT (datetime('now'))
+  );
+
   CREATE INDEX IF NOT EXISTS idx_consent_lookup ON consent_records(business_id, customer_id, type, created_at);
   CREATE INDEX IF NOT EXISTS idx_messages_conv ON messages(conversation_id, created_at);
   CREATE INDEX IF NOT EXISTS idx_tech_availability ON tech_availability(technician_id, day_of_week);
   CREATE INDEX IF NOT EXISTS idx_tech_time_off ON tech_time_off(technician_id, start_at, end_at);
   CREATE INDEX IF NOT EXISTS idx_setup_submissions_signup ON setup_submissions(signup_id, kind);
+  CREATE INDEX IF NOT EXISTS idx_support_requests_recording ON support_requests(recording_sid);
 `);
 
 // ---- Migrations -------------------------------------------------------------
@@ -693,4 +717,38 @@ export function getValidSession(token) {
 
 export function deleteSession(token) {
   db.prepare(`DELETE FROM sessions WHERE token = ?`).run(token);
+}
+
+// ---- HelloBob support/sales voice line (telephony/supportVoiceWebhooks.js) -
+// See support_requests in the schema above for the shape and why 'callback'
+// and 'voice_message' share one table.
+
+export function createSupportRequest({ kind, callSid, phoneE164, name, reason, recordingSid, recordingDurationSeconds }) {
+  const info = db.prepare(
+    `INSERT INTO support_requests (kind, call_sid, phone_e164, name, reason, recording_sid, recording_duration_seconds)
+     VALUES (?, ?, ?, ?, ?, ?, ?)`
+  ).run(kind, callSid, phoneE164, name || null, reason || null, recordingSid || null, recordingDurationSeconds ?? null);
+  return db.prepare(`SELECT * FROM support_requests WHERE id = ?`).get(Number(info.lastInsertRowid));
+}
+
+export function getSupportRequest(id) {
+  return db.prepare(`SELECT * FROM support_requests WHERE id = ?`).get(id) || null;
+}
+
+/** Twilio's transcribeCallback only carries RecordingSid, not our row id, so this is the lookup it actually uses. */
+export function getSupportRequestByRecordingSid(recordingSid) {
+  return db.prepare(`SELECT * FROM support_requests WHERE recording_sid = ?`).get(recordingSid) || null;
+}
+
+export function setSupportRequestTranscript(id, transcript) {
+  db.prepare(`UPDATE support_requests SET transcript = ? WHERE id = ?`).run(transcript, id);
+}
+
+export function markSupportRequestNotified(id) {
+  db.prepare(`UPDATE support_requests SET notified_at = datetime('now') WHERE id = ?`).run(id);
+}
+
+/** For a future admin view — not wired into the dashboard yet, but cheap to have ready. */
+export function listSupportRequests(limit = 100) {
+  return db.prepare(`SELECT * FROM support_requests ORDER BY created_at DESC, id DESC LIMIT ?`).all(limit);
 }

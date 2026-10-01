@@ -9,7 +9,15 @@ import { existsSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { config } from './config.js';
 import { handleIncomingSms, handleIncomingVoice } from './telephony/webhooks.js';
-import { whisperXml } from './telephony/twilio.js';
+import { whisperXml, fetchRecordingAudio } from './telephony/twilio.js';
+import {
+  handleSupportVoiceIncoming,
+  handleSupportVoiceTurn,
+  handleSupportVoiceEscalateChoice,
+  handleSupportVoiceCallbackName,
+  handleSupportVoiceRecordingComplete,
+  handleSupportVoiceTranscriptionComplete,
+} from './telephony/supportVoiceWebhooks.js';
 import {
   getBusinessRoute,
   getConversationsRoute,
@@ -26,7 +34,7 @@ import { handleWebsiteChat } from './webchat/websiteChat.js';
 import { captureSignup, SignupError } from './signup.js';
 import { submitGuidedSetup, submitWebsiteBuilder, SetupFormError } from './setupForms.js';
 import { startReminderScheduler } from './reminders.js';
-import { db, listSignups, listPendingApprovals, getLatestSubmission, getTechnician, getConversation } from './db.js';
+import { db, listSignups, listPendingApprovals, getLatestSubmission, getTechnician, getConversation, getSupportRequest } from './db.js';
 import { seedDemoIfEmpty } from './demoSeed.js';
 import { login, logout, acceptInvite, createBusinessWithOwner, sessionFromToken, AuthError } from './auth/auth.js';
 
@@ -213,6 +221,52 @@ export function createApp() {
       // message, so there's nothing here worth signature-checking.
       if (req.method === 'POST' && path === '/webhooks/voice-whisper') {
         return sendXml(res, 200, whisperXml('HelloBob call'));
+      }
+
+      // ---- HelloBob support/sales voice line ---------------------------------
+      // A dedicated Twilio number for people calling HelloBob itself (not a
+      // subscriber business's customers) — see telephony/supportVoiceWebhooks.js.
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceIncoming({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendXml(res, result.status, result.body);
+      }
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice/turn') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceTurn({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendXml(res, result.status, result.body);
+      }
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice/escalate-choice') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceEscalateChoice({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendXml(res, result.status, result.body);
+      }
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice/callback-name') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceCallbackName({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendXml(res, result.status, result.body);
+      }
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice/recording-complete') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceRecordingComplete({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendXml(res, result.status, result.body);
+      }
+
+      if (req.method === 'POST' && path === '/webhooks/support-voice/transcription-complete') {
+        const raw = await readBody(req);
+        const params = parseFormBody(raw);
+        const result = await handleSupportVoiceTranscriptionComplete({ url: fullUrlFor(req), params, signatureHeader: req.headers['x-twilio-signature'] });
+        return sendJson(res, result.status, { ok: true });
       }
 
       // ---- Dashboard auth ---------------------------------------------------
@@ -501,6 +555,30 @@ export function createApp() {
           websiteBuilder: getLatestSubmission(signup.id, 'website_builder'),
         }));
         return sendJson(res, 200, pending);
+      }
+
+      // Lets Gilbert actually listen to a voice message left on the support
+      // line without ever needing Twilio credentials himself — this fetches
+      // the audio from Twilio server-side (see fetchRecordingAudio in
+      // telephony/twilio.js) using credentials already configured here, and
+      // streams it straight through. Same ?key=ADMIN_KEY gate as the routes
+      // above; the link itself is what gets texted/emailed to Gilbert by
+      // telephony/supportVoiceWebhooks.js.
+      const voiceMessageMatch = path.match(/^\/api\/admin\/voice-messages\/(\d+)$/);
+      if (req.method === 'GET' && voiceMessageMatch) {
+        if (!config.adminKey || url.searchParams.get('key') !== config.adminKey) {
+          return sendJson(res, 404, { error: 'not found' });
+        }
+        const request = getSupportRequest(Number(voiceMessageMatch[1]));
+        if (!request || request.kind !== 'voice_message' || !request.recording_sid) {
+          return sendJson(res, 404, { error: 'not found' });
+        }
+        const recording = await fetchRecordingAudio(request.recording_sid);
+        if (!recording.ok) {
+          return sendJson(res, 502, { error: 'could not fetch recording from Twilio' });
+        }
+        res.writeHead(200, { 'content-type': recording.contentType });
+        return res.end(recording.buffer);
       }
 
       // Static dashboard UI (plain HTML/CSS/JS, no build step — same
