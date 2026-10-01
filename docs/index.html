@@ -878,6 +878,16 @@
   .ss-field input::placeholder{ color:var(--grey-dim); }
   .ss-error{ color:#F17A73; font-size:13px; margin:2px 0 0; }
   .ss-error[hidden]{ display:none; }
+  .ss-pref-row{ display:flex; gap:8px; }
+  .ss-pref-opt{ flex:1; }
+  .ss-pref-opt input{ position:absolute; opacity:0; width:1px; height:1px; }
+  .ss-pref-opt span{
+    display:block; text-align:center; font-family:var(--font-body); font-size:13px; font-weight:600; color:var(--grey);
+    background:rgba(255,255,255,0.03); border:1px solid var(--line); border-radius:9px; padding:10px 13px; cursor:pointer;
+    transition:border-color .15s ease, color .15s ease, background .15s ease;
+  }
+  .ss-pref-opt input:checked + span{ border-color:var(--red); color:var(--white); background:rgba(229,35,26,0.12); }
+  .ss-pref-opt input:focus-visible + span{ outline:2px solid var(--red); outline-offset:1px; }
   #ssSubmitBtn:disabled{ opacity:.6; cursor:default; }
 
   .su-done{ display:flex; align-items:flex-start; gap:14px; margin-top:22px; padding-top:22px; border-top:1px solid var(--line); }
@@ -1850,7 +1860,7 @@
     </div>
     <div class="hero-cta-row">
       <a class="btn btn-primary btn-stacked" href="#contact" data-goto="contact">
-        <span class="btn-main" data-i18n="hero.ctaPrimary">Start My Free 14-Day Trial</span>
+        <span class="btn-main" data-i18n="hero.ctaPrimary">Start My Free 10-Day Trial</span>
         <span class="btn-sub">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
           <span data-i18n="hero.ctaReassurance">No card, nothing due until you've tested Bob yourself.</span>
@@ -3470,7 +3480,7 @@
     </div>
 
     <a class="btn btn-primary btn-stacked value-cta" href="#contact" data-goto="contact">
-      <span class="btn-main" data-i18n="value.cta">Start My Free 14-Day Trial</span>
+      <span class="btn-main" data-i18n="value.cta">Start My Free 10-Day Trial</span>
       <span class="btn-sub">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
         <span data-i18n="hero.ctaReassurance">No card, nothing due until you've tested Bob yourself.</span>
@@ -3588,7 +3598,7 @@
         <li class="ss-item">
           <span class="ss-num">4</span>
           <div class="ss-body">
-            <h3 data-i18n="steps.s4.title">Try him free for 14 days</h3>
+            <h3 data-i18n="steps.s4.title">Try him free for 10 days</h3>
             <p data-i18n="steps.s4.body">No card, nothing due until you've tested Bob yourself. Cancel anytime after.</p>
           </div>
         </li>
@@ -3606,6 +3616,19 @@
         <div class="ss-field">
           <label for="ssPhone" data-i18n="signup.phoneLabel">Phone</label>
           <input type="tel" id="ssPhone" name="contactPhone" autocomplete="tel" required>
+        </div>
+        <div class="ss-field">
+          <label data-i18n="signup.contactPrefLabel">How should we reach you?</label>
+          <div class="ss-pref-row" id="ssContactPref">
+            <label class="ss-pref-opt">
+              <input type="radio" name="contactPref" value="email" checked>
+              <span data-i18n="signup.contactPrefEmail">Email</span>
+            </label>
+            <label class="ss-pref-opt">
+              <input type="radio" name="contactPref" value="text">
+              <span data-i18n="signup.contactPrefText">Text</span>
+            </label>
+          </div>
         </div>
         <button type="submit" class="btn btn-primary su-launch-btn" id="ssSubmitBtn" data-i18n="steps.continue">Start My Free Trial</button>
         <p class="su-finePrint" data-i18n="signup.finePrint">No credit card required to start. $197/month flat after your trial &mdash; cancel anytime.</p>
@@ -4075,7 +4098,7 @@
     'cta.phonePlaceholder': '[ Su número de teléfono ]',
     'cta.serving': 'Sirviendo a empresas de HVAC en todo el país',
 
-    'hero.ctaPrimary': 'Comience Mi Prueba Gratis De 14 Días',
+    'hero.ctaPrimary': 'Comience Mi Prueba Gratis De 10 Días',
     'hero.ctaSecondary': 'Ver Una Demostración En Vivo',
     'hero.ctaReassurance': 'Sin tarjeta, no paga nada hasta probarlo usted mismo.',
     'nudge.title': 'Vea exactamente cómo funciona',
@@ -4090,13 +4113,16 @@
     'steps.s2.body': 'El mismo día, directo a su correo. Unos 10&ndash;15 minutos para completarlo &mdash; guárdelo y termínelo después si lo necesita.',
     'steps.s3.title': 'Construimos a Bob para su negocio',
     'steps.s3.body': 'Su horario, sus servicios, sus precios, sus garantías &mdash; Bob aprende a sonar como su negocio, no como un guion.',
-    'steps.s4.title': 'Pruébelo gratis por 14 días',
+    'steps.s4.title': 'Pruébelo gratis por 10 días',
     'steps.s4.body': 'Sin tarjeta, no paga nada hasta probarlo usted mismo. Cancele cuando quiera después.',
     'steps.continue': 'Continuar Al Formulario De Inscripción',
     'steps.fallback': 'Ventana bloqueada &mdash; abrir el formulario de inscripción',
     'steps.done.head': 'Abierto en una nueva pestaña',
     'steps.done.sub': 'Termine de completar el formulario ahí, luego revise su correo &mdash; ahí le enviaremos su cuestionario de configuración a continuación.',
     'signup.finePrint': 'No se requiere tarjeta de crédito para comenzar. $197/mes fijo después de su prueba &mdash; cancele cuando quiera.',
+    'signup.contactPrefLabel': '¿Cómo prefiere que lo contactemos?',
+    'signup.contactPrefEmail': 'Correo',
+    'signup.contactPrefText': 'Mensaje de texto',
 
     'faq.eyebrow': 'Preguntas Frecuentes',
     'faq.title': 'Antes de que pregunte.',
@@ -6427,13 +6453,13 @@
   })();
 
   // ---------- Self-serve signup: our own form, straight to our own backend ----------
-  // The quick sign-up (business name, email, phone) is OUR OWN system now,
-  // not Jotform — see HELLOBOB_API_BASE / POST /api/signup in
-  // hellobob-backend. This is the same backend + same DB row + same two
-  // automatic emails (welcome + questionnaire link, notify-me) as the "Ask
-  // Bob" chat's capture_signup path — a visitor can sign up either way and
-  // it lands in the exact same place. Only the detailed 15-section setup
-  // questionnaire that follows is still a (separate, already-built) Jotform.
+  // The quick sign-up (business name, email, phone, contact preference) is
+  // OUR OWN system — see HELLOBOB_API_BASE / POST /api/signup in
+  // hellobob-backend. This is the same backend + same DB row + same welcome
+  // email/text as the "Ask Bob" chat's capture_signup path — a visitor can
+  // sign up either way and it lands in the exact same place. The Guided
+  // Setup wizard that follows (docs/setup.html) is our own real form too —
+  // nothing in this flow goes to Jotform or any other third party.
   (function initSignupSteps(){
     const wrap = document.getElementById('signupSteps');
     const form = document.getElementById('ssCta');
@@ -6459,6 +6485,8 @@
       const businessName = (bizNameEl && bizNameEl.value || '').trim();
       const contactEmail = (emailEl && emailEl.value || '').trim();
       const contactPhone = (phoneEl && phoneEl.value || '').trim();
+      const contactPrefEl = form.querySelector('input[name="contactPref"]:checked');
+      const contactPref = contactPrefEl ? contactPrefEl.value : 'email';
       if(!businessName || !contactEmail || !contactPhone){
         showError(siteLang === 'es' ? 'Complete los tres campos para continuar.' : 'Please fill in all three fields to continue.');
         return;
@@ -6473,7 +6501,7 @@
         const res = await fetch(HELLOBOB_API_BASE + '/api/signup', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ businessName, contactEmail, contactPhone }),
+          body: JSON.stringify({ businessName, contactEmail, contactPhone, contactPref }),
         });
         if(!res.ok) throw new Error('signup failed');
         form.hidden = true;
@@ -6555,7 +6583,7 @@
         endStat3Num: "+1", endStat3Label: "New 5-Star Review",
         endHead: "This is Bob. Working while you sleep.",
         endSub: "No card, nothing due until you've tried Bob yourself.",
-        endCta: "Start My Free 14-Day Trial",
+        endCta: "Start My Free 10-Day Trial",
         endReplay: "Watch Again"
       },
       es: {
@@ -6594,7 +6622,7 @@
         endStat3Num: "+1", endStat3Label: "Nueva Reseña De 5 Estrellas",
         endHead: "Este es Bob. Trabajando mientras usted duerme.",
         endSub: "Sin tarjeta, no paga nada hasta probarlo usted mismo.",
-        endCta: "Comience Mi Prueba Gratis De 14 Días",
+        endCta: "Comience Mi Prueba Gratis De 10 Días",
         endReplay: "Ver De Nuevo"
       }
     };

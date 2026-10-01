@@ -1,0 +1,760 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<meta charset="UTF-8">
+<title>HelloBob Website Builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#ECECE7; --card:#FFFFFF; --card-2:#F6F6F3;
+    --ink:#17181B; --ink-soft:#4B4E54; --muted:#6B6F76; --line:#DDDDD7;
+    --red:#E5231A; --red-deep:#A5170F; --red-soft:rgba(229,35,26,0.10);
+    --green:#1C8F52; --green-soft:rgba(28,143,82,0.10);
+    --amber:#966212; --amber-soft:rgba(214,146,20,0.14);
+    --steel:#2F4E67;
+    --font-display:'Big Shoulders Display','Arial Narrow',sans-serif;
+    --font-body:'Barlow',-apple-system,'Segoe UI',sans-serif;
+    --font-mono:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --page:#0E0E10; --card:#17181B; --card-2:#1D1F23;
+      --ink:#F5F5F3; --ink-soft:#C7C9CD; --muted:#9A9DA3; --line:#2A2C30;
+      --red:#E5231A; --red-deep:#FF6357; --red-soft:rgba(229,35,26,0.16);
+      --green:#39D67A; --green-soft:rgba(57,214,122,0.14);
+      --amber:#F0A93D; --amber-soft:rgba(240,169,61,0.14);
+      --steel:#8FB0CC;
+    }
+  }
+  :root[data-theme="dark"]{
+    --page:#0E0E10; --card:#17181B; --card-2:#1D1F23;
+    --ink:#F5F5F3; --ink-soft:#C7C9CD; --muted:#9A9DA3; --line:#2A2C30;
+    --red:#E5231A; --red-deep:#FF6357; --red-soft:rgba(229,35,26,0.16);
+    --green:#39D67A; --green-soft:rgba(57,214,122,0.14);
+    --amber:#F0A93D; --amber-soft:rgba(240,169,61,0.14);
+    --steel:#8FB0CC;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{ margin:0; background:var(--page); color:var(--ink); font-family:var(--font-body); -webkit-font-smoothing:antialiased; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  input, select, textarea{ font-family:inherit; }
+
+  .topbar{ position:sticky; top:0; z-index:20; background:var(--page); border-bottom:1px solid var(--line); }
+  .topbar-inner{ max-width:640px; margin:0 auto; padding:20px 24px 16px; }
+  .brand{ display:flex; flex-wrap:wrap; row-gap:8px; align-items:center; gap:10px; margin-bottom:18px; }
+  .brand-mark{
+    width:30px; height:30px; border-radius:8px; flex-shrink:0;
+    background:radial-gradient(circle at 32% 28%, #FF4536, var(--red) 60%, var(--red-deep) 100%);
+    display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:12px;
+    box-shadow:0 6px 14px -6px rgba(229,35,26,0.55);
+  }
+  .brand-word{ font-family:var(--font-display); font-weight:800; font-size:17px; letter-spacing:0.005em; }
+  .brand-word .hello{ color:var(--ink); } .brand-word .bob{ color:var(--red); }
+  .brand-word{ white-space:nowrap; }
+  .brand-tag{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-left:2px; white-space:nowrap; }
+
+  .stepper-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:9px; }
+  .stepper-label{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--muted); }
+  .stepper-name{ font-size:13.5px; font-weight:600; color:var(--ink-soft); }
+  .stepper-track{ display:flex; gap:4px; }
+  .stepper-seg{ cursor:pointer; }
+  .stepper-jump-hint{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); text-align:center; padding-top:6px; }
+  .stepper-seg{ flex:1; height:5px; border-radius:3px; background:var(--line); overflow:hidden; }
+  .stepper-seg-fill{ height:100%; width:0%; background:var(--red); border-radius:3px; transition:width .25s ease; }
+  .stepper-seg.is-done .stepper-seg-fill{ width:100%; }
+  .stepper-seg.is-current .stepper-seg-fill{ width:100%; background:var(--red); }
+
+  .main{ max-width:640px; margin:0 auto; padding:32px 24px 140px; }
+  .step-card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:28px 26px 30px; box-shadow:0 1px 2px rgba(0,0,0,0.05); }
+  .step-eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.07em; text-transform:uppercase; color:var(--red); margin:0 0 8px; }
+  .step-title{ font-family:var(--font-display); font-weight:800; font-size:26px; letter-spacing:-0.005em; margin:0 0 8px; text-wrap:balance; }
+  .step-sub{ font-size:14px; line-height:1.55; color:var(--ink-soft); margin:0 0 24px; max-width:52ch; }
+
+  .field{ margin-bottom:20px; }
+  .field:last-child{ margin-bottom:0; }
+  .field-label{ display:flex; align-items:baseline; gap:6px; font-size:13px; font-weight:600; margin-bottom:7px; }
+  .field-label .req{ color:var(--red); font-weight:700; }
+  .field-label .opt{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.03em; text-transform:uppercase; color:var(--muted); font-weight:500; }
+  .field-hint{ font-size:12px; color:var(--muted); margin-top:6px; line-height:1.5; }
+  .field-row{ display:flex; gap:12px; }
+  .field-row > *{ flex:1; min-width:0; }
+
+  input[type="text"], input[type="tel"], input[type="url"], input[type="number"], input[type="email"], select, textarea{
+    width:100%; font-size:14.5px; color:var(--ink); background:var(--card-2);
+    border:1.5px solid var(--line); border-radius:10px; padding:11px 13px;
+    transition:border-color .15s;
+  }
+  textarea{ resize:vertical; min-height:72px; line-height:1.5; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible{ outline:none; border-color:var(--red); }
+  select{ appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B6F76' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; background-size:14px; padding-right:34px; }
+
+  /* template picker (tone-card pattern) */
+  .tone-card-list{ display:flex; flex-direction:column; gap:10px; }
+  .tone-card{
+    display:block; width:100%; text-align:left; cursor:pointer; font-family:inherit;
+    border:1.5px solid var(--line); border-radius:12px; padding:12px 14px; background:var(--card-2);
+    transition:border-color .15s, background .15s;
+  }
+  .tone-card:hover{ border-color:var(--muted); }
+  .tone-card.is-active{ border-color:var(--red); background:var(--red-soft); }
+  .tone-card-head{ display:flex; align-items:center; gap:9px; margin-bottom:5px; }
+  .tone-card-radio{ width:15px; height:15px; border-radius:50%; border:1.5px solid var(--muted); flex-shrink:0; position:relative; }
+  .tone-card.is-active .tone-card-radio{ border-color:var(--red); }
+  .tone-card.is-active .tone-card-radio::after{ content:''; position:absolute; inset:3px; border-radius:50%; background:var(--red); }
+  .tone-card-name{ font-size:13.5px; font-weight:700; color:var(--ink); }
+  .tone-card-desc{ font-size:12px; color:var(--muted); margin:0; line-height:1.45; }
+
+  /* color swatches */
+  .swatch-grid{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .swatch{ width:34px; height:34px; border-radius:50%; cursor:pointer; border:2px solid var(--card); box-shadow:0 0 0 1.5px var(--line); flex-shrink:0; position:relative; }
+  .swatch.is-selected{ box-shadow:0 0 0 2px var(--card), 0 0 0 4px var(--ink); }
+  .swatch-custom-wrap{ display:flex; align-items:center; gap:8px; }
+  .swatch-custom-wrap input[type="color"]{ width:34px; height:34px; padding:0; border:1.5px solid var(--line); border-radius:50%; overflow:hidden; cursor:pointer; background:var(--card-2); }
+  .swatch-custom-wrap span{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); }
+
+  /* switch */
+  .switch-row{ display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  .switch-text strong{ display:block; font-size:14px; font-weight:600; margin-bottom:2px; }
+  .switch-text span{ font-size:12.5px; color:var(--muted); }
+  .switch{ position:relative; width:42px; height:25px; flex-shrink:0; }
+  .switch input{ position:absolute; opacity:0; width:100%; height:100%; margin:0; cursor:pointer; }
+  .switch-track{ position:absolute; inset:0; background:var(--line); border-radius:999px; transition:background .15s; pointer-events:none; }
+  .switch-track::after{ content:''; position:absolute; top:2.5px; left:2.5px; width:20px; height:20px; border-radius:50%; background:#fff; box-shadow:0 1px 3px rgba(0,0,0,0.25); transition:transform .15s; }
+  .switch input:checked ~ .switch-track{ background:var(--green); }
+  .switch input:checked ~ .switch-track::after{ transform:translateX(17px); }
+
+  /* ---------- Footer nav ---------- */
+  .footer-nav{ position:fixed; left:0; right:0; bottom:0; background:var(--page); border-top:1px solid var(--line); z-index:20; }
+  .footer-nav-inner{ max-width:640px; margin:0 auto; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; gap:14px; }
+  .btn{ font-family:inherit; font-size:14px; font-weight:700; border-radius:10px; padding:13px 26px; cursor:pointer; border:none; transition:opacity .15s, transform .1s; flex-shrink:0; }
+  .btn:active{ transform:scale(0.98); }
+  .btn-back{ background:transparent; color:var(--ink-soft); border:1.5px solid var(--line); }
+  .btn-back:hover{ border-color:var(--muted); }
+  .btn-back:disabled{ opacity:0; pointer-events:none; }
+  .btn-next{ background:linear-gradient(155deg, #FF4536, var(--red) 55%, var(--red-deep) 100%); color:#fff; box-shadow:0 8px 18px -8px rgba(229,35,26,0.6); }
+  .btn-next:disabled{ opacity:0.4; cursor:default; box-shadow:none; }
+  .footer-progress-text{ font-family:var(--font-mono); font-size:11.5px; color:var(--muted); white-space:nowrap; min-width:0; overflow:hidden; text-overflow:ellipsis; }
+
+  /* ---------- Done screen ---------- */
+  .done-wrap{ max-width:560px; margin:64px auto 0; padding:0 24px; text-align:center; }
+  .done-icon{ width:64px; height:64px; border-radius:50%; background:var(--green-soft); color:var(--green); display:flex; align-items:center; justify-content:center; margin:0 auto 22px; }
+  .done-icon svg{ width:30px; height:30px; }
+  .done-title{ font-family:var(--font-display); font-weight:800; font-size:30px; margin:0 0 12px; }
+  .done-sub{ font-size:15px; line-height:1.6; color:var(--ink-soft); margin:0 0 30px; }
+  .done-next{ background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 22px; text-align:left; margin-bottom:26px; }
+  .done-next-label{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted); margin-bottom:10px; }
+  .done-next-item{ display:flex; gap:10px; font-size:13.5px; color:var(--ink-soft); padding:6px 0; }
+  .done-next-item b{ color:var(--ink); }
+  .submit-error{ font-family:var(--font-body); font-size:13px; color:var(--red-deep); text-align:center; margin:0; padding:10px 24px 0; }
+
+  [hidden]{ display:none !important; }
+
+  .site-lang-wrap{ position:relative; display:inline-flex; flex-shrink:0; margin-left:auto; }
+  .site-lang-flag{ width:15px; height:11px; border-radius:2px; overflow:hidden; flex-shrink:0; display:flex; box-shadow:0 0 0 1px rgba(0,0,0,0.12); }
+  .site-lang-flag svg{ display:block; width:100%; height:100%; }
+  .site-lang-btn{
+    display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0.03em;
+    background:var(--card); color:var(--ink-soft); border:1px solid var(--line); border-radius:999px; padding:7px 11px; cursor:pointer;
+    transition:border-color .15s, color .15s;
+  }
+  .site-lang-btn:hover, .site-lang-btn[aria-expanded="true"]{ border-color:var(--red-deep); color:var(--red-deep); }
+  .site-lang-caret{ width:8px; height:8px; color:var(--muted); flex-shrink:0; transition:transform .15s; }
+  .site-lang-btn[aria-expanded="true"] .site-lang-caret{ transform:rotate(180deg); }
+  .site-lang-menu{
+    position:absolute; top:calc(100% + 6px); right:0; min-width:118px; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; padding:4px; margin:0; list-style:none; z-index:30; box-shadow:0 14px 30px -10px rgba(0,0,0,0.28);
+  }
+  .site-lang-menu[hidden]{ display:none; }
+  .site-lang-option{
+    display:flex; align-items:center; gap:8px; padding:7px 9px; border-radius:7px; cursor:pointer;
+    font-family:var(--font-mono); font-size:11px; font-weight:500; letter-spacing:0.03em; color:var(--ink-soft); white-space:nowrap;
+    transition:background .12s, color .12s;
+  }
+  .site-lang-option:hover, .site-lang-option.is-active{ background:var(--card-2); color:var(--ink); }
+
+  @media (max-width:600px){
+    .step-title{ font-size:22px; }
+    .field-row{ flex-direction:column; }
+    .site-lang-wrap{ margin-left:0; }
+  }
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark">B</span>
+      <span class="brand-word"><span class="hello">Hello</span><span class="bob">Bob</span></span>
+      <span class="brand-tag" id="brandTag">Building Your Website</span>
+      <span class="site-lang-wrap" id="site-lang-wrap">
+        <button type="button" class="site-lang-btn" id="site-lang-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Form language">
+          <span class="site-lang-flag" id="site-lang-flag" aria-hidden="true"></span>
+          <span id="site-lang-code">EN</span>
+          <svg class="site-lang-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
+        </button>
+        <ul class="site-lang-menu" id="site-lang-menu" role="listbox" aria-label="Form language" hidden>
+          <li class="site-lang-option is-active" role="option" data-lang="en" aria-selected="true" tabindex="-1">
+            <span class="site-lang-flag" aria-hidden="true"></span><span>EN</span>
+          </li>
+          <li class="site-lang-option" role="option" data-lang="es" aria-selected="false" tabindex="-1">
+            <span class="site-lang-flag" aria-hidden="true"></span><span>ES</span>
+          </li>
+        </ul>
+      </span>
+    </div>
+    <div class="stepper-row">
+      <span class="stepper-label" id="stepperLabel">STEP 1 / 5</span>
+      <span class="stepper-name" id="stepperName">Business Basics</span>
+    </div>
+    <div class="stepper-track" id="stepperTrack"></div>
+    <div class="stepper-jump-hint" id="stepperHint">Click any step above to jump straight to it — nothing needs to be filled in first.</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="step-card" id="stepCard"></div>
+</div>
+
+<div class="footer-nav">
+  <div class="footer-nav-inner">
+    <button class="btn btn-back" id="btnBack">Back</button>
+    <span class="footer-progress-text" id="footerProgressText"></span>
+    <button class="btn btn-next" id="btnNext">Continue</button>
+  </div>
+  <p class="submit-error" id="submitError" hidden></p>
+</div>
+
+<div class="done-wrap" id="doneScreen" hidden>
+  <div class="done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
+  <h1 class="done-title" id="doneTitle">Got it — we're on it.</h1>
+  <p class="done-sub" id="doneSub">Everything you just sent over is saved and ready for our team to start building <b id="doneBizName">your</b> site.</p>
+  <div class="done-next">
+    <div class="done-next-label" id="doneNextLabel">What happens next</div>
+    <div class="done-next-item">🎨&nbsp;&nbsp;<span id="doneNext1">We build (or update) your site using exactly what you sent — template, colors, services, and all.</span></div>
+    <div class="done-next-item">📧&nbsp;&nbsp;<span id="doneNext2">You'll get an email with a preview link to review before it goes live.</span></div>
+    <div class="done-next-item">⚙️&nbsp;&nbsp;<span id="doneNext3">Want to change anything after that? Just reply to that email — nothing's locked in.</span></div>
+  </div>
+</div>
+
+<div class="done-wrap" id="noTokenScreen" hidden>
+  <div class="done-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9L2.8 17a2 2 0 0 0 1.7 3h15a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path></svg></div>
+  <h1 class="done-title" id="noTokenTitle">This link&rsquo;s missing something.</h1>
+  <p class="done-sub" id="noTokenSub">We couldn&rsquo;t find a signup for this link. Please use the Website Builder link from your Guided Setup confirmation or welcome email &mdash; or sign up for HelloBob first if you haven&rsquo;t yet.</p>
+</div>
+
+<script>
+(function(){
+
+  // Our own backend (see hellobob-backend's src/setupForms.js, POST
+  // /api/website-builder) — same host the rest of the marketing site and
+  // Guided Setup talk to. Nothing here goes to Jotform or any other third
+  // party. SETUP_TOKEN comes from the real link sent after Guided Setup
+  // (see setupForms.js's websiteBuilderUrlFor()) or the welcome email,
+  // never typed in by hand.
+  var HELLOBOB_API_BASE = 'https://hellobob-backend.onrender.com';
+  var SETUP_TOKEN = new URLSearchParams(location.search).get('t') || '';
+
+  var US_STATES = [
+    ['AL','Alabama'],['AK','Alaska'],['AZ','Arizona'],['AR','Arkansas'],['CA','California'],['CO','Colorado'],['CT','Connecticut'],
+    ['DE','Delaware'],['DC','District of Columbia'],['FL','Florida'],['GA','Georgia'],['HI','Hawaii'],['ID','Idaho'],['IL','Illinois'],
+    ['IN','Indiana'],['IA','Iowa'],['KS','Kansas'],['KY','Kentucky'],['LA','Louisiana'],['ME','Maine'],['MD','Maryland'],
+    ['MA','Massachusetts'],['MI','Michigan'],['MN','Minnesota'],['MS','Mississippi'],['MO','Missouri'],['MT','Montana'],['NE','Nebraska'],
+    ['NV','Nevada'],['NH','New Hampshire'],['NJ','New Jersey'],['NM','New Mexico'],['NY','New York'],['NC','North Carolina'],
+    ['ND','North Dakota'],['OH','Ohio'],['OK','Oklahoma'],['OR','Oregon'],['PA','Pennsylvania'],['RI','Rhode Island'],
+    ['SC','South Carolina'],['SD','South Dakota'],['TN','Tennessee'],['TX','Texas'],['UT','Utah'],['VT','Vermont'],['VA','Virginia'],
+    ['WA','Washington'],['WV','West Virginia'],['WI','Wisconsin'],['WY','Wyoming']
+  ];
+  var US_STATE_NAMES_ES = {
+    AL:'Alabama', AK:'Alaska', AZ:'Arizona', AR:'Arkansas', CA:'California', CO:'Colorado', CT:'Connecticut',
+    DE:'Delaware', DC:'Distrito de Columbia', FL:'Florida', GA:'Georgia', HI:'Hawái', ID:'Idaho', IL:'Illinois',
+    IN:'Indiana', IA:'Iowa', KS:'Kansas', KY:'Kentucky', LA:'Luisiana', ME:'Maine', MD:'Maryland',
+    MA:'Massachusetts', MI:'Michigan', MN:'Minnesota', MS:'Misisipi', MO:'Misuri', MT:'Montana', NE:'Nebraska',
+    NV:'Nevada', NH:'Nuevo Hampshire', NJ:'Nueva Jersey', NM:'Nuevo México', NY:'Nueva York', NC:'Carolina del Norte',
+    ND:'Dakota del Norte', OH:'Ohio', OK:'Oklahoma', OR:'Oregón', PA:'Pensilvania', RI:'Rhode Island',
+    SC:'Carolina del Sur', SD:'Dakota del Sur', TN:'Tennessee', TX:'Texas', UT:'Utah', VT:'Vermont', VA:'Virginia',
+    WA:'Washington', WV:'Virginia Occidental', WI:'Wisconsin', WY:'Wyoming'
+  };
+  function stateName(code){ return (LANG === 'es' ? US_STATE_NAMES_ES[code] : null) || (US_STATES.filter(function(s){ return s[0]===code; })[0]||[])[1] || ''; }
+
+  var TEMPLATES = [
+    { id:'classic', name:{en:'Classic', es:'Clásico'}, desc:{
+      en:'A clean, trusted layout — your phone number and services up top, built for local search.',
+      es:'Un diseño limpio y confiable — tu número y servicios arriba, pensado para búsquedas locales.' } },
+    { id:'bold', name:{en:'Bold', es:'Audaz'}, desc:{
+      en:'High-contrast hero and big call-to-action buttons — built to turn visitors into calls fast.',
+      es:'Portada de alto contraste y botones grandes — diseñado para convertir visitas en llamadas rápido.' } },
+    { id:'modern', name:{en:'Modern', es:'Moderno'}, desc:{
+      en:'Spacious and photo-forward — a sleek look for a premium brand.',
+      es:'Espacioso y con fotos en primer plano — una imagen elegante para una marca premium.' } },
+    { id:'minimal', name:{en:'Minimal', es:'Minimalista'}, desc:{
+      en:'Just the essentials on one fast page, booking front and center.',
+      es:'Solo lo esencial en una página rápida, con reservas al frente.' } }
+  ];
+  var ACCENT_COLORS = [
+    { hex:'#E5231A', name:{en:'HelloBob Red', es:'Rojo HelloBob'} },
+    { hex:'#2F4E67', name:{en:'Steel Blue', es:'Azul Acero'} },
+    { hex:'#1C8F52', name:{en:'Forest Green', es:'Verde Bosque'} },
+    { hex:'#966212', name:{en:'Amber', es:'Ámbar'} },
+    { hex:'#7C3AED', name:{en:'Violet', es:'Violeta'} },
+    { hex:'#111827', name:{en:'Charcoal', es:'Carbón'} }
+  ];
+  var GOALS = ['more_calls','more_bookings','look_credible','show_work','other'];
+  var DOMAIN_CHOICES = ['keep_current','new_subdomain','not_sure'];
+
+  var state = {
+    businessName:'', tagline:'', phone:'', serviceCity:'', bizState:'', serviceRadius:'', primaryGoal:'',
+    template:'classic', accentColor:'#E5231A',
+    servicesText:'', standoutFeatures:'', yearsInBusiness:'', certifications:'',
+    testimonials:'', photosNote:'', showBeforeAfter:false,
+    publicPhone:'', publicEmail:'', hoursText:'', gbpLink:'', fbLink:'', igHandle:'', domainPreference:''
+  };
+
+  var steps = ['basics','style','content','trust','contact'];
+  function stepNames(){ return ['step.basics','step.style','step.content','step.trust','step.contact'].map(t); }
+  var current = 0;
+
+  var stepCard = document.getElementById('stepCard');
+  var stepperTrack = document.getElementById('stepperTrack');
+  var stepperLabel = document.getElementById('stepperLabel');
+  var stepperName = document.getElementById('stepperName');
+  var btnBack = document.getElementById('btnBack');
+  var btnNext = document.getElementById('btnNext');
+  var footerProgressText = document.getElementById('footerProgressText');
+
+  steps.forEach(function(step, i){
+    var seg = document.createElement('div');
+    seg.className = 'stepper-seg';
+    seg.innerHTML = '<div class="stepper-seg-fill"></div>';
+    seg.addEventListener('click', function(){ captureStep(); current = i; window.scrollTo({top:0}); renderStep(); });
+    stepperTrack.appendChild(seg);
+  });
+
+  function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+
+  function fieldHtml(label, req, inner, hint){
+    return '<div class="field">'+
+      '<div class="field-label">'+esc(label)+(req?' <span class="req">*</span>':' <span class="opt">'+t('opt')+'</span>')+'</div>'+
+      inner+
+      (hint?'<div class="field-hint">'+hint+'</div>':'')+
+    '</div>';
+  }
+
+  var LANG = 'en';
+  try { var savedLang = localStorage.getItem('hellobob-wizard-lang'); if (savedLang === 'es' || savedLang === 'en') LANG = savedLang; } catch(e){}
+
+  var LANG_FLAGS = {
+    en: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#B22234"/><g fill="#fff"><rect y="1.08" width="20" height="1.08"/><rect y="3.23" width="20" height="1.08"/><rect y="5.38" width="20" height="1.08"/><rect y="7.54" width="20" height="1.08"/><rect y="9.69" width="20" height="1.08"/><rect y="11.85" width="20" height="1.08"/></g><rect width="8" height="7.54" fill="#3C3B6E"/></svg>',
+    es: '<svg viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg"><rect width="20" height="14" fill="#fff"/><rect width="6.67" height="14" fill="#006847"/><rect x="13.33" width="6.67" height="14" fill="#CE1126"/><circle cx="10" cy="7" r="1.7" fill="#8B5A2B"/></svg>'
+  };
+
+  var STR = {
+    en: {
+      'brand.tag': 'Building Your Website',
+      'stepper.label': 'STEP {n} / {total}',
+      'stepper.hint': 'Click any step above to jump straight to it — nothing needs to be filled in first.',
+      'step.basics': 'Business Basics', 'step.style': 'Look & Feel', 'step.content': 'Services & Story',
+      'step.trust': 'Trust & Photos', 'step.contact': 'Contact & Hours',
+      'nav.back': 'Back', 'nav.continue': 'Continue', 'nav.finish': 'Send to HelloBob', 'nav.progress': 'Step {n} of {total}',
+      'opt': 'Optional',
+
+      'basics.title': 'Tell us about the business', 'basics.sub': 'The basics we need to get your site started.',
+      'basics.businessName': 'Business name', 'basics.businessNamePh': 'e.g. Rivera HVAC Services',
+      'basics.tagline': 'One-line tagline', 'basics.taglinePh': 'e.g. Fast, honest HVAC repair since 2011',
+      'basics.phone': 'Business phone', 'basics.phonePh': '(555) 555-0100',
+      'basics.serviceCity': 'City you’re based in', 'basics.serviceCityPh': 'e.g. Tampa',
+      'basics.bizState': 'State', 'basics.bizStatePick': 'Select a state',
+      'basics.serviceRadius': 'Service radius (miles)', 'basics.serviceRadiusPh': 'e.g. 25',
+      'basics.primaryGoal': 'What should this site mainly do for you?', 'basics.primaryGoalPick': 'Select a goal',
+      'basics.goal.more_calls': 'Get more phone calls', 'basics.goal.more_bookings': 'Get more online bookings',
+      'basics.goal.look_credible': 'Look more credible and trustworthy', 'basics.goal.show_work': 'Showcase photos of finished work',
+      'basics.goal.other': 'Something else',
+
+      'style.title': 'Pick a look', 'style.sub': 'Choose a starting template and an accent color — easy to adjust later.',
+      'style.template': 'Template',
+      'style.accentColor': 'Accent color', 'style.accentColorHint': 'Or pick a custom color:',
+
+      'content.title': 'Services & what makes you different', 'content.sub': 'What should visitors see first about what you offer.',
+      'content.servicesText': 'Services to feature', 'content.servicesTextPh': 'One per line is fine, e.g.\nAC repair\nFurnace installation\nDuct cleaning',
+      'content.standoutFeatures': 'What makes you different from other companies nearby?', 'content.standoutFeaturesPh': 'Licensing, guarantees, years in business, awards, 24/7 availability...',
+      'content.yearsInBusiness': 'Years in business', 'content.yearsInBusinessPh': 'e.g. 12',
+      'content.certifications': 'Licenses or certifications to display', 'content.certificationsPh': 'e.g. EPA 608 Certified, State License #12345',
+
+      'trust.title': 'Trust & photos', 'trust.sub': 'Helps your site feel real to a first-time visitor.',
+      'trust.testimonials': 'Reviews you’d like featured', 'trust.testimonialsPh': 'Paste 1–3 reviews, with the customer’s first name if you have permission to share it.',
+      'trust.photosNote': 'Photos you’d like used', 'trust.photosNotePh': 'Describe or link any photos — logo, team, job site photos. We’ll follow up by email if we need the actual files.',
+      'trust.showBeforeAfter': 'Include a before/after project gallery', 'trust.showBeforeAfterSub': 'We’ll ask for a couple of project photo pairs by email.',
+
+      'contact.title': 'Contact info & hours', 'contact.sub': 'What should show on the site itself.',
+      'contact.publicPhone': 'Phone number to display on the site', 'contact.publicEmail': 'Email to display on the site', 'contact.publicEmailPh': 'you@yourbusiness.com',
+      'contact.hoursText': 'Business hours', 'contact.hoursTextPh': 'e.g. Mon–Fri 8am–5pm, Sat 9am–1pm, closed Sunday',
+      'contact.gbpLink': 'Google Business Profile link', 'contact.gbpLinkPh': 'https://g.page/...',
+      'contact.fbLink': 'Facebook page link', 'contact.fbLinkPh': 'https://facebook.com/...',
+      'contact.igHandle': 'Instagram handle', 'contact.igHandlePh': '@yourbusiness',
+      'contact.domainPreference': 'Domain', 'contact.domainPick': 'Select an option',
+      'contact.domain.keep_current': 'I already have a domain — use mine', 'contact.domain.new_subdomain': 'Give me a HelloBob web address',
+      'contact.domain.not_sure': 'Not sure yet — let’s talk',
+
+      'submit.saving': 'Sending…', 'submit.error': 'Something went wrong sending this over — please try again. Nothing you entered was lost.',
+      'noToken.title': 'This link’s missing something.',
+      'noToken.sub': 'We couldn’t find a signup for this link. Please use the Website Builder link from your Guided Setup confirmation or welcome email — or sign up for HelloBob first if you haven’t yet.',
+    },
+    es: {
+      'brand.tag': 'Creando Tu Sitio Web',
+      'stepper.label': 'PASO {n} / {total}',
+      'stepper.hint': 'Haz clic en cualquier paso arriba para ir directo a él — no es necesario completar nada antes.',
+      'step.basics': 'Datos del Negocio', 'step.style': 'Estilo', 'step.content': 'Servicios e Historia',
+      'step.trust': 'Confianza y Fotos', 'step.contact': 'Contacto y Horario',
+      'nav.back': 'Atrás', 'nav.continue': 'Continuar', 'nav.finish': 'Enviar a HelloBob', 'nav.progress': 'Paso {n} de {total}',
+      'opt': 'Opcional',
+
+      'basics.title': 'Cuéntanos sobre el negocio', 'basics.sub': 'Lo básico que necesitamos para empezar tu sitio.',
+      'basics.businessName': 'Nombre del negocio', 'basics.businessNamePh': 'ej. Rivera HVAC Services',
+      'basics.tagline': 'Frase de una línea', 'basics.taglinePh': 'ej. Reparación de HVAC rápida y honesta desde 2011',
+      'basics.phone': 'Teléfono del negocio', 'basics.phonePh': '(555) 555-0100',
+      'basics.serviceCity': 'Ciudad donde está ubicado', 'basics.serviceCityPh': 'ej. Tampa',
+      'basics.bizState': 'Estado', 'basics.bizStatePick': 'Selecciona un estado',
+      'basics.serviceRadius': 'Radio de servicio (millas)', 'basics.serviceRadiusPh': 'ej. 25',
+      'basics.primaryGoal': '¿Qué debería lograr principalmente este sitio?', 'basics.primaryGoalPick': 'Selecciona un objetivo',
+      'basics.goal.more_calls': 'Recibir más llamadas', 'basics.goal.more_bookings': 'Recibir más reservas en línea',
+      'basics.goal.look_credible': 'Verse más confiable y profesional', 'basics.goal.show_work': 'Mostrar fotos de trabajos terminados',
+      'basics.goal.other': 'Otra cosa',
+
+      'style.title': 'Elige un estilo', 'style.sub': 'Elige una plantilla inicial y un color — fácil de ajustar después.',
+      'style.template': 'Plantilla',
+      'style.accentColor': 'Color de acento', 'style.accentColorHint': 'O elige un color personalizado:',
+
+      'content.title': 'Servicios y qué te hace diferente', 'content.sub': 'Lo que los visitantes deben ver primero sobre lo que ofreces.',
+      'content.servicesText': 'Servicios a destacar', 'content.servicesTextPh': 'Uno por línea está bien, ej.\nReparación de A/C\nInstalación de calefacción\nLimpieza de ductos',
+      'content.standoutFeatures': '¿Qué te hace diferente de otras empresas cercanas?', 'content.standoutFeaturesPh': 'Licencias, garantías, años en el negocio, premios, disponibilidad 24/7...',
+      'content.yearsInBusiness': 'Años en el negocio', 'content.yearsInBusinessPh': 'ej. 12',
+      'content.certifications': 'Licencias o certificaciones a mostrar', 'content.certificationsPh': 'ej. Certificación EPA 608, Licencia Estatal #12345',
+
+      'trust.title': 'Confianza y fotos', 'trust.sub': 'Ayuda a que tu sitio se sienta real para un visitante nuevo.',
+      'trust.testimonials': 'Reseñas que te gustaría destacar', 'trust.testimonialsPh': 'Pega de 1 a 3 reseñas, con el nombre del cliente si tienes permiso de compartirlo.',
+      'trust.photosNote': 'Fotos que te gustaría usar', 'trust.photosNotePh': 'Describe o enlaza fotos — logo, equipo, trabajos. Te escribiremos por correo si necesitamos los archivos.',
+      'trust.showBeforeAfter': 'Incluir una galería de antes/después', 'trust.showBeforeAfterSub': 'Te pediremos un par de fotos de proyectos por correo.',
+
+      'contact.title': 'Datos de contacto y horario', 'contact.sub': 'Lo que debe aparecer en el sitio.',
+      'contact.publicPhone': 'Teléfono a mostrar en el sitio', 'contact.publicEmail': 'Correo a mostrar en el sitio', 'contact.publicEmailPh': 'tu@negocio.com',
+      'contact.hoursText': 'Horario del negocio', 'contact.hoursTextPh': 'ej. Lun–Vie 8am–5pm, Sáb 9am–1pm, cerrado domingo',
+      'contact.gbpLink': 'Enlace de Perfil de Negocio de Google', 'contact.gbpLinkPh': 'https://g.page/...',
+      'contact.fbLink': 'Enlace de página de Facebook', 'contact.fbLinkPh': 'https://facebook.com/...',
+      'contact.igHandle': 'Usuario de Instagram', 'contact.igHandlePh': '@tunegocio',
+      'contact.domainPreference': 'Dominio', 'contact.domainPick': 'Selecciona una opción',
+      'contact.domain.keep_current': 'Ya tengo un dominio — usar el mío', 'contact.domain.new_subdomain': 'Dame una dirección web de HelloBob',
+      'contact.domain.not_sure': 'No estoy seguro todavía — hablemos',
+
+      'submit.saving': 'Enviando…', 'submit.error': 'Algo salió mal al enviar esto — por favor intenta de nuevo. No se perdió nada de lo que ingresaste.',
+      'noToken.title': 'A este enlace le falta algo.',
+      'noToken.sub': 'No encontramos una inscripción para este enlace. Usa el enlace del Creador de Sitios Web de tu confirmación de Configuración Guiada o correo de bienvenida — o regístrate en HelloBob primero si aún no lo has hecho.',
+    }
+  };
+  function t(key){
+    var v = STR[LANG] && STR[LANG][key];
+    if (v !== undefined) return v;
+    v = STR.en[key];
+    return v !== undefined ? v : key;
+  }
+  function tf(key, vals){ var s = t(key); Object.keys(vals||{}).forEach(function(k){ s = s.replace('{'+k+'}', vals[k]); }); return s; }
+
+  function toneCardListHtml(items, selectedId, groupId){
+    return '<div class="tone-card-list" id="'+groupId+'">'+
+      items.map(function(it){
+        var active = it.id === selectedId;
+        return '<button type="button" class="tone-card'+(active?' is-active':'')+'" data-tone-value="'+esc(it.id)+'">'+
+          '<div class="tone-card-head"><span class="tone-card-radio"></span><span class="tone-card-name">'+esc(it.name[LANG] || it.name.en)+'</span></div>'+
+          '<p class="tone-card-desc">'+esc(it.desc[LANG] || it.desc.en)+'</p>'+
+        '</button>';
+      }).join('')+
+    '</div>';
+  }
+
+  function swatchGridHtml(){
+    var customKnown = ACCENT_COLORS.some(function(c){ return c.hex.toLowerCase() === state.accentColor.toLowerCase(); });
+    return '<div class="swatch-grid" id="accentSwatches">'+
+      ACCENT_COLORS.map(function(c){
+        var sel = c.hex.toLowerCase() === state.accentColor.toLowerCase();
+        return '<span class="swatch'+(sel?' is-selected':'')+'" style="background:'+c.hex+'" data-swatch-value="'+c.hex+'" title="'+esc(c.name[LANG]||c.name.en)+'"></span>';
+      }).join('')+
+      '<span class="swatch-custom-wrap"><input type="color" id="in-customColor" value="'+(customKnown?'#ffffff':state.accentColor)+'"><span>'+esc(t('style.accentColorHint'))+'</span></span>'+
+    '</div>';
+  }
+
+  function switchHtml(id, checked, label, sub){
+    return '<div class="switch-row"><div class="switch-text"><strong>'+esc(label)+'</strong>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</div>'+
+      '<label class="switch"><input type="checkbox" id="'+id+'" '+(checked?'checked':'')+'><span class="switch-track"></span></label></div>';
+  }
+
+  function renderStep(){
+    var id = steps[current];
+    stepperLabel.textContent = tf('stepper.label', { n: current+1, total: steps.length });
+    stepperName.textContent = stepNames()[current];
+    Array.prototype.forEach.call(stepperTrack.children, function(seg, i){
+      seg.classList.toggle('is-done', i < current);
+      seg.classList.toggle('is-current', i === current);
+    });
+    btnBack.disabled = (current === 0);
+    btnBack.textContent = t('nav.back');
+    btnNext.textContent = (current === steps.length - 1) ? t('nav.finish') : t('nav.continue');
+
+    var html = '';
+    if (id === 'basics'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('basics.title')+'</h1>';
+      html += '<p class="step-sub">'+t('basics.sub')+'</p>';
+      html += fieldHtml(t('basics.businessName'), true, '<input type="text" id="in-businessName" value="'+esc(state.businessName)+'" placeholder="'+esc(t('basics.businessNamePh'))+'">');
+      html += fieldHtml(t('basics.tagline'), false, '<input type="text" id="in-tagline" value="'+esc(state.tagline)+'" placeholder="'+esc(t('basics.taglinePh'))+'">');
+      html += fieldHtml(t('basics.phone'), false, '<input type="tel" id="in-phone" value="'+esc(state.phone)+'" placeholder="'+esc(t('basics.phonePh'))+'">');
+      html += '<div class="field-row">'+
+        fieldHtml(t('basics.serviceCity'), false, '<input type="text" id="in-serviceCity" value="'+esc(state.serviceCity)+'" placeholder="'+esc(t('basics.serviceCityPh'))+'">')+
+        fieldHtml(t('basics.bizState'), false, '<select id="in-bizState">'+
+          ['::'+t('basics.bizStatePick')].concat(US_STATES.map(function(s){ return s[0]+'::'+(LANG==='es'?stateName(s[0]):s[1]); })).map(function(o){
+            var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.bizState===p[0]?' selected':'')+'>'+esc(p[1])+'</option>';
+          }).join('')+'</select>')+
+      '</div>';
+      html += fieldHtml(t('basics.serviceRadius'), false, '<input type="number" id="in-serviceRadius" value="'+esc(state.serviceRadius)+'" placeholder="'+esc(t('basics.serviceRadiusPh'))+'">');
+      html += fieldHtml(t('basics.primaryGoal'), false, '<select id="in-primaryGoal">'+
+        ['::'+t('basics.primaryGoalPick')].concat(GOALS.map(function(g){ return g+'::'+t('basics.goal.'+g); })).map(function(o){
+          var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.primaryGoal===p[0]?' selected':'')+'>'+esc(p[1])+'</option>';
+        }).join('')+'</select>');
+    }
+    else if (id === 'style'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('style.title')+'</h1>';
+      html += '<p class="step-sub">'+t('style.sub')+'</p>';
+      html += fieldHtml(t('style.template'), false, toneCardListHtml(TEMPLATES, state.template, 'templatePicker'));
+      html += fieldHtml(t('style.accentColor'), false, swatchGridHtml());
+    }
+    else if (id === 'content'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('content.title')+'</h1>';
+      html += '<p class="step-sub">'+t('content.sub')+'</p>';
+      html += fieldHtml(t('content.servicesText'), false, '<textarea id="in-servicesText" placeholder="'+esc(t('content.servicesTextPh'))+'">'+esc(state.servicesText)+'</textarea>');
+      html += fieldHtml(t('content.standoutFeatures'), false, '<textarea id="in-standoutFeatures" placeholder="'+esc(t('content.standoutFeaturesPh'))+'">'+esc(state.standoutFeatures)+'</textarea>');
+      html += '<div class="field-row">'+
+        fieldHtml(t('content.yearsInBusiness'), false, '<input type="text" id="in-yearsInBusiness" value="'+esc(state.yearsInBusiness)+'" placeholder="'+esc(t('content.yearsInBusinessPh'))+'">')+
+        fieldHtml(t('content.certifications'), false, '<input type="text" id="in-certifications" value="'+esc(state.certifications)+'" placeholder="'+esc(t('content.certificationsPh'))+'">')+
+      '</div>';
+    }
+    else if (id === 'trust'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('trust.title')+'</h1>';
+      html += '<p class="step-sub">'+t('trust.sub')+'</p>';
+      html += fieldHtml(t('trust.testimonials'), false, '<textarea id="in-testimonials" placeholder="'+esc(t('trust.testimonialsPh'))+'">'+esc(state.testimonials)+'</textarea>');
+      html += fieldHtml(t('trust.photosNote'), false, '<textarea id="in-photosNote" placeholder="'+esc(t('trust.photosNotePh'))+'">'+esc(state.photosNote)+'</textarea>');
+      html += '<div class="field">'+switchHtml('in-showBeforeAfter', state.showBeforeAfter, t('trust.showBeforeAfter'), t('trust.showBeforeAfterSub'))+'</div>';
+    }
+    else if (id === 'contact'){
+      html += '<p class="step-eyebrow">'+tf('stepper.label', { n: current+1, total: steps.length })+'</p>';
+      html += '<h1 class="step-title">'+t('contact.title')+'</h1>';
+      html += '<p class="step-sub">'+t('contact.sub')+'</p>';
+      html += '<div class="field-row">'+
+        fieldHtml(t('contact.publicPhone'), false, '<input type="tel" id="in-publicPhone" value="'+esc(state.publicPhone || state.phone)+'">')+
+        fieldHtml(t('contact.publicEmail'), false, '<input type="email" id="in-publicEmail" value="'+esc(state.publicEmail)+'" placeholder="'+esc(t('contact.publicEmailPh'))+'">')+
+      '</div>';
+      html += fieldHtml(t('contact.hoursText'), false, '<textarea id="in-hoursText" placeholder="'+esc(t('contact.hoursTextPh'))+'">'+esc(state.hoursText)+'</textarea>');
+      html += fieldHtml(t('contact.gbpLink'), false, '<input type="url" id="in-gbpLink" value="'+esc(state.gbpLink)+'" placeholder="'+esc(t('contact.gbpLinkPh'))+'">');
+      html += '<div class="field-row">'+
+        fieldHtml(t('contact.fbLink'), false, '<input type="url" id="in-fbLink" value="'+esc(state.fbLink)+'" placeholder="'+esc(t('contact.fbLinkPh'))+'">')+
+        fieldHtml(t('contact.igHandle'), false, '<input type="text" id="in-igHandle" value="'+esc(state.igHandle)+'" placeholder="'+esc(t('contact.igHandlePh'))+'">')+
+      '</div>';
+      html += fieldHtml(t('contact.domainPreference'), false, '<select id="in-domainPreference">'+
+        ['::'+t('contact.domainPick')].concat(DOMAIN_CHOICES.map(function(d){ return d+'::'+t('contact.domain.'+d); })).map(function(o){
+          var p=o.split('::'); return '<option value="'+p[0]+'"'+(state.domainPreference===p[0]?' selected':'')+'>'+esc(p[1])+'</option>';
+        }).join('')+'</select>');
+    }
+
+    stepCard.innerHTML = html;
+    wireStep(id);
+    footerProgressText.textContent = tf('nav.progress', { n: current+1, total: steps.length });
+  }
+
+  function bind(elId, key){
+    var el = document.getElementById(elId);
+    if (!el) return;
+    el.addEventListener('input', function(e){ state[key] = e.target.value; });
+  }
+
+  function wireStep(id){
+    if (id === 'basics'){
+      bind('in-businessName','businessName'); bind('in-tagline','tagline'); bind('in-phone','phone');
+      bind('in-serviceCity','serviceCity'); bind('in-serviceRadius','serviceRadius');
+      document.getElementById('in-bizState').addEventListener('change', function(e){ state.bizState = e.target.value; });
+      document.getElementById('in-primaryGoal').addEventListener('change', function(e){ state.primaryGoal = e.target.value; });
+    }
+    else if (id === 'style'){
+      document.querySelectorAll('#templatePicker .tone-card').forEach(function(card){
+        card.addEventListener('click', function(){ state.template = card.getAttribute('data-tone-value'); renderStep(); });
+      });
+      document.querySelectorAll('#accentSwatches .swatch').forEach(function(sw){
+        sw.addEventListener('click', function(){ state.accentColor = sw.getAttribute('data-swatch-value'); renderStep(); });
+      });
+      var customColor = document.getElementById('in-customColor');
+      if (customColor) customColor.addEventListener('input', function(e){ state.accentColor = e.target.value; renderStep(); });
+    }
+    else if (id === 'content'){
+      bind('in-servicesText','servicesText'); bind('in-standoutFeatures','standoutFeatures');
+      bind('in-yearsInBusiness','yearsInBusiness'); bind('in-certifications','certifications');
+    }
+    else if (id === 'trust'){
+      bind('in-testimonials','testimonials'); bind('in-photosNote','photosNote');
+      document.getElementById('in-showBeforeAfter').addEventListener('change', function(e){ state.showBeforeAfter = e.target.checked; });
+    }
+    else if (id === 'contact'){
+      bind('in-publicPhone','publicPhone'); bind('in-publicEmail','publicEmail'); bind('in-hoursText','hoursText');
+      bind('in-gbpLink','gbpLink'); bind('in-fbLink','fbLink'); bind('in-igHandle','igHandle');
+      document.getElementById('in-domainPreference').addEventListener('change', function(e){ state.domainPreference = e.target.value; });
+    }
+  }
+
+  // Reads whatever's currently on screen into state before navigating —
+  // covers fields whose 'input'/'change' listener may not have fired yet
+  // (e.g. a text field the visitor is still focused in when they click a
+  // stepper segment instead of Continue).
+  function captureStep(){
+    var id = steps[current];
+    if (id === 'basics'){
+      state.businessName = valOf('in-businessName', state.businessName);
+      state.tagline = valOf('in-tagline', state.tagline);
+      state.phone = valOf('in-phone', state.phone);
+      state.serviceCity = valOf('in-serviceCity', state.serviceCity);
+      state.serviceRadius = valOf('in-serviceRadius', state.serviceRadius);
+    } else if (id === 'content'){
+      state.servicesText = valOf('in-servicesText', state.servicesText);
+      state.standoutFeatures = valOf('in-standoutFeatures', state.standoutFeatures);
+      state.yearsInBusiness = valOf('in-yearsInBusiness', state.yearsInBusiness);
+      state.certifications = valOf('in-certifications', state.certifications);
+    } else if (id === 'trust'){
+      state.testimonials = valOf('in-testimonials', state.testimonials);
+      state.photosNote = valOf('in-photosNote', state.photosNote);
+    } else if (id === 'contact'){
+      state.publicPhone = valOf('in-publicPhone', state.publicPhone);
+      state.publicEmail = valOf('in-publicEmail', state.publicEmail);
+      state.hoursText = valOf('in-hoursText', state.hoursText);
+      state.gbpLink = valOf('in-gbpLink', state.gbpLink);
+      state.fbLink = valOf('in-fbLink', state.fbLink);
+      state.igHandle = valOf('in-igHandle', state.igHandle);
+    }
+  }
+  function valOf(elId, fallback){ var el = document.getElementById(elId); return el ? el.value : fallback; }
+
+  var lastSubmitResult = null;
+
+  function submitSite(){
+    captureStep();
+    var errorEl = document.getElementById('submitError');
+    errorEl.hidden = true;
+
+    if (!SETUP_TOKEN){
+      errorEl.textContent = t('noToken.sub');
+      errorEl.hidden = false;
+      return;
+    }
+
+    btnNext.disabled = true;
+    btnNext.textContent = t('submit.saving');
+
+    fetch(HELLOBOB_API_BASE + '/api/website-builder', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ token: SETUP_TOKEN, site: state }),
+    })
+      .then(function(res){ if (!res.ok) throw new Error('website-builder submit failed'); return res.json(); })
+      .then(function(result){
+        lastSubmitResult = result;
+        showDone();
+      })
+      .catch(function(){
+        btnNext.disabled = false;
+        btnNext.textContent = t('nav.finish');
+        errorEl.textContent = t('submit.error');
+        errorEl.hidden = false;
+      });
+  }
+
+  btnNext.addEventListener('click', function(){
+    if (current === steps.length - 1){ submitSite(); return; }
+    captureStep();
+    current++; window.scrollTo({top:0, behavior:'smooth'}); renderStep();
+  });
+  btnBack.addEventListener('click', function(){
+    if (current === 0) return;
+    captureStep();
+    current--; window.scrollTo({top:0, behavior:'smooth'}); renderStep();
+  });
+
+  function showDone(){
+    document.querySelector('.topbar').hidden = true;
+    document.querySelector('.main').hidden = true;
+    document.querySelector('.footer-nav').hidden = true;
+    applyDoneScreenText();
+    document.getElementById('doneScreen').hidden = false;
+    window.scrollTo({top:0});
+  }
+
+  function applyDoneScreenText(){
+    document.getElementById('doneTitle').textContent = LANG === 'es' ? 'Listo — ya lo recibimos.' : "Got it — we're on it.";
+    var bizPhrase = state.businessName ? esc(state.businessName) : (LANG === 'es' ? 'tu negocio' : 'your business');
+    document.getElementById('doneSub').innerHTML = (LANG === 'es'
+      ? 'Todo lo que acabas de enviar está guardado y listo para que nuestro equipo empiece a construir el sitio de <b>'+bizPhrase+'</b>.'
+      : 'Everything you just sent over is saved and ready for our team to start building <b>'+bizPhrase+'</b>’s site.');
+    document.getElementById('doneNextLabel').textContent = LANG === 'es' ? 'Qué sigue' : 'What happens next';
+    document.getElementById('doneNext1').textContent = LANG === 'es'
+      ? 'Construimos (o actualizamos) tu sitio usando exactamente lo que enviaste — plantilla, colores, servicios y todo.'
+      : 'We build (or update) your site using exactly what you sent — template, colors, services, and all.';
+    document.getElementById('doneNext2').textContent = LANG === 'es'
+      ? 'Recibirás un correo con un enlace de vista previa para revisar antes de publicarlo.'
+      : "You'll get an email with a preview link to review before it goes live.";
+    document.getElementById('doneNext3').textContent = LANG === 'es'
+      ? '¿Quieres cambiar algo después de eso? Solo responde a ese correo — nada queda fijo.'
+      : "Want to change anything after that? Just reply to that email — nothing's locked in.";
+  }
+
+  function applyFormLanguage(lang){
+    LANG = (lang === 'es') ? 'es' : 'en';
+    try { localStorage.setItem('hellobob-wizard-lang', LANG); } catch(e){}
+    document.documentElement.lang = LANG;
+    document.getElementById('site-lang-code').textContent = LANG.toUpperCase();
+    document.getElementById('site-lang-flag').innerHTML = LANG_FLAGS[LANG];
+    document.querySelectorAll('#site-lang-menu .site-lang-option').forEach(function(opt){
+      var active = opt.getAttribute('data-lang') === LANG;
+      opt.classList.toggle('is-active', active);
+      opt.setAttribute('aria-selected', active ? 'true' : 'false');
+    });
+    document.getElementById('brandTag').textContent = t('brand.tag');
+    document.getElementById('stepperHint').textContent = t('stepper.hint');
+    if (document.getElementById('doneScreen').hidden) { renderStep(); }
+    else { applyDoneScreenText(); }
+  }
+
+  (function initFormLangSwitcher(){
+    var btn = document.getElementById('site-lang-btn');
+    var menu = document.getElementById('site-lang-menu');
+    var options = Array.prototype.slice.call(menu.querySelectorAll('.site-lang-option'));
+    function closeMenu(){ menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); }
+    function openMenu(){ menu.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+    btn.addEventListener('click', function(e){ e.stopPropagation(); menu.hidden ? openMenu() : closeMenu(); });
+    options.forEach(function(opt){
+      opt.querySelector('.site-lang-flag').innerHTML = LANG_FLAGS[opt.getAttribute('data-lang')];
+      opt.addEventListener('click', function(){ applyFormLanguage(opt.getAttribute('data-lang')); closeMenu(); });
+    });
+    document.addEventListener('click', function(e){ if (!document.getElementById('site-lang-wrap').contains(e.target)) closeMenu(); });
+    document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeMenu(); });
+  })();
+
+  if (!SETUP_TOKEN){
+    document.querySelector('.topbar').hidden = true;
+    document.querySelector('.main').hidden = true;
+    document.querySelector('.footer-nav').hidden = true;
+    document.getElementById('noTokenTitle').textContent = t('noToken.title');
+    document.getElementById('noTokenSub').textContent = t('noToken.sub');
+    document.getElementById('noTokenScreen').hidden = false;
+  } else {
+    applyFormLanguage(LANG);
+  }
+})();
+</script>
+
+</body></html>
