@@ -23,7 +23,9 @@ import {
 } from './routes/api.js';
 import { handleWebsiteChat } from './webchat/websiteChat.js';
 import { captureSignup, SignupError } from './signup.js';
-import { db, listSignups, getTechnician, getConversation } from './db.js';
+import { submitGuidedSetup, submitWebsiteBuilder, SetupFormError } from './setupForms.js';
+import { startReminderScheduler } from './reminders.js';
+import { db, listSignups, listPendingApprovals, getLatestSubmission, getTechnician, getConversation } from './db.js';
 import { seedDemoIfEmpty } from './demoSeed.js';
 import { login, logout, acceptInvite, createBusinessWithOwner, sessionFromToken, AuthError } from './auth/auth.js';
 
@@ -385,7 +387,7 @@ export function createApp() {
         }
       }
 
-      // Plain on-page "Start My Free Trial" form (accuhvac.html's
+      // Plain on-page "Start My Free Trial" form (docs/index.html's
       // #signupSteps) — the OTHER way (besides the Ask Bob chat) a visitor
       // can sign up. Same shared captureSignup() as the chat's
       // capture_signup tool call, so both land in the exact same place.
@@ -404,11 +406,62 @@ export function createApp() {
               businessName: typeof body.businessName === 'string' ? body.businessName.trim() : '',
               contactEmail: typeof body.contactEmail === 'string' ? body.contactEmail.trim() : '',
               contactPhone: typeof body.contactPhone === 'string' ? body.contactPhone.trim() : '',
+              contactPref: body.contactPref === 'text' ? 'text' : 'email',
               source: 'website_form',
             });
             return sendJson(res, 200, result);
           } catch (err) {
             const status = err instanceof SignupError && err.code === 'bad_request' ? 400 : 500;
+            return sendJson(res, status, { error: err.code || 'internal_error', message: err.message });
+          }
+        }
+      }
+
+      // docs/setup.html (Guided Setup) posts here once a customer finishes
+      // the questionnaire. Cross-origin from GitHub Pages to this Render
+      // backend, same as /api/signup and /api/website-chat above.
+      if (path === '/api/setup') {
+        if (req.method === 'OPTIONS') {
+          setCors(req, res);
+          res.writeHead(204);
+          return res.end();
+        }
+        if (req.method === 'POST') {
+          setCors(req, res);
+          const body = await readJsonBody(req);
+          if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
+          try {
+            const result = await submitGuidedSetup({ token: body.token, answers: body.answers, websiteChoice: body.websiteChoice });
+            return sendJson(res, 200, result);
+          } catch (err) {
+            const status = err instanceof SetupFormError && err.code === 'bad_request' ? 400
+              : err instanceof SetupFormError && err.code === 'not_found' ? 404
+              : 500;
+            return sendJson(res, status, { error: err.code || 'internal_error', message: err.message });
+          }
+        }
+      }
+
+      // docs/website-builder.html posts here — only reached when Guided
+      // Setup said the customer has no website or wants to upgrade theirs,
+      // but the link works for any valid signup token.
+      if (path === '/api/website-builder') {
+        if (req.method === 'OPTIONS') {
+          setCors(req, res);
+          res.writeHead(204);
+          return res.end();
+        }
+        if (req.method === 'POST') {
+          setCors(req, res);
+          const body = await readJsonBody(req);
+          if (body === null) return sendJson(res, 400, { error: 'invalid JSON body' });
+          try {
+            const result = await submitWebsiteBuilder({ token: body.token, site: body.site });
+            return sendJson(res, 200, result);
+          } catch (err) {
+            const status = err instanceof SetupFormError && err.code === 'bad_request' ? 400
+              : err instanceof SetupFormError && err.code === 'not_found' ? 404
+              : 500;
             return sendJson(res, status, { error: err.code || 'internal_error', message: err.message });
           }
         }
@@ -422,6 +475,23 @@ export function createApp() {
           return sendJson(res, 404, { error: 'not found' });
         }
         return sendJson(res, 200, listSignups());
+      }
+
+      // Signups that finished their form(s) and are ready for Gilbert to
+      // review and manually create their real business/dashboard account —
+      // see db.js listPendingApprovals(). Same ?key=ADMIN_KEY gate as
+      // /api/signups. Full submitted answers are included so this is a
+      // single page to review, not a hunt through raw DB rows.
+      if (req.method === 'GET' && path === '/api/admin/pending-approvals') {
+        if (!config.adminKey || url.searchParams.get('key') !== config.adminKey) {
+          return sendJson(res, 404, { error: 'not found' });
+        }
+        const pending = listPendingApprovals().map((signup) => ({
+          signup,
+          guidedSetup: getLatestSubmission(signup.id, 'guided_setup'),
+          websiteBuilder: getLatestSubmission(signup.id, 'website_builder'),
+        }));
+        return sendJson(res, 200, pending);
       }
 
       // Static dashboard UI (plain HTML/CSS/JS, no build step — same
@@ -455,7 +525,11 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       `HelloBob backend listening on port ${config.port}` +
       `${config.dryRun ? ' (DRY RUN — no API keys set)' : ''}` +
       `${!config.dryRun && !config.twilioConfigured ? ' (Twilio not configured — SMS sends are logged, not sent)' : ''}` +
+      `${config.stripeConfigured ? '' : ' (Stripe not configured — payment links are skipped)'}` +
       `${config.demoMode ? ' [DEMO MODE]' : ''}`
     );
   });
+
+  // Hourly day-2/5/8 setup reminders — see reminders.js.
+  startReminderScheduler();
 }

@@ -69,12 +69,23 @@ export const config = {
   demoOwnerEmail: 'demo@hellobob.example',
   demoOwnerPassword: process.env.DEMO_OWNER_PASSWORD || 'demo2',
 
-  // The detailed 15-section setup questionnaire ("Let's Build Your Bob") —
-  // still a real Jotform, kept as-is since it's already built out. The
-  // quick 3-field sign-up is NOT Jotform anymore: Bob captures it directly
-  // in chat and saves it to our own `signups` table (see db.js), then
-  // immediately points the new signup here for the detailed part.
-  jotformQuestionnaireUrl: process.env.JOTFORM_QUESTIONNAIRE_URL || 'https://form.jotform.com/262458290659065',
+  // Where the marketing site (docs/) is actually hosted — used to build the
+  // real, own-domain links to setup.html and website-builder.html that go
+  // out in the welcome email/text after signup, and in reminders.js. No
+  // third party (Jotform or otherwise) is involved anywhere in this flow.
+  // Override with SITE_BASE_URL once a custom domain is set up; defaults to
+  // the GitHub Pages URL this repo's docs/ folder is served from.
+  siteBaseUrl: process.env.SITE_BASE_URL || 'https://gilbertrenteria.github.io/hellobob-backend',
+
+  // Stripe — collects payment at the end of the free trial. Plain fetch()
+  // calls to Stripe's REST API, no SDK, same zero-dependency style as
+  // twilio.js/resend.js (see billing/stripe.js). Leaving these unset is a
+  // normal, supported state (stripeConfigured stays false): reminders and
+  // the setup flow simply skip any payment call-to-action until real keys
+  // are added here — no code change or redeploy needed when that day comes.
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY || '',
+  stripePriceId: process.env.STRIPE_PRICE_ID || '', // the $197/mo recurring Price, created in the Stripe dashboard
+  stripeConfigured: !!(process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PRICE_ID),
 
   // Which origins may call the public /api/website-chat endpoint from a
   // browser. '*' (default) allows any site — fine while this is only
