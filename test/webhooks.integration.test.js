@@ -7,6 +7,7 @@
 process.env.DB_PATH = ':memory:';
 process.env.DRY_RUN = 'true';
 process.env.PORT = '0'; // ask the OS for a free port
+process.env.OWNER_FORWARD_PHONE = '+15550009999'; // exercises the whisper-forward path below
 
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -91,6 +92,26 @@ test('a missed call triggers a reactive text-back and logs a conversation', asyn
   const convo = conversations.find((c) => c.phone_e164 === '+15559998888');
   assert.ok(convo, 'expected a conversation to have been created for the missed-call customer');
   assert.equal(convo.channel, 'voice_missed_call');
+});
+
+test('an incoming call rings the owner\'s real phone with a whisper, not the AI', async () => {
+  const res = await postForm('/webhooks/voice', {
+    From: '+15559998888',
+    To: business.phone_e164,
+    CallStatus: 'ringing',
+  });
+  assert.equal(res.status, 200);
+  const xml = await res.text();
+  assert.match(xml, /<Dial answerOnBridge="true">/);
+  assert.match(xml, /\+15550009999/); // OWNER_FORWARD_PHONE
+  assert.match(xml, /\/webhooks\/voice-whisper/);
+});
+
+test('the voice whisper endpoint announces this is a HelloBob call', async () => {
+  const res = await postForm('/webhooks/voice-whisper', {});
+  assert.equal(res.status, 200);
+  const xml = await res.text();
+  assert.match(xml, /<Say>HelloBob call<\/Say>/);
 });
 
 test('an inbound SMS gets a dry-run AI reply and is logged both ways', async () => {
