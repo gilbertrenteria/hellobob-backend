@@ -33,6 +33,14 @@ export const config = {
   twilioAuthToken: required('TWILIO_AUTH_TOKEN'),
   twilioFromNumber: required('TWILIO_FROM_NUMBER'), // E.164, e.g. +16195550142
 
+  // There's no AI voice/IVR in this product on purpose (see
+  // telephony/webhooks.js) — Bob only talks over SMS. When someone actually
+  // calls the business number instead of texting it, this is the real phone
+  // that rings instead, with a short "HelloBob call" whisper only the owner
+  // hears so it's clear this is a business call before they pick up. Leave
+  // unset and an incoming call just gets the old silent-disconnect behavior.
+  ownerForwardPhone: process.env.OWNER_FORWARD_PHONE || '', // E.164, e.g. +16195550199
+
   // Public base URL this server is reachable at (for Twilio webhook
   // signature validation, and so Bob can log a link back to itself).
   publicBaseUrl: process.env.PUBLIC_BASE_URL || `http://localhost:${process.env.PORT || 3000}`,

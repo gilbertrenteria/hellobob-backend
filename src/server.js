@@ -9,6 +9,7 @@ import { existsSync } from 'node:fs';
 import { extname, join, normalize } from 'node:path';
 import { config } from './config.js';
 import { handleIncomingSms, handleIncomingVoice } from './telephony/webhooks.js';
+import { whisperXml } from './telephony/twilio.js';
 import {
   getBusinessRoute,
   getConversationsRoute,
@@ -204,6 +205,14 @@ export function createApp() {
           signatureHeader: req.headers['x-twilio-signature'],
         });
         return sendXml(res, result.status, result.body);
+      }
+
+      // Twilio fetches this fresh the instant the owner's phone picks up on
+      // a forwarded call (see dialWithWhisperXml in telephony/twilio.js) —
+      // it carries no business data, just the fixed "this is HelloBob"
+      // message, so there's nothing here worth signature-checking.
+      if (req.method === 'POST' && path === '/webhooks/voice-whisper') {
+        return sendXml(res, 200, whisperXml('HelloBob call'));
       }
 
       // ---- Dashboard auth ---------------------------------------------------
