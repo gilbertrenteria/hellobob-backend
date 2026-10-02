@@ -757,6 +757,30 @@
   .step h3{ font-family:var(--font-display); font-weight:700; text-transform:uppercase; font-size:18px; margin:0 0 8px; letter-spacing:0.01em; }
   .step p{ color:var(--grey); font-size:13.5px; line-height:1.55; margin:0; }
 
+  /* ---------- How it works: full-journey timeline ---------- */
+  .how-timeline{ max-width:800px; margin:38px 0 0; list-style:none; padding:0; display:flex; flex-direction:column; gap:0; }
+  .how-tl-item{ position:relative; display:flex; gap:22px; padding-bottom:36px; }
+  .how-tl-item:not(:last-child)::before{
+    content:''; position:absolute; left:21px; top:46px; bottom:4px; width:1px; background:var(--line);
+  }
+  .how-tl-num{
+    width:42px; height:42px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:15px; font-weight:700; background:rgba(255,255,255,0.03); color:var(--grey);
+    border:1px solid var(--line); position:relative; z-index:1;
+  }
+  .how-tl-item.is-live .how-tl-num{ background:var(--red); border-color:var(--red); color:#fff; }
+  .how-tl-tag{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; text-transform:uppercase; color:var(--grey-dim); margin:0 0 4px; }
+  .how-tl-body h3{ font-family:var(--font-display); font-weight:800; text-transform:uppercase; letter-spacing:0.01em; font-size:19px; margin:0 0 8px; color:var(--white); }
+  .how-tl-body p{ font-size:14.5px; line-height:1.65; color:var(--grey); margin:0; max-width:58ch; }
+  .how-tl-body p strong{ color:var(--white); font-weight:600; }
+  @media (max-width:640px){
+    .how-tl-item{ gap:16px; padding-bottom:30px; }
+    .how-tl-num{ width:36px; height:36px; font-size:13px; }
+    .how-tl-item:not(:last-child)::before{ left:17.5px; top:40px; }
+    .how-tl-body h3{ font-size:17px; }
+    .how-tl-body p{ font-size:14px; }
+  }
+
   /* ---------- Why grid ---------- */
   .why-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); }
   .why-card{ background:var(--black); padding:30px 28px; }
@@ -1868,18 +1892,6 @@
     <p class="section-eyebrow" data-i18n="proof.eyebrow">Real Shops, Real Results</p>
     <h2 class="section-title" data-i18n="proof.title">Built for one truck or a growing crew.</h2>
 
-    <div class="proof-sort" id="proofSort">
-      <p class="proof-sort-q" data-i18n="proof.sort.q">Which one's you?</p>
-      <div class="proof-sort-opts" role="group" aria-label="Business size">
-        <button type="button" class="proof-sort-opt" data-proof-sort="solo" data-i18n="proof.sort.solo">Just me, one truck</button>
-        <button type="button" class="proof-sort-opt" data-proof-sort="crew" data-i18n="proof.sort.crew">A crew, growing fleet</button>
-      </div>
-      <p class="proof-sort-result" id="proofSortResult" hidden>
-        <span data-i18n="proof.sort.resultPrefix">Showing what fits you &mdash;</span>
-        <button type="button" class="proof-sort-reset" id="proofSortReset" data-i18n="proof.sort.reset">show both examples</button>
-      </p>
-    </div>
-
     <div class="proof-examples" id="proofExamples">
       <div class="proof-example" data-proof-example="crew">
         <div class="proof-panel" data-proof-panel="numbers">
@@ -2737,20 +2749,69 @@
 <section class="how" data-page="how">
   <div class="wrap">
     <p class="section-eyebrow" data-i18n="how.eyebrow">How It Works</p>
-    <h2 class="section-title" data-i18n="how.title">Everything it takes, in four steps.</h2>
-    <p class="section-lede" data-i18n="how.lede">Not just a chatbot &mdash; a website if you need one, instant answers on every channel, and jobs that land in the software you already run.</p>
-    <div class="steps">
-      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
-        <div class="step-num">01</div><h3 data-i18n="how.step1.head">We build it</h3><p data-i18n="how.step1.body">Send your hours and pricing &mdash; we configure me around your business.</p></div>
-      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        <div class="step-num">02</div><h3 data-i18n="how.step2.head">You get what you need</h3><p data-i18n="how.step2.body">One line of code if you already have a site. A full website, free, if you don't.</p></div>
-      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-        <div class="step-num">03</div><h3 data-i18n="how.step3.head">I start answering</h3><p data-i18n="how.step3.body">Every channel, every visitor, an instant reply &mdash; day or night.</p></div>
-      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
-        <div class="step-num">04</div><h3 data-i18n="how.step4.head">You get the leads</h3><p data-i18n="how.step4.body">Booked jobs land straight in the dispatch software you already run.</p></div>
-    </div>
+    <h2 class="section-title" data-i18n="how.title">From Sign-Up To Serviced &mdash; Every Step.</h2>
+    <p class="section-lede" data-i18n="how.lede">Here's exactly what happens, start to finish &mdash; from the form you fill out today to the reminder that brings a customer back next year.</p>
 
-    <div class="integration-badges" style="margin-top:36px;">
+    <ol class="how-timeline">
+      <li class="how-tl-item">
+        <div class="how-tl-num">1</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl1.tag">~2 Minutes</p>
+          <h3 data-i18n="how.tl1.head">You Fill Out A Quick Form</h3>
+          <p data-i18n="how.tl1.body">Click <strong>Start My Free Trial</strong> and tell us your business name, service area, and how you'd like to be reached &mdash; email, text, or both. That's it. No sales call, no waiting on hold &mdash; you're moving in minutes, not days.</p>
+        </div>
+      </li>
+      <li class="how-tl-item">
+        <div class="how-tl-num">2</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl2.tag">Same Day &middot; ~10&ndash;15 Minutes</p>
+          <h3 data-i18n="how.tl2.head">We Send Your Setup Questionnaire</h3>
+          <p data-i18n="how.tl2.body">Sent however you asked to be reached, it asks for your hours, services, pricing, guarantees, and the dispatch software you already use. Save it and finish later if you need to &mdash; this is the real source material that makes me sound like <strong>your</strong> shop instead of a generic script.</p>
+        </div>
+      </li>
+      <li class="how-tl-item">
+        <div class="how-tl-num">3</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl3.tag">We Build It For You</p>
+          <h3 data-i18n="how.tl3.head">We Build Me Around Your Business &mdash; And Your Website, If You Need One</h3>
+          <p data-i18n="how.tl3.body">Using your answers, we configure my hours, pricing, services, and tone to match your business exactly, and connect me to your dispatch software so booked jobs land somewhere you already work. Already have a site? Adding me is one line of code. Don't have one? We build you a full website free &mdash; pick from 100 templates with chat and booking already wired in. Either way, you're not learning new software or waiting weeks on a developer.</p>
+        </div>
+      </li>
+      <li class="how-tl-item is-live">
+        <div class="how-tl-num">4</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl4.tag">Your Free 10-Day Trial Starts</p>
+          <h3 data-i18n="how.tl4.head">I Go Live &mdash; Answering Every Channel</h3>
+          <p data-i18n="how.tl4.body">I start answering immediately, everywhere a customer might reach you: website chat, texts to your business line, Facebook, Instagram, Google Business Profile messages, even an automatic text-back on a missed call. No card required, nothing due &mdash; this is your chance to see exactly how I handle a real conversation before you commit to anything. Same instant, on-brand reply, day or night, on every single one.</p>
+        </div>
+      </li>
+      <li class="how-tl-item">
+        <div class="how-tl-num">5</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl5.tag">Every Conversation</p>
+          <h3 data-i18n="how.tl5.head">I Qualify The Job And Book It</h3>
+          <p data-i18n="how.tl5.body">I ask what a dispatcher would &mdash; what's wrong, the address, how urgent it is &mdash; so the job is already scoped by the time you see it. Then I book it straight onto your calendar and sync it to your dispatch software, so nothing has to be re-typed or re-entered by hand.</p>
+        </div>
+      </li>
+      <li class="how-tl-item">
+        <div class="how-tl-num">6</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl6.tag">Before, During &amp; After The Job</p>
+          <h3 data-i18n="how.tl6.head">I Keep The Job &mdash; And The Customer &mdash; On Track</h3>
+          <p data-i18n="how.tl6.body">Appointment reminders and on-the-way texts go out automatically, so fewer customers forget or reschedule. After the job's done, I follow up to collect reviews, and send maintenance plan reminders down the line to bring that customer back for their next service &mdash; the kind of follow-through a one-truck owner or a busy dispatcher rarely has time for.</p>
+        </div>
+      </li>
+      <li class="how-tl-item">
+        <div class="how-tl-num">7</div>
+        <div class="how-tl-body">
+          <p class="how-tl-tag" data-i18n="how.tl7.tag">After Day 10</p>
+          <h3 data-i18n="how.tl7.head">You Decide &mdash; No Card, No Contract</h3>
+          <p data-i18n="how.tl7.body">If I've earned a spot on your team, it's <strong>$197/month flat</strong> &mdash; the same price whether you run one truck or ten, no matter how many you add. If I haven't, cancel anytime; nothing was ever charged. Either way, the decision is entirely yours.</p>
+        </div>
+      </li>
+    </ol>
+
+    <div class="integration-badges" style="margin-top:44px;">
       <span class="integration-badge">ServiceTitan</span>
       <span class="integration-badge">Housecall Pro</span>
       <span class="integration-badge">Jobber</span>
@@ -3408,16 +3469,29 @@
     'channels.arrow.tapMessage': 'Toca Sitio Web',
 
     'how.eyebrow': 'Cómo Funciona',
-    'how.title': 'Todo lo que se necesita, en cuatro pasos.',
-    'how.lede': 'No es solo un chatbot &mdash; un sitio web si lo necesita, respuestas instantáneas en cada canal, y trabajos que llegan al software que ya usa.',
-    'how.step1.head': 'Lo construimos',
-    'how.step1.body': 'Envíe su horario y precios &mdash; lo configuro alrededor de su negocio.',
-    'how.step2.head': 'Usted recibe lo que necesita',
-    'how.step2.body': 'Una línea de código si ya tiene un sitio. Un sitio web completo, gratis, si no lo tiene.',
-    'how.step3.head': 'Empiezo a responder',
-    'how.step3.body': 'Cada canal, cada visitante, una respuesta instantánea &mdash; día o noche.',
-    'how.step4.head': 'Usted recibe los clientes potenciales',
-    'how.step4.body': 'Los trabajos agendados llegan directo al software de despacho que ya usa.',
+    'how.title': 'Desde El Registro Hasta El Servicio &mdash; Cada Paso.',
+    'how.lede': 'Esto es exactamente lo que sucede, de principio a fin &mdash; desde el formulario que completa hoy hasta el recordatorio que trae de vuelta a un cliente el próximo año.',
+    'how.tl1.tag': '~2 Minutos',
+    'how.tl1.head': 'Usted Completa Un Formulario Rápido',
+    'how.tl1.body': 'Haga clic en <strong>Comenzar Mi Prueba Gratis</strong> y díganos el nombre de su negocio, su área de servicio, y cómo prefiere que lo contactemos &mdash; correo, texto, o ambos. Eso es todo. Sin llamada de ventas, sin esperar en espera &mdash; usted avanza en minutos, no días.',
+    'how.tl2.tag': 'El Mismo Día &middot; ~10&ndash;15 Minutos',
+    'how.tl2.head': 'Le Enviamos Su Cuestionario De Configuración',
+    'how.tl2.body': 'Enviado como usted prefiera que lo contactemos, pide su horario, servicios, precios, garantías, y el software de despacho que ya usa. Guárdelo y termínelo después si lo necesita &mdash; este es el material real que hace que suene como <strong>su</strong> negocio y no como un guion genérico.',
+    'how.tl3.tag': 'Lo Construimos Por Usted',
+    'how.tl3.head': 'Me Construimos Alrededor De Su Negocio &mdash; Y Su Sitio Web, Si Lo Necesita',
+    'how.tl3.body': 'Usando sus respuestas, configuramos mi horario, precios, servicios, y tono exactamente para su negocio, y me conectamos a su software de despacho para que los trabajos agendados lleguen a donde ya trabaja. ¿Ya tiene un sitio? Agregarme es una línea de código. ¿No tiene uno? Le construimos un sitio web completo gratis &mdash; elija entre 100 plantillas con el chat y las reservas ya integrados. De cualquier forma, no tiene que aprender software nuevo ni esperar semanas a un desarrollador.',
+    'how.tl4.tag': 'Comienza Su Prueba Gratis De 10 Días',
+    'how.tl4.head': 'Empiezo A Funcionar &mdash; Respondiendo En Cada Canal',
+    'how.tl4.body': 'Empiezo a responder de inmediato, en todo lugar donde un cliente pueda contactarlo: chat del sitio web, mensajes de texto a su línea de negocio, Facebook, Instagram, mensajes del Perfil de Negocio de Google, incluso una respuesta de texto automática a una llamada perdida. No se requiere tarjeta, nada que pagar &mdash; esta es su oportunidad de ver exactamente cómo manejo una conversación real antes de comprometerse a algo. La misma respuesta instantánea y a su medida, día o noche, en cada uno.',
+    'how.tl5.tag': 'Cada Conversación',
+    'how.tl5.head': 'Califico El Trabajo Y Lo Agendo',
+    'how.tl5.body': 'Pregunto lo que un despachador preguntaría &mdash; qué anda mal, la dirección, qué tan urgente es &mdash; para que el trabajo ya esté definido cuando usted lo vea. Luego lo agendo directo en su calendario y lo sincronizo con su software de despacho, para que nada tenga que volver a escribirse a mano.',
+    'how.tl6.tag': 'Antes, Durante Y Después Del Trabajo',
+    'how.tl6.head': 'Mantengo El Trabajo &mdash; Y Al Cliente &mdash; En Curso',
+    'how.tl6.body': 'Los recordatorios de citas y los mensajes de "voy en camino" se envían automáticamente, para que menos clientes olviden o reprogramen. Después del trabajo, doy seguimiento para recopilar reseñas, y envío recordatorios de planes de mantenimiento más adelante para traer de vuelta a ese cliente para su próximo servicio &mdash; el tipo de seguimiento que un dueño de un solo camión o un despachador ocupado rara vez tiene tiempo de hacer.',
+    'how.tl7.tag': 'Después Del Día 10',
+    'how.tl7.head': 'Usted Decide &mdash; Sin Tarjeta, Sin Contrato',
+    'how.tl7.body': 'Si me he ganado un lugar en su equipo, son <strong>$197/mes fijos</strong> &mdash; el mismo precio ya sea que tenga un camión o diez, sin importar cuántos agregue. Si no, cancele cuando quiera; nunca se le cobró nada. De cualquier forma, la decisión es completamente suya.',
 
     'integrations.eyebrow': 'Funciona Con Lo Que Ya Usa',
     'integrations.title': 'Ningún tablero de despacho nuevo que aprender.',
