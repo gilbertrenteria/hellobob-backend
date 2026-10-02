@@ -1860,16 +1860,6 @@
       <div class="stat"><div class="stat-num">&lt;<span class="stat-count-once" data-count-to="5">5</span>s</div><div class="stat-label" data-i18n="hero.stat2">Avg. reply time</div></div>
       <div class="stat"><div class="stat-num"><span class="stat-count-once" data-count-to="0">0</span></div><div class="stat-label" data-i18n="hero.stat3">Chats left unanswered</div></div>
     </div>
-    <div class="hero-cta-row">
-      <a class="btn btn-primary btn-stacked" href="#contact" data-goto="contact">
-        <span class="btn-main" data-i18n="hero.ctaPrimary">Start My Free 10-Day Trial</span>
-        <span class="btn-sub">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-          <span data-i18n="hero.ctaReassurance">No card, nothing due until you've tested Bob yourself.</span>
-        </span>
-      </a>
-      <a class="btn btn-ghost" href="#channels" data-goto="channels" data-i18n="hero.ctaSecondary">See A Live Demo</a>
-    </div>
   </div>
 </section>
 
@@ -1943,6 +1933,17 @@
     </div>
 
     <p class="proof-trust-line" data-i18n="proof.trustLine">No contract, no long-term commitment &mdash; $197/month flat, cancel anytime, whether you're one truck or ten.</p>
+
+    <div class="hero-cta-row" style="margin-top:28px;">
+      <a class="btn btn-primary btn-stacked" href="#contact" data-goto="contact">
+        <span class="btn-main" data-i18n="hero.ctaPrimary">Start My Free 10-Day Trial</span>
+        <span class="btn-sub">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+          <span data-i18n="hero.ctaReassurance">No card, nothing due until you've tested Bob yourself.</span>
+        </span>
+      </a>
+      <a class="btn btn-ghost" href="#channels" data-goto="channels" data-i18n="hero.ctaSecondary">See A Live Demo</a>
+    </div>
   </div>
 </section>
 
@@ -2992,8 +2993,8 @@
         <li class="ss-item">
           <span class="ss-num">2</span>
           <div class="ss-body">
-            <h3 data-i18n="steps.s2.title">We email your setup questionnaire</h3>
-            <p data-i18n="steps.s2.body">Same day, straight to your inbox. About 10&ndash;15 minutes to fill out &mdash; save it and finish later if you need to.</p>
+            <h3 data-i18n="steps.s2.title">We text/email your setup questionnaire</h3>
+            <p data-i18n="steps.s2.body">Same day, sent however you asked to be reached. About 10&ndash;15 minutes to fill out &mdash; save it and finish later if you need to.</p>
           </div>
         </li>
         <li class="ss-item">
@@ -3029,6 +3030,10 @@
           <label data-i18n="signup.contactPrefLabel">How should we reach you?</label>
           <div class="ss-pref-row" id="ssContactPref">
             <label class="ss-pref-opt">
+              <input type="radio" name="contactPref" value="both">
+              <span data-i18n="signup.contactPrefBoth">Both</span>
+            </label>
+            <label class="ss-pref-opt">
               <input type="radio" name="contactPref" value="email" checked>
               <span data-i18n="signup.contactPrefEmail">Email</span>
             </label>
@@ -3047,7 +3052,7 @@
         <div class="su-done-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></div>
         <div class="su-done-copy">
           <h3 data-i18n="steps.done.head">You're in!</h3>
-          <p class="su-done-sub" data-i18n="steps.done.sub">Check your email &mdash; that's where your setup questionnaire is headed next.</p>
+          <p class="su-done-sub" data-i18n="steps.done.sub">Check your text/email &mdash; that's where your setup questionnaire is headed next.</p>
         </div>
       </div>
     </div>
@@ -3513,8 +3518,8 @@
 
     'steps.s1.title': 'Cuéntenos lo básico',
     'steps.s1.body': 'Haga clic en continuar y complete nuestro breve formulario de inscripción &mdash; nombre del negocio, área de servicio y cómo contactarlo. Unos 2 minutos.',
-    'steps.s2.title': 'Le enviamos su cuestionario de configuración',
-    'steps.s2.body': 'El mismo día, directo a su correo. Unos 10&ndash;15 minutos para completarlo &mdash; guárdelo y termínelo después si lo necesita.',
+    'steps.s2.title': 'Le enviamos su cuestionario de configuración por texto/correo',
+    'steps.s2.body': 'El mismo día, como usted prefiera que lo contactemos. Unos 10&ndash;15 minutos para completarlo &mdash; guárdelo y termínelo después si lo necesita.',
     'steps.s3.title': 'Construimos a Bob para su negocio',
     'steps.s3.body': 'Su horario, sus servicios, sus precios, sus garantías &mdash; Bob aprende a sonar como su negocio, no como un guion.',
     'steps.s4.title': 'Pruébelo gratis por 10 días',
@@ -3522,9 +3527,10 @@
     'steps.continue': 'Continuar Al Formulario De Inscripción',
     'steps.fallback': 'Ventana bloqueada &mdash; abrir el formulario de inscripción',
     'steps.done.head': 'Abierto en una nueva pestaña',
-    'steps.done.sub': 'Termine de completar el formulario ahí, luego revise su correo &mdash; ahí le enviaremos su cuestionario de configuración a continuación.',
+    'steps.done.sub': 'Revise su texto/correo &mdash; ahí le enviaremos su cuestionario de configuración a continuación.',
     'signup.finePrint': 'No se requiere tarjeta de crédito para comenzar. $197/mes fijo después de su prueba &mdash; cancele cuando quiera.',
     'signup.contactPrefLabel': '¿Cómo prefiere que lo contactemos?',
+    'signup.contactPrefBoth': 'Ambos',
     'signup.contactPrefEmail': 'Correo',
     'signup.contactPrefText': 'Mensaje de texto',
 
