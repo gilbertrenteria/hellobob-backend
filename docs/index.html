@@ -908,6 +908,9 @@
   .social-link{ display:flex; align-items:center; gap:8px; background:none; border:none; padding:0; cursor:pointer; color:var(--grey-dim); font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:0.05em; transition:color .15s; }
   .social-link:hover{ color:var(--white); }
   .social-link svg{ width:14px; height:14px; flex-shrink:0; }
+  .foot-contact{ display:flex; flex-direction:column; gap:8px; }
+  .foot-contact a{ color:var(--grey-dim); text-decoration:underline; text-underline-offset:3px; transition:color .15s; }
+  .foot-contact a:hover{ color:var(--white); }
 
   /* ---------- Social preview modal ---------- */
   .social-modal{ position:fixed; inset:0; z-index:100; display:flex; align-items:center; justify-content:center; padding:24px; }
@@ -3645,8 +3648,8 @@
     </div>
 
     <div class="contact-row">
-      <span><a href="mailto:hello@hellobob.example">hello@hellobob.example</a></span>
-      <span data-i18n="cta.phonePlaceholder">[ Your phone number ]</span>
+      <span><a href="mailto:support@meethellobob.com">support@meethellobob.com</a></span>
+      <span data-i18n="cta.phonePlaceholder"><a href="tel:+18329561380">(832) 956-1380</a></span>
       <span data-i18n="cta.serving">Serving HVAC companies nationwide</span>
     </div>
   </div>
@@ -3661,15 +3664,9 @@
       <span class="sep" aria-hidden="true">&middot;</span>
       <button type="button" class="linklike js-open-legal" data-doc="privacy">Privacy Policy</button>
     </div>
-    <div class="foot-social">
-      <button type="button" class="social-link" data-social="facebook" aria-haspopup="dialog">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"></path></svg>
-        facebook.com/hellobob
-      </button>
-      <button type="button" class="social-link" data-social="instagram" aria-haspopup="dialog">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="6" ry="6"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
-        instagram.com/hellobob
-      </button>
+    <div class="foot-contact">
+      <a href="tel:+18329561380">(832) 956-1380</a>
+      <a href="mailto:support@meethellobob.com">support@meethellobob.com</a>
     </div>
   </div>
 </footer>
@@ -4095,7 +4092,7 @@
     'cta.h1Line': 'Deje de perder trabajos<br>ante',
     'cta.strike': 'quien responda primero.',
     'cta.sub': 'Esto es exactamente lo que sucede a continuación &mdash; sin llamadas, sin sorpresas, no paga nada hasta que pruebe a Bob usted mismo.',
-    'cta.phonePlaceholder': '[ Su número de teléfono ]',
+    'cta.phonePlaceholder': '<a href="tel:+18329561380">(832) 956-1380</a>',
     'cta.serving': 'Sirviendo a empresas de HVAC en todo el país',
 
     'hero.ctaPrimary': 'Comience Mi Prueba Gratis De 10 Días',
@@ -5844,8 +5841,8 @@
         : "Of course &mdash; let me grab your name and number so someone from our team can reach out directly.");
       leadForm(async (bookerName) => {
         await botSay('<div class="confirm">' + checkIcon() + '<span>' + (lang === 'es'
-          ? 'Gracias, ' + bookerName + ' &mdash; le contactaremos pronto. También puede escribirnos directamente a hello@hellobob.example.'
-          : 'Thanks, ' + bookerName + ' &mdash; we\'ll reach out shortly. You can also email us directly at hello@hellobob.example.') + '</span></div>');
+          ? 'Gracias, ' + bookerName + ' &mdash; le contactaremos pronto. También puede escribirnos directamente a support@meethellobob.com.'
+          : 'Thanks, ' + bookerName + ' &mdash; we\'ll reach out shortly. You can also email us directly at support@meethellobob.com.') + '</span></div>');
       });
     }
     function matchJamieFAQ(textRaw){
@@ -6511,7 +6508,7 @@
         }
       } catch(err){
         if(submitBtn){ submitBtn.disabled = false; submitBtn.textContent = siteLang === 'es' ? 'Comenzar mi prueba gratis' : 'Start My Free Trial'; }
-        showError(siteLang === 'es' ? 'Algo salió mal — inténtelo de nuevo, o escriba a hello@hellobob.example.' : 'Something went wrong — please try again, or email hello@hellobob.example.');
+        showError(siteLang === 'es' ? 'Algo salió mal — inténtelo de nuevo, o escriba a support@meethellobob.com.' : 'Something went wrong — please try again, or email support@meethellobob.com.');
       }
     });
   })();
