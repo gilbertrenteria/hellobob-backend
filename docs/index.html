@@ -317,6 +317,18 @@
     font-size:19px; line-height:1.1; letter-spacing:0.01em;
   }
   .whatwedo-body{ color:var(--grey); font-size:14px; line-height:1.6; max-width:32ch; }
+
+  /* Shared icon used atop step/feature cards (What I Do, Setup, Integrations) */
+  .step-icon{ width:28px; height:28px; color:var(--red); flex-shrink:0; }
+  .step .step-icon{ margin-bottom:14px; }
+
+  /* Subtle reveal-on-scroll for icon/step cards, added via JS (see below).
+     Skipped entirely for reduced-motion users, who see everything at rest. */
+  .reveal-item{ opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; }
+  .reveal-item.is-revealed{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){
+    .reveal-item{ opacity:1; transform:none; transition:none; }
+  }
   @media (max-width:900px){
     .whatwedo-grid{ grid-template-columns:repeat(2,1fr); }
     .whatwedo-grid .whatwedo-card{ padding:24px 20px; }
@@ -1882,14 +1894,14 @@
     <div class="fit-check">
       <p class="fit-check-kicker" data-i18n="proof.fitCheck.kicker">Sound familiar?</p>
       <ul class="fit-check-list">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item1">You're the one texting customers back at 9 PM because there's no one else.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item2">No website &mdash; or one you haven't touched since you started the business.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item3">Calls go to voicemail while you're up a ladder or under a unit.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item4">No dashboard &mdash; you have no idea how many calls, texts, or leads you're actually getting, let alone losing.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item5">Scheduling lives in your head, on paper, or in a group text &mdash; nothing that actually tracks what's booked.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item6">Once the truck pulls away, that's it &mdash; no reminder for the next tune-up, no nudge for repeat business.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item7">No system for asking happy customers to leave a review &mdash; so your rating just sits there.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item8">Texts and emails go out looking like they're from someone scrambling, not an established company.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item1">You're the one texting customers back at 9 PM.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item2">No website &mdash; or one frozen since you started.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item3">Calls hit voicemail while you're up a ladder.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item4">No dashboard &mdash; no idea how many leads you're losing.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item5">Scheduling lives in your head, on paper, or a group text.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item6">Once the truck leaves, that's it &mdash; no follow-up, ever.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item7">No system for review requests &mdash; your rating just sits there.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item8">Texts and emails look scrambled, not like an established company.</span></li>
       </ul>
       <p class="fit-check-note" data-i18n="proof.fitCheck.note">Starting from nothing or upgrading from something that isn't working &mdash; either way, HelloBob replaces it, not adds another thing to check.</p>
     </div>
@@ -1897,14 +1909,14 @@
     <div class="fit-check our-solution">
       <p class="fit-check-kicker" data-i18n="proof.ourSolution.kicker">Our Solution</p>
       <ul class="fit-check-list">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item1">Bob answers every text, call, and chat in under 5 seconds &mdash; day or night, so you're not the one doing it.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item2">A real website, built for you in minutes and kept current &mdash; included, not extra.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item3">Every call that goes unanswered gets an instant text back with a live chat link &mdash; nobody just hits voicemail.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item4">One dashboard shows every lead, booking, and message, live &mdash; so nothing's a mystery anymore.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item5">Every job gets booked straight onto your calendar the moment it's confirmed &mdash; no more guessing what's on for tomorrow.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item6">Bob follows up automatically &mdash; appointment reminders, on-the-way texts, and a nudge for the next tune-up, without you lifting a finger.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item7">Every finished job gets an automatic review request &mdash; happy customers get a one-tap link to Google or Facebook.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item8">Every message, invoice, and reminder goes out clean and consistent &mdash; you look like the established company you already are.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item1">I answer every text, call, and chat in under 5 seconds.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item2">A real website, built in minutes &mdash; included, not extra.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item3">Missed calls get an instant text-back with a chat link.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item4">One dashboard shows every lead, booking, and message, live.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item5">Jobs book straight onto your calendar the moment they're confirmed.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item6">I follow up automatically &mdash; reminders, on-the-way texts, tune-up nudges.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item7">Every finished job gets a one-tap review request.</span></li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item8">Every message goes out clean and consistent &mdash; like an established company.</span></li>
       </ul>
       <p class="fit-check-note" data-i18n="proof.ourSolution.note">One flat $197/month. No separate tools to juggle, no new habits to build &mdash; just fewer things falling through the cracks.</p>
     </div>
@@ -1940,10 +1952,10 @@
         <div class="proof-fit">
           <p class="proof-fit-kicker" data-i18n="proof.fitCrew.kicker">Built For A Growing Team</p>
           <ul class="proof-fit-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item1">The dashboard isn't locked to one device or person &mdash; share the login with whoever on your team checks leads, bookings, or reviews.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item2">A separate crew view gives your techs what they need in the field, without digging through the owner's dashboard.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item3">Plugs into the dispatch software you already run &mdash; ServiceTitan, Housecall Pro, Jobber, FieldEdge, and more.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item4">One flat $197/month no matter how many trucks you add &mdash; it doesn't get more expensive as you grow.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item1">The dashboard isn't locked to one device &mdash; share it with your whole team.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item2">A separate crew view gives your techs what they need in the field.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item3">Plugs into the dispatch software you already run.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item4">One flat $197/month, no matter how many trucks you add.</span></li>
           </ul>
         </div>
       </div>
@@ -1964,10 +1976,10 @@
         <div class="proof-fit">
           <p class="proof-fit-kicker" data-i18n="proof.fitSolo.kicker">Built For A One-Truck Shop</p>
           <ul class="proof-fit-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item1">$197/month replaces a hire you could never justify alone &mdash; a full-time secretary runs $2,800+/month before payroll tax or a single sick day.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item2">Same flat price as a full fleet &mdash; you're never charged a "small business" markup for running just one truck.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item3">No contract, cancel anytime &mdash; nothing to be locked into while you figure out if it's worth it.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item4">Free website and Guided Setup, no tech skills needed &mdash; built for someone with zero time to learn new software.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item1">$197/month replaces a hire you could never justify alone &mdash; a full-time secretary runs $2,800+/month before payroll tax.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item2">Same flat price as a full fleet &mdash; no small-business markup.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item3">No contract, cancel anytime.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitSolo.item4">Free website and Guided Setup &mdash; no tech skills needed.</span></li>
           </ul>
         </div>
       </div>
@@ -1981,37 +1993,43 @@
   <div class="wrap">
     <p class="section-eyebrow" data-i18n="whatwedo.eyebrow">What I Do</p>
     <h2 class="section-title" data-i18n="whatwedo.title">One Front Desk. Every Channel. Zero Missed Jobs.</h2>
-    <p class="section-lede" data-i18n="whatwedo.lede">I'm Bob, your real virtual front desk, trained on your business &mdash; your services, your service area, how you talk to customers. I sit wherever a customer might reach out, have the conversation, and hand you a booked job. Here's the whole flow:</p>
+    <p class="section-lede" data-i18n="whatwedo.lede">I'm Bob, your real virtual front desk &mdash; trained on your services, your area, and how you talk to customers. Here's the whole flow:</p>
     <div class="whatwedo-grid">
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
         <p class="whatwedo-num">01</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card1.head">I Answer Instantly</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card1.body">The moment someone opens a chat from your website, taps through from Facebook, Instagram, or your Google Business Profile, or texts your business line, I reply in seconds &mdash; nights, weekends, holidays. No hold music. No voicemail. No "we'll call you back."</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card1.body">Website chat, Facebook, Instagram, Google Business, or a text to your line &mdash; I reply in seconds, nights or weekends. No hold music, no voicemail, no callback.</p>
       </div>
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6a1 1 0 0 1 1 1v1h1a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1V3a1 1 0 0 1 1-1z"></path><path d="M9 12l2 2 4-4"></path></svg>
         <p class="whatwedo-num">02</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card2.head">I Qualify The Job</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card2.body">I ask what a good dispatcher would ask: what's broken, how urgent, what kind of unit, what address. By the time I loop you in, the job is already scoped.</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card2.body">I ask what a dispatcher would &mdash; so the job's already scoped by the time you see it.</p>
       </div>
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
         <p class="whatwedo-num">03</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card3.head">I Book The Job</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card3.body">Once I have what I need, I put the appointment straight onto your calendar and send you the summary. You wake up to booked work, not a pile of messages to sort through.</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card3.body">I put it straight on your calendar and send you the summary.</p>
       </div>
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3a14.5 14.5 0 0 1 3.8 9.5A14.5 14.5 0 0 1 12 21a14.5 14.5 0 0 1-3.8-8.5A14.5 14.5 0 0 1 12 3z"></path></svg>
         <p class="whatwedo-num">04</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card4.head">I Work From Anywhere</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card4.body">No app, nothing to log into. I run as your website chat &mdash; reachable from a Facebook or Instagram bio link, your Google Business Profile's Website button, a missed-call text-back, or nothing more than a simple link or a QR code on a truck, invoice, or yard sign.</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card4.body">No app needed &mdash; website chat, social links, missed-call text-back, or a QR code on your truck.</p>
       </div>
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         <p class="whatwedo-num">05</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card5.head">I Keep The Job On Track</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card5.body">Once it's booked, I keep the follow-through automatic: a reminder before the appointment, a heads-up when the tech's on the way, a booking confirmation and payment-reminder email, and later, a nudge to get back on the schedule for the next tune-up.</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card5.body">Reminders, on-my-way texts, and tune-up nudges &mdash; all automatic.</p>
       </div>
       <div class="whatwedo-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
         <p class="whatwedo-num">06</p>
         <h3 class="whatwedo-head" data-i18n="whatwedo.card6.head">I Follow Up For Reviews</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card6.body">Once the job's done, I text (and email, if you've turned that on) the customer to rate the visit. 4&ndash;5 stars go straight to Google or Facebook &mdash; anything lower comes to you privately, before it's ever posted.</p>
+        <p class="whatwedo-body" data-i18n="whatwedo.card6.body">4&ndash;5 stars go straight to Google. Anything lower comes to you first.</p>
       </div>
     </div>
   </div>
@@ -3245,10 +3263,14 @@
     <p class="section-eyebrow" data-i18n="how.eyebrow">Setup</p>
     <h2 class="section-title" data-i18n="how.title">Live on your site in four steps.</h2>
     <div class="steps">
-      <div class="step"><div class="step-num">01</div><h3 data-i18n="how.step1.head">We build it</h3><p data-i18n="how.step1.body">Send us your hours, pricing, and services &mdash; we configure me around your business, not a generic script.</p></div>
-      <div class="step"><div class="step-num">02</div><h3 data-i18n="how.step2.head">You paste one line</h3><p data-i18n="how.step2.body">A short snippet goes on your website. No developer, no new software to learn.</p></div>
-      <div class="step"><div class="step-num">03</div><h3 data-i18n="how.step3.head">I start answering</h3><p data-i18n="how.step3.body">Every visitor gets an instant reply and a path to book &mdash; nights, weekends, and mid-job.</p></div>
-      <div class="step"><div class="step-num">04</div><h3 data-i18n="how.step4.head">You get the leads</h3><p data-i18n="how.step4.body">Every booking and captured contact lands in one simple dashboard, ready to dispatch.</p></div>
+      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+        <div class="step-num">01</div><h3 data-i18n="how.step1.head">We build it</h3><p data-i18n="how.step1.body">Send your hours and pricing &mdash; we configure me around your business.</p></div>
+      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <div class="step-num">02</div><h3 data-i18n="how.step2.head">You paste one line</h3><p data-i18n="how.step2.body">One snippet on your website. No developer needed.</p></div>
+      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+        <div class="step-num">03</div><h3 data-i18n="how.step3.head">I start answering</h3><p data-i18n="how.step3.body">Every visitor gets an instant reply, day or night.</p></div>
+      <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+        <div class="step-num">04</div><h3 data-i18n="how.step4.head">You get the leads</h3><p data-i18n="how.step4.body">Every booking lands in one simple dashboard, ready to dispatch.</p></div>
     </div>
   </div>
 </section>
@@ -3259,7 +3281,7 @@
   <div class="wrap">
     <p class="section-eyebrow" data-i18n="integrations.eyebrow">Works With What You Run</p>
     <h2 class="section-title" data-i18n="integrations.title">No new dispatch board to learn.</h2>
-    <p class="section-lede" data-i18n="integrations.lede">I don't replace the field service software your team already dispatches from &mdash; I plug into it. Tell us what you run and we'll get you connected.</p>
+    <p class="section-lede" data-i18n="integrations.lede">I plug into the field service software you already run &mdash; I don't replace it.</p>
     <div class="integration-badges">
       <span class="integration-badge">ServiceTitan</span>
       <span class="integration-badge">Housecall Pro</span>
@@ -3267,19 +3289,22 @@
       <span class="integration-badge">FieldEdge</span>
       <span class="integration-badge is-more" data-i18n="integrations.moreOnRequest">+ more on request</span>
     </div>
-    <p class="section-lede" style="font-size:13.5px; margin-top:-8px;" data-i18n="integrations.rollout">Integrations are built out one account at a time as customers come on board &mdash; let us know what you run at signup and we'll prioritize it.</p>
+    <p class="section-lede" style="font-size:13.5px; margin-top:-8px;" data-i18n="integrations.rollout">Built out one account at a time &mdash; tell us what you run at signup.</p>
     <div class="sync-grid">
       <div class="sync-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
         <h3 class="sync-head" data-i18n="integrations.card1.head">Client Records, Created For You</h3>
-        <p class="sync-body" data-i18n="integrations.card1.body">A new caller becomes a real customer record in your system automatically &mdash; no re-typing names, addresses, or phone numbers.</p>
+        <p class="sync-body" data-i18n="integrations.card1.body">New callers become real customer records automatically &mdash; no re-typing.</p>
       </div>
       <div class="sync-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
         <h3 class="sync-head" data-i18n="integrations.card2.head">Your Dispatch Board, Updated Live</h3>
-        <p class="sync-body" data-i18n="integrations.card2.body">Booked jobs land on the calendar you already run, assigned and ready, the moment I book them &mdash; not batched in later.</p>
+        <p class="sync-body" data-i18n="integrations.card2.body">Booked jobs land on your calendar the moment they're booked, not batched in later.</p>
       </div>
       <div class="sync-card">
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
         <h3 class="sync-head" data-i18n="integrations.card3.head">Every Outcome, Logged Back</h3>
-        <p class="sync-body" data-i18n="integrations.card3.body">Booked, quoted, or missed &mdash; every conversation's result is written back to the job history your team already checks.</p>
+        <p class="sync-body" data-i18n="integrations.card3.body">Booked, quoted, or missed &mdash; every outcome is logged back automatically.</p>
       </div>
     </div>
   </div>
@@ -3296,7 +3321,7 @@
         <div class="tool-card">
           <span class="tool-card-tag">Every Subscription</span>
           <h3 class="tool-card-head">Owner Dashboard</h3>
-          <p class="tool-card-body">The real thing behind the mockup below &mdash; conversations, appointments, billing, technicians, and full customer records with equipment history, all in one place, plus a separate day-view for your crew.</p>
+          <p class="tool-card-body">The real thing behind the mockup below &mdash; conversations, billing, and full customer records in one place.</p>
           <ul class="tool-card-list">
             <li>Overview, conversations, appointments, billing</li>
             <li>Customer equipment &amp; follow-up tracking</li>
@@ -3307,18 +3332,18 @@
         <div class="tool-card">
           <span class="tool-card-tag">Included Free</span>
           <h3 class="tool-card-head">Website Builder</h3>
-          <p class="tool-card-body">No site yet? Build one &mdash; pick from 100 templates across 10 trade-specific styles, swap colors and fonts, and your chat widget and booking are already wired in.</p>
+          <p class="tool-card-body">No site yet? Pick from 100 templates &mdash; your chat widget and booking are already wired in.</p>
           <ul class="tool-card-list">
             <li>100 templates, 10 categories</li>
             <li>Live preview as you customize</li>
-            <li>Free as a lead capture page &mdash; unlocks your full Virtual Front Desk once you sign up</li>
+            <li>Free as a lead capture page &mdash; unlocks fully once you sign up</li>
           </ul>
           <a class="btn btn-primary" href="https://claude.ai/code/artifact/bc5a7adb-b6cd-4054-9b13-27e1b327cb29" target="_blank" rel="noopener">Open The Website Builder</a>
         </div>
         <div class="tool-card">
           <span class="tool-card-tag">24/7</span>
           <h3 class="tool-card-head">Virtual Front Desk</h3>
-          <p class="tool-card-body">Bob answers every website chat, text, and social message instantly, qualifies the job, and books it straight onto your calendar &mdash; nights, weekends, and holidays included.</p>
+          <p class="tool-card-body">I answer every chat, text, and social message instantly, and book the job straight onto your calendar.</p>
           <ul class="tool-card-list">
             <li>Unlimited conversations, day or night</li>
             <li>Appointment booking synced to your calendar</li>
@@ -3882,19 +3907,19 @@
 
     'whatwedo.eyebrow': 'Lo Que Hago',
     'whatwedo.title': 'Una Recepción. Cada Canal. Cero Trabajos Perdidos.',
-    'whatwedo.lede': 'Soy Bob, su recepción virtual real, capacitado en su negocio &mdash; sus servicios, su área de servicio, cómo le habla a los clientes. Estoy donde sea que un cliente se comunique, sostengo la conversación y le entrego un trabajo agendado. Así es todo el proceso:',
+    'whatwedo.lede': 'Soy Bob, su recepción virtual real &mdash; capacitado en sus servicios, su área, y cómo habla con sus clientes. Así es todo el proceso:',
     'whatwedo.card1.head': 'Respondo al Instante',
-    'whatwedo.card1.body': 'En el momento en que alguien abre un chat desde su sitio web, entra desde Facebook, Instagram, o su Perfil de Negocio de Google, o le escribe a su línea de negocio, respondo en segundos &mdash; noches, fines de semana, días festivos. Sin música de espera. Sin buzón de voz. Sin "le devolvemos la llamada".',
+    'whatwedo.card1.body': 'Chat de su sitio web, Facebook, Instagram, Google Business, o un mensaje de texto &mdash; respondo en segundos, noches o fines de semana. Sin música de espera, sin buzón de voz, sin devolución de llamada.',
     'whatwedo.card2.head': 'Califico El Trabajo',
-    'whatwedo.card2.body': 'Pregunto lo que preguntaría un buen despachador: qué está fallando, qué tan urgente es, qué tipo de unidad, qué dirección. Para cuando lo incluyo a usted, el trabajo ya está definido.',
+    'whatwedo.card2.body': 'Pregunto lo que preguntaría un despachador &mdash; para cuando lo ve, el trabajo ya está definido.',
     'whatwedo.card3.head': 'Agendo El Trabajo',
-    'whatwedo.card3.body': 'Una vez que tengo lo que necesito, pongo la cita directamente en su calendario y le envío el resumen. Usted despierta con trabajo agendado, no con una pila de mensajes por revisar.',
+    'whatwedo.card3.body': 'Lo pongo directamente en su calendario y le envío el resumen.',
     'whatwedo.card4.head': 'Trabajo Desde Cualquier Lugar',
-    'whatwedo.card4.body': 'Sin aplicación, nada que instalar. Funciono como el chat de su sitio web &mdash; accesible desde un enlace en la biografía de Facebook o Instagram, el botón de Sitio Web de su Perfil de Negocio de Google, una respuesta de texto a llamada perdida, o desde nada más que un simple enlace o un código QR en un camión, factura, o letrero de jardín.',
+    'whatwedo.card4.body': 'Sin aplicación necesaria &mdash; chat del sitio web, redes sociales, respuesta a llamada perdida, o un código QR en su camión.',
     'whatwedo.card5.head': 'Mantengo El Trabajo En Curso',
-    'whatwedo.card5.body': 'Una vez agendado, mantengo el seguimiento automático: un recordatorio antes de la cita, un aviso cuando el técnico va en camino, un correo de confirmación y recordatorio de pago, y después, un mensaje para volver a agendar el próximo mantenimiento.',
+    'whatwedo.card5.body': 'Recordatorios, avisos de "voy en camino", y mensajes de mantenimiento &mdash; todo automático.',
     'whatwedo.card6.head': 'Doy Seguimiento Para Reseñas',
-    'whatwedo.card6.body': 'Una vez terminado el trabajo, le envío un mensaje de texto (y un correo, si lo tiene activado) al cliente para calificar la visita. 4&ndash;5 estrellas van directo a Google o Facebook &mdash; cualquier calificación menor le llega a usted en privado, antes de publicarse.',
+    'whatwedo.card6.body': '4&ndash;5 estrellas van directo a Google. Cualquier calificación menor le llega primero a usted.',
 
     'math.eyebrow': 'Las Cuentas',
     'math.title': 'Un trabajo salvado paga todo mi año.',
@@ -4000,25 +4025,25 @@
     'how.eyebrow': 'Configuración',
     'how.title': 'En vivo en su sitio en cuatro pasos.',
     'how.step1.head': 'Lo construimos',
-    'how.step1.body': 'Envíenos su horario, precios y servicios &mdash; lo configuro alrededor de su negocio, no con un guion genérico.',
+    'how.step1.body': 'Envíe su horario y precios &mdash; lo configuro alrededor de su negocio.',
     'how.step2.head': 'Usted pega una línea',
-    'how.step2.body': 'Un pequeño fragmento de código va en su sitio web. Sin desarrollador, sin software nuevo que aprender.',
+    'how.step2.body': 'Un fragmento de código en su sitio. Sin desarrollador necesario.',
     'how.step3.head': 'Empiezo a responder',
-    'how.step3.body': 'Cada visitante recibe una respuesta instantánea y un camino para agendar &mdash; noches, fines de semana, y a media jornada.',
+    'how.step3.body': 'Cada visitante recibe una respuesta instantánea, día o noche.',
     'how.step4.head': 'Usted recibe los clientes potenciales',
-    'how.step4.body': 'Cada cita y contacto capturado llega a un panel sencillo, listo para despachar.',
+    'how.step4.body': 'Cada cita llega a un panel sencillo, listo para despachar.',
 
     'integrations.eyebrow': 'Funciona Con Lo Que Ya Usa',
     'integrations.title': 'Ningún tablero de despacho nuevo que aprender.',
-    'integrations.lede': 'No reemplazo el software de servicio de campo desde el que su equipo ya despacha &mdash; me conecto a él. Díganos qué usa y lo conectamos.',
+    'integrations.lede': 'Me conecto al software de servicio de campo que ya usa &mdash; no lo reemplazo.',
     'integrations.moreOnRequest': '+ más bajo solicitud',
-    'integrations.rollout': 'Las integraciones se implementan cuenta por cuenta conforme se incorporan los clientes &mdash; díganos qué sistema usa al registrarse y lo priorizamos.',
+    'integrations.rollout': 'Se implementa cuenta por cuenta &mdash; díganos qué sistema usa al registrarse.',
     'integrations.card1.head': 'Registros De Clientes, Creados Para Usted',
-    'integrations.card1.body': 'Un nuevo interesado se convierte automáticamente en un registro de cliente real en su sistema &mdash; sin volver a escribir nombres, direcciones o números telefónicos.',
+    'integrations.card1.body': 'Los nuevos interesados se convierten en registros de cliente reales automáticamente &mdash; sin volver a escribir nada.',
     'integrations.card2.head': 'Su Tablero De Despacho, Actualizado En Vivo',
-    'integrations.card2.body': 'Los trabajos agendados llegan al calendario que ya usa, asignados y listos, en el momento en que los agendo &mdash; no procesados por lotes después.',
+    'integrations.card2.body': 'Los trabajos agendados llegan a su calendario en el momento en que se agendan, no después.',
     'integrations.card3.head': 'Cada Resultado, Registrado De Vuelta',
-    'integrations.card3.body': 'Agendado, cotizado, o perdido &mdash; el resultado de cada conversación se escribe de vuelta al historial de trabajos que su equipo ya revisa.',
+    'integrations.card3.body': 'Agendado, cotizado, o perdido &mdash; cada resultado se registra automáticamente.',
 
     'why.eyebrow': 'Por Qué Yo',
     'why.title': 'Hecha para HVAC, no adaptada después.',
@@ -6936,6 +6961,42 @@
     playBtn.addEventListener('click', openPlayer);
     if(closeBtn) closeBtn.addEventListener('click', closePlayer);
     window.startDemoReel = openPlayer;
+  })();
+
+  // ---- Subtle scroll-reveal for the icon/step cards added across What I Do,
+  // Setup, Integrations, and the tools showcase. Cards fade/rise in as they
+  // cross into view, staggered slightly within each row so a grid doesn't
+  // just snap on all at once. Respects prefers-reduced-motion by doing
+  // nothing (the CSS above already shows everything at rest in that case),
+  // and if IntersectionObserver isn't available, cards just stay visible.
+  (function initRevealOnScroll(){
+    const cards = document.querySelectorAll('.whatwedo-card, .step, .sync-card, .tool-card');
+    if(!cards.length) return;
+    const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduceMotion || !('IntersectionObserver' in window)) return;
+
+    cards.forEach(card => card.classList.add('reveal-item'));
+
+    const groups = new Map(); // parent element -> ordered list of its cards
+    cards.forEach(card => {
+      const parent = card.parentElement;
+      if(!groups.has(parent)) groups.set(parent, []);
+      groups.get(parent).push(card);
+    });
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if(!entry.isIntersecting) return;
+        const card = entry.target;
+        const siblings = groups.get(card.parentElement) || [card];
+        const index = siblings.indexOf(card);
+        card.style.transitionDelay = (Math.max(0, index) * 70) + 'ms';
+        card.classList.add('is-revealed');
+        obs.unobserve(card);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+    cards.forEach(card => observer.observe(card));
   })();
 })();
 </script>
