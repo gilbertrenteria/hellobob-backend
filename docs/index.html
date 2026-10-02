@@ -6243,15 +6243,16 @@
 
     // Encode this page's own public, shareable address with a marker hash so
     // scanning the code lands right back here with Bob already open. We
-    // can't just read location.href: viewed inside Claude's own preview
-    // panel, this script actually runs inside a sandboxed preview iframe
-    // whose address is an internal frame-hosting domain, not the public link
-    // a phone can actually open — encoding that would produce a QR code that
-    // scans to nothing. Only trust the live address when it's genuinely the
-    // public claude.ai page (e.g. opened directly, outside the chat preview);
-    // otherwise fall back to the known public artifact URL.
+    // can't just read location.href unconditionally: viewed inside Claude's
+    // own preview panel, this script actually runs inside a sandboxed preview
+    // iframe whose address is an internal frame-hosting domain, not a public
+    // link a phone can actually open — encoding that would produce a QR code
+    // that scans to nothing. Only trust the live address on a known public
+    // host (the real meethellobob.com domain, the GitHub Pages fallback, or
+    // an actual claude.ai artifact page); otherwise fall back to the known
+    // public artifact URL.
     const KNOWN_PUBLIC_URL = 'https://claude.ai/code/artifact/4c379fd5-9ba9-459d-8470-24245eda5a8e';
-    const isPublicHost = /(^|\.)claude\.ai$/.test(location.hostname || '');
+    const isPublicHost = /(^|\.)meethellobob\.com$|(^|\.)github\.io$|(^|\.)claude\.ai$/.test(location.hostname || '');
     const base = isPublicHost ? (location.origin + location.pathname).replace(/#.*$/, '') : KNOWN_PUBLIC_URL;
     const qrUrl = base + '#ask-jamie';
     if(urlEl) urlEl.textContent = qrUrl;
@@ -6355,15 +6356,38 @@
 
     // Does the actual DOM swap. `instant` means it's happening behind the
     // splash (or reduced motion is on) so any scrolling should jump, not glide.
+    // On narrow screens .nav-links becomes its own horizontally-scrollable
+    // strip (see the max-width:1010px rule), so switching to a tab further
+    // along the row — FAQ, Get Started — could leave its label clipped at
+    // the edge until the visitor noticed they could swipe it. Nudges just
+    // that strip's own scrollLeft so the active tab is fully in view; never
+    // touches the page's vertical scroll.
+    function scrollActiveTabIntoView(btn){
+      const container = btn.closest('.nav-links');
+      if(!container) return;
+      const btnLeft = btn.offsetLeft;
+      const btnRight = btnLeft + btn.offsetWidth;
+      const viewLeft = container.scrollLeft;
+      const viewRight = viewLeft + container.clientWidth;
+      if(btnRight > viewRight){
+        container.scrollLeft = btnRight - container.clientWidth + 16;
+      } else if(btnLeft < viewLeft){
+        container.scrollLeft = Math.max(0, btnLeft - 16);
+      }
+    }
+
     function applyPage(page, opts){
       opts = opts || {};
       pageEls.forEach(el => { el.hidden = el.dataset.page !== page; });
       document.dispatchEvent(new CustomEvent('hellobob:pagechange', { detail: page }));
+      let activeBtn = null;
       tabButtons.forEach(btn => {
         const active = btn.dataset.pageLink === page;
         btn.classList.toggle('is-active', active);
         btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        if(active) activeBtn = btn;
       });
+      if(activeBtn) scrollActiveTabIntoView(activeBtn);
       updateStripes();
       // The demo page's jump-nav bars measure at 0 height while [hidden] —
       // re-measure now that this page's visibility just changed, before any
