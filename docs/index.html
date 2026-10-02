@@ -1642,6 +1642,7 @@
     display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
     background:var(--line); border:1px solid var(--line); margin-top:32px;
   }
+  .tools-grid-2{ grid-template-columns:repeat(2,1fr); }
   .tool-card{
     background:var(--panel); padding:28px 26px 26px; display:flex; flex-direction:column; gap:14px;
   }
@@ -1796,20 +1797,6 @@
   </div>
 </header>
 
-<div class="demo-nudge" id="demoNudge" hidden>
-  <button type="button" class="demo-nudge-body" id="demoNudgeBody">
-    <span class="demo-nudge-play">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
-    </span>
-    <span class="demo-nudge-text">
-      <strong data-i18n="nudge.title">See exactly how this works</strong>
-      <span data-i18n="nudge.sub">0:37 &middot; what happens when a customer messages you</span>
-    </span>
-  </button>
-  <button type="button" class="demo-nudge-close" id="demoNudgeClose" aria-label="Dismiss">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-  </button>
-</div>
 
 <div class="jamie-widget" id="jamie-widget">
   <button type="button" class="jamie-launcher" id="jamie-launcher" aria-expanded="false" aria-controls="jamie-panel">
@@ -1865,7 +1852,7 @@
   <div class="wrap">
     <p class="hero-eyebrow" data-i18n="hero.eyebrow">Now answering for HVAC companies nationwide</p>
     <h1><span data-i18n="hero.h1Line">Every unanswered message<br>is a job for</span> <em class="hero-strike" data-i18n="hero.strike">someone else.</em> <span class="hero-us"></span></h1>
-    <p class="hero-sub" data-full-text="Hi, I'm Bob &mdash; your 24/7 virtual front desk. I answer every customer instantly, qualify the job, and get it booked on your calendar &mdash; then stay on it after: reminders, invoices, and review requests, with every lead, booking, and review tracked live on your dashboard." data-full-text-es="Hola, soy Bob &mdash; su recepción virtual 24/7. Respondo a cada cliente al instante, evalúo el trabajo, y lo agendo en su calendario &mdash; y sigo en contacto después: recordatorios, facturas y solicitudes de reseña, con cada contacto, cita y reseña registrados en vivo en su panel."></p>
+    <p class="hero-sub" data-full-text="I&rsquo;m Bob &mdash; I answer every customer instantly, day or night, and get the job booked on your calendar." data-full-text-es="Soy Bob &mdash; respondo a cada cliente al instante, d&iacute;a y noche, y agendo el trabajo en su calendario."></p>
   </div>
   <div class="wrap">
     <div class="stat-row">
@@ -1888,38 +1875,8 @@
 
 <section class="proof" data-page="home" id="proof">
   <div class="wrap">
-    <p class="section-eyebrow" data-i18n="proof.eyebrow">Proof, Not Promises</p>
-    <h2 class="section-title" data-i18n="proof.title">Here's what actually happens.</h2>
-
-    <div class="fit-check">
-      <p class="fit-check-kicker" data-i18n="proof.fitCheck.kicker">Sound familiar?</p>
-      <ul class="fit-check-list">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item1">You're the one texting customers back at 9 PM.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item2">No website &mdash; or one frozen since you started.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item3">Calls hit voicemail while you're up a ladder.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item4">No dashboard &mdash; no idea how many leads you're losing.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item5">Scheduling lives in your head, on paper, or a group text.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item6">Once the truck leaves, that's it &mdash; no follow-up, ever.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item7">No system for review requests &mdash; your rating just sits there.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="proof.fitCheck.item8">Texts and emails look scrambled, not like an established company.</span></li>
-      </ul>
-      <p class="fit-check-note" data-i18n="proof.fitCheck.note">Starting from nothing or upgrading from something that isn't working &mdash; either way, HelloBob replaces it, not adds another thing to check.</p>
-    </div>
-
-    <div class="fit-check our-solution">
-      <p class="fit-check-kicker" data-i18n="proof.ourSolution.kicker">Our Solution</p>
-      <ul class="fit-check-list">
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item1">I answer every text, call, and chat in under 5 seconds.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item2">A real website, built in minutes &mdash; included, not extra.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item3">Missed calls get an instant text-back with a chat link.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item4">One dashboard shows every lead, booking, and message, live.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item5">Jobs book straight onto your calendar the moment they're confirmed.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item6">I follow up automatically &mdash; reminders, on-the-way texts, tune-up nudges.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item7">Every finished job gets a one-tap review request.</span></li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.ourSolution.item8">Every message goes out clean and consistent &mdash; like an established company.</span></li>
-      </ul>
-      <p class="fit-check-note" data-i18n="proof.ourSolution.note">One flat $197/month. No separate tools to juggle, no new habits to build &mdash; just fewer things falling through the cracks.</p>
-    </div>
+    <p class="section-eyebrow" data-i18n="proof.eyebrow">Real Shops, Real Results</p>
+    <h2 class="section-title" data-i18n="proof.title">Built for one truck or a growing crew.</h2>
 
     <div class="proof-sort" id="proofSort">
       <p class="proof-sort-q" data-i18n="proof.sort.q">Which one's you?</p>
@@ -1947,12 +1904,12 @@
             <span class="proof-chip"><strong>63%</strong><span data-i18n="proof.crew.chip3">Booked, Not Just Answered</span></span>
             <span class="proof-chip"><strong>0</strong><span data-i18n="proof.crew.chip4">Left Unanswered</span></span>
           </div>
-          <p class="proof-note" data-i18n="proof.numNote">Pulled straight from Coastline Air &amp; Heat's own dashboard &mdash; the same example account used throughout this page.</p>
+      <p class="proof-note" data-i18n="proof.numNote">Pulled straight from Coastline Air &amp; Heat's own records &mdash; the same example account used throughout this page.</p>
         </div>
         <div class="proof-fit">
           <p class="proof-fit-kicker" data-i18n="proof.fitCrew.kicker">Built For A Growing Team</p>
           <ul class="proof-fit-list">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item1">The dashboard isn't locked to one device &mdash; share it with your whole team.</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item1">Your account isn't locked to one device &mdash; share it with your whole team.</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item2">A separate crew view gives your techs what they need in the field.</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item3">Plugs into the dispatch software you already run.</span></li>
             <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="proof.fitCrew.item4">One flat $197/month, no matter how many trucks you add.</span></li>
@@ -2014,10 +1971,10 @@
         <p class="whatwedo-body" data-i18n="whatwedo.card3.body">I put it straight on your calendar and send you the summary.</p>
       </div>
       <div class="whatwedo-card">
-        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3" y1="12" x2="21" y2="12"></line><path d="M12 3a14.5 14.5 0 0 1 3.8 9.5A14.5 14.5 0 0 1 12 21a14.5 14.5 0 0 1-3.8-8.5A14.5 14.5 0 0 1 12 3z"></path></svg>
+        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
         <p class="whatwedo-num">04</p>
-        <h3 class="whatwedo-head" data-i18n="whatwedo.card4.head">I Work From Anywhere</h3>
-        <p class="whatwedo-body" data-i18n="whatwedo.card4.body">No app needed &mdash; website chat, social links, missed-call text-back, or a QR code on your truck.</p>
+        <h3 class="whatwedo-head" data-i18n="whatwedo.card4.head">I Build You A Website</h3>
+        <p class="whatwedo-body" data-i18n="whatwedo.card4.body">No site yet? I'll build you one free &mdash; pick a template, and your chat and booking are already wired in.</p>
       </div>
       <div class="whatwedo-card">
         <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
@@ -2031,488 +1988,6 @@
         <h3 class="whatwedo-head" data-i18n="whatwedo.card6.head">I Follow Up For Reviews</h3>
         <p class="whatwedo-body" data-i18n="whatwedo.card6.body">4&ndash;5 stars go straight to Google. Anything lower comes to you first.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<div class="stripe"></div>
-
-<section class="math" data-page="home">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="math.eyebrow">The Math</p>
-    <h2 class="section-title" data-i18n="math.title">One saved job pays for my whole year.</h2>
-    <p class="section-lede" data-i18n="math.lede">I only need to save you one job a year to pay for myself. Everything after that is money you would've otherwise lost.</p>
-
-    <div class="math-wrap">
-      <div class="math-top">
-        <div><div class="math-figure is-red">$150&ndash;$2K+</div><div class="math-figure-label" data-i18n="math.fig1">Typical value of one repair or emergency job</div></div>
-        <div><div class="math-figure">$197<span class="figure-suffix">/mo</span></div><div class="math-figure-label" data-i18n="math.fig2">Flat cost of me</div></div>
-        <div><div class="math-figure">1</div><div class="math-figure-label" data-i18n="math.fig3">Booked job needed to pay for me all year</div></div>
-      </div>
-      <div class="secretary-row">
-        <div class="secretary-figure">
-          <div class="math-figure is-red">$2,800<span class="figure-suffix">+/mo</span></div>
-          <div class="math-figure-label" data-i18n="math.secretary">A full-time secretary &mdash; before payroll tax, benefits, or a single sick day</div>
-        </div>
-        <div class="secretary-vs">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-          <span data-i18n="math.vsMe">vs. me</span>
-        </div>
-        <div class="secretary-figure">
-          <div class="math-figure">$197<span class="figure-suffix">/mo</span></div>
-          <div class="math-figure-label" data-i18n="math.meCost">What I cost &mdash; nights, weekends, and holidays included, no PTO required</div>
-        </div>
-      </div>
-      <div class="compare-grid">
-        <div class="compare-col">
-          <h3 class="compare-head bad" data-i18n="math.badHead">Without Me</h3>
-          <ul class="compare-list bad">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="math.bad1">After-hours website messages go unanswered, or nowhere at all.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="math.bad2">A visitor with no response tries the next company on Google.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="math.bad3">Website visitors browsing at night leave without booking.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg><span data-i18n="math.bad4">You find out a lead was lost only when it's too late to fix.</span></li>
-          </ul>
-        </div>
-        <div class="compare-col">
-          <h3 class="compare-head good" data-i18n="math.goodHead">With Me</h3>
-          <ul class="compare-list good">
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="math.good1">I answer every message in seconds, any hour, any day.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="math.good2">I triage emergency requests and put them on your schedule immediately.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="math.good3">I capture even undecided visitors as a lead you can call back.</span></li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg><span data-i18n="math.good4">You see every conversation and booking in one dashboard.</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="stripe"></div>
-<section class="view-picker" data-page="home">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="viewPicker.eyebrow">See It From Both Sides</p>
-    <h2 class="section-title view-picker-title" data-i18n="viewPicker.title">Pick a side to start.</h2>
-    <div class="view-bubbles">
-      <a href="#owner-dashboard" class="view-bubble" data-goto="owner-dashboard">
-        <span class="view-bubble-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg></span>
-        <span class="view-bubble-text"><strong data-i18n="viewPicker.owner.strong">What You'll See</strong><span data-i18n="viewPicker.owner.sub">The owner's dashboard &mdash; leads, bookings, reviews</span></span>
-        <svg class="view-bubble-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-      </a>
-      <a href="#channels" class="view-bubble" data-goto="channels">
-        <span class="view-bubble-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></span>
-        <span class="view-bubble-text"><strong data-i18n="viewPicker.customer.strong">What Your Customer Sees</strong><span data-i18n="viewPicker.customer.sub">Me, wherever they reach out</span></span>
-        <svg class="view-bubble-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>
-      </a>
-    </div>
-  </div>
-</section>
-<div class="stripe"></div>
-
-<section class="demo-reel" id="demoReel" data-page="demo">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="reel.eyebrow">See It In Action</p>
-    <h2 class="section-title" data-i18n="reel.title">Watch Bob handle a real lead, start to finish.</h2>
-    <p class="section-lede" data-i18n="reel.lede">One walkthrough, both sides &mdash; what your customer experiences when they message you, and what shows up on your end while you're not looking.</p>
-
-    <div class="reel-frame" id="reelFrame">
-      <div class="reel-poster" id="reelPoster">
-        <button type="button" class="reel-play-btn" id="reelPlayBtn" aria-label="Play demo">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
-        </button>
-        <div class="reel-poster-text">
-          <p class="reel-poster-eyebrow" data-i18n="reel.poster.eyebrow">Watch Demo</p>
-          <h3 data-i18n="reel.poster.title">From First Message To 5-Star Review</h3>
-          <p data-i18n="reel.poster.sub">See exactly what happens &mdash; for your customer, and for you.</p>
-        </div>
-        <span class="reel-duration-chip" id="reelDurationChip">0:37</span>
-      </div>
-
-      <div class="reel-player" id="reelPlayer" hidden>
-        <div class="reel-topbar">
-          <span class="reel-topbar-title" data-i18n="reel.player.title">HelloBob &mdash; How Bob Works</span>
-          <span class="reel-timer"><span id="reelTimerNow">0:00</span> / <span id="reelTimerTotal">0:37</span></span>
-          <button type="button" class="reel-close-btn" id="reelCloseBtn" aria-label="Close demo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-          </button>
-        </div>
-        <div class="reel-progress-track"><div class="reel-progress-fill" id="reelProgressFill"></div></div>
-        <div class="reel-stage" id="reelStage"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="owner-dash" id="owner-dashboard" data-page="demo">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="ownerDash.eyebrow">For The Business Owner</p>
-    <h2 class="section-title" data-i18n="ownerDash.title">You see everything I do.</h2>
-    <p class="section-lede" data-i18n="ownerDash.lede">Customers only ever talk to me. Behind the scenes, you get a live dashboard of every lead, booking, and review I've logged &mdash; the same one you'd check from your phone between jobs. Here's what that looks like, tab by tab.</p>
-    <div class="tool-callout tool-callout-multi">
-      <p><strong>These aren't mockups.</strong> Every button below opens the actual product with sample data already loaded &mdash; click around, or chat with the real Bob right here on this page.</p>
-      <div class="tool-callout-actions">
-        <a class="btn btn-primary" href="https://claude.ai/code/artifact/916fba66-a396-4815-85c1-721f23bad463?org=0f296a40-4d85-4249-86e2-578d5a58ea21" target="_blank" rel="noopener">Open The Real Dashboard</a>
-        <a class="btn btn-primary" href="https://claude.ai/code/artifact/bc5a7adb-b6cd-4054-9b13-27e1b327cb29" target="_blank" rel="noopener">Open The Real Website Builder</a>
-        <a class="btn btn-primary" href="https://claude.ai/code/artifact/3c53f093-1566-462e-9b4d-0d95bb10437f" target="_blank" rel="noopener">Open The Real Guided Setup</a>
-        <button type="button" class="btn btn-primary" id="openRealChatBtn">Chat With The Real Bob</button>
-      </div>
-    </div>
-
-
-    <nav class="jump-nav" aria-label="Jump to a dashboard tab">
-      <a href="#dash-appt" data-goto="dash-appt" data-i18n="ownerDash.tab3.title">Appointments</a>
-      <a href="#dash-conversations" data-goto="dash-conversations" data-i18n="ownerDash.tab2.title">Conversations</a>
-      <a href="#dash-customers" data-goto="dash-customers" data-i18n="ownerDash.tab7.title">Customers</a>
-      <a href="#dash-missed" data-goto="dash-missed" data-i18n="ownerDash.tab5.title">Missed Opportunities</a>
-      <a href="#dash-overview" data-goto="dash-overview" data-i18n="ownerDash.tab1.title">Overview</a>
-      <a href="#dash-reviews" data-goto="dash-reviews" data-i18n="ownerDash.tab4.title">Reviews</a>
-      <a href="#dash-compliance" data-goto="dash-compliance" data-i18n="ownerDash.tab6.title">Compliance</a>
-    </nav>
-
-    <div class="channel-list">
-    <details class="channel-item" open id="dash-appt">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span data-i18n="ownerDash.tab3.title">Appointments</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab3.desc">Every job I book, synced to your real calendar and grouped by day &mdash; who's on it, and where things stand. Mark a job Complete and I prompt you right there for what to do about payment: send a reminder by text or email, mark it already paid, or skip.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/appointments</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Appointments</h4><span>4 upcoming</span></div>
-            <div class="ow-appt-group">
-              <div class="ow-appt-day">Yesterday &mdash; Mon, Aug 24</div>
-              <div class="ow-appt-list">
-                <div class="ow-appt"><div class="ow-appt-time">2:00p</div><div class="ow-appt-main"><strong>Angela K.</strong><span>AC Tune-Up &middot; Tech: Mike &middot; Payment reminder sent</span></div><span class="ow-appt-pill confirmed">Complete</span></div>
-              </div>
-            </div>
-            <div class="ow-appt-group">
-              <div class="ow-appt-day">Today &mdash; Tue, Aug 25</div>
-              <div class="ow-appt-list">
-                <div class="ow-appt"><div class="ow-appt-time">10:00a</div><div class="ow-appt-main"><strong>Denise R.</strong><span>AC Tune-Up &middot; Tech: Mike</span></div><span class="ow-appt-pill confirmed">Confirmed</span></div>
-                <div class="ow-appt"><div class="ow-appt-time">1:00p</div><div class="ow-appt-main"><strong>Priya M.</strong><span>No-Cool Emergency &middot; Tech: Carlos</span></div><span class="ow-appt-pill enroute">On The Way</span></div>
-                <div class="ow-appt"><div class="ow-appt-time">3:30p</div><div class="ow-appt-main"><strong>Marcus T.</strong><span>Thermostat Install &middot; Tech: Mike</span></div><span class="ow-appt-pill confirmed">Confirmed</span></div>
-              </div>
-            </div>
-            <div class="ow-appt-group">
-              <div class="ow-appt-day">Tomorrow &mdash; Wed, Aug 26</div>
-              <div class="ow-appt-list">
-                <div class="ow-appt"><div class="ow-appt-time">9:00a</div><div class="ow-appt-main"><strong>James D.</strong><span>Annual Maintenance &middot; Tech: Carlos</span></div><span class="ow-appt-pill confirmed">Confirmed</span></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-conversations">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="8.01" y2="12"></line><line x1="12" y1="12" x2="12.01" y2="12"></line><line x1="16" y1="12" x2="16.01" y2="12"></line></svg><span data-i18n="ownerDash.tab2.title">Conversations</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab2.desc">Every conversation I have &mdash; on the website, by text, on Facebook &mdash; lands in one list. Tap any one to read the full conversation.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/conversations</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Conversations</h4><span>4 today</span></div>
-            <div class="ow-convo-list">
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-convo-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg></div>
-                  <div class="ow-convo-main"><strong>Priya M. &mdash; Website Chat</strong><span>AC blowing warm air, needs someone today</span></div>
-                  <div class="ow-convo-time">9:14 AM<span class="ow-convo-pill booked">Booked</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail">
-                  <div class="msg user">My AC is blowing warm air</div>
-                  <div class="msg bot">Sorry to hear that &mdash; is this urgent, or can it wait a day or two?</div>
-                  <div class="msg user">pretty urgent, it's 98 outside</div>
-                  <div class="msg bot">Got it &mdash; I can get a tech out today between 1&ndash;3pm. Want me to book that?</div>
-                  <div class="msg user">yes please</div>
-                  <div class="msg bot">Booked! You're all set for today, 1&ndash;3pm.</div>
-                </div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-convo-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div>
-                  <div class="ow-convo-main"><strong>James D. &mdash; Missed-Call Text-Back</strong><span>Never answered &mdash; texted back automatically</span></div>
-                  <div class="ow-convo-time">8:02 AM<span class="ow-convo-pill booked">Booked</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail"><p class="ow-note">Full transcript available in your dashboard.</p></div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-convo-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.4v7A10 10 0 0 0 22 12z"></path></svg></div>
-                  <div class="ow-convo-main"><strong>Denise R. &mdash; Facebook</strong><span>Asking about maintenance plan pricing</span></div>
-                  <div class="ow-convo-time">Yesterday<span class="ow-convo-pill open">Needs Reply</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail"><p class="ow-note">Full transcript available in your dashboard.</p></div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-convo-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
-                  <div class="ow-convo-main"><strong>Marcus T. &mdash; Text Reminder Reply</strong><span>Confirmed tomorrow's 10am appointment</span></div>
-                  <div class="ow-convo-time">Yesterday<span class="ow-convo-pill booked">Booked</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail"><p class="ow-note">Full transcript available in your dashboard.</p></div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-customers">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg><span data-i18n="ownerDash.tab7.title">Customers</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab7.desc">Every customer in one place &mdash; their full job history, every conversation, and exactly where their review request stands. Tap a name to see everything.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/customers</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Customers</h4><span>48 total</span></div>
-            <div class="ow-convo-list">
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-cust-avatar">A</div>
-                  <div class="ow-convo-main"><strong>Angela K.</strong><span>3 jobs &middot; last visit Aug 24</span></div>
-                  <div class="ow-convo-time">&nbsp;<span class="ow-convo-pill open" data-ow-markposted-pill>2-Day Reminder Sent</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail">
-                  <p class="ow-note">Job history: Aug 24 &mdash; AC Tune-Up (Complete) &middot; Jun 2 &mdash; Thermostat Install &middot; Jan 14 &mdash; No-Cool Emergency</p>
-                  <p class="ow-note">Review: rated 5&#9733;, opened Google's review page Aug 24, no confirmation yet &mdash; next check-in Aug 31.</p>
-                  <button type="button" class="ow-review-resolve" data-ow-markposted>Mark Posted</button>
-                </div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-cust-avatar">P</div>
-                  <div class="ow-convo-main"><strong>Priya M.</strong><span>2 jobs &middot; last visit Aug 25</span></div>
-                  <div class="ow-convo-time">&nbsp;<span class="ow-convo-pill booked">Review Posted</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail">
-                  <p class="ow-note">Job history: Aug 25 &mdash; No-Cool Emergency (Complete) &middot; Mar 11 &mdash; AC Tune-Up</p>
-                  <p class="ow-note">Review: rated 5&#9733;, self-confirmed posted to Google on Aug 25.</p>
-                </div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-cust-avatar">J</div>
-                  <div class="ow-convo-main"><strong>James D.</strong><span>1 job &middot; last visit Aug 23</span></div>
-                  <div class="ow-convo-time">&nbsp;<span class="ow-convo-pill cold">Declined</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail">
-                  <p class="ow-note">Job history: Aug 23 &mdash; Annual Maintenance (Complete)</p>
-                  <p class="ow-note">Review: rated 5&#9733;, tapped &ldquo;No thanks&rdquo; on the first reminder &mdash; no further review reminders sent for this job.</p>
-                </div>
-              </details>
-              <details class="ow-convo">
-                <summary>
-                  <div class="ow-cust-avatar">M</div>
-                  <div class="ow-convo-main"><strong>Marcus T.</strong><span>1 job &middot; last visit Aug 24</span></div>
-                  <div class="ow-convo-time">&nbsp;<span class="ow-convo-pill booked">Confirmed</span></div>
-                  <svg class="ow-convo-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"></path></svg>
-                </summary>
-                <div class="ow-convo-detail">
-                  <p class="ow-note">Job history: Aug 24 &mdash; Thermostat Install (Confirmed, not yet complete)</p>
-                  <p class="ow-note">Review: request goes out automatically once the job's marked complete.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-missed">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><span data-i18n="ownerDash.tab5.title">Missed Opportunities</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab5.desc">Not every lead books right away. I flag the ones that went quiet so you know exactly who to call back, and why.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/missed</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Missed Opportunities</h4><span>3 this week</span></div>
-            <div class="ow-miss-list">
-              <div class="ow-miss">
-                <div class="ow-miss-main"><strong>Angela K. &mdash; Website Chat</strong><span>Asked about a full system replacement, then went quiet after hearing the estimate range.</span></div>
-                <div class="ow-miss-meta"><span class="ow-convo-pill cold">Price Hesitation</span><button type="button" class="ow-review-resolve" data-ow-followup>Follow Up</button></div>
-              </div>
-              <div class="ow-miss">
-                <div class="ow-miss-main"><strong>Tom B. &mdash; Google Business Profile</strong><span>Wanted a same-day repair &mdash; no slots left until tomorrow.</span></div>
-                <div class="ow-miss-meta"><span class="ow-convo-pill cold">No Availability</span><button type="button" class="ow-review-resolve" data-ow-followup>Follow Up</button></div>
-              </div>
-              <div class="ow-miss">
-                <div class="ow-miss-main"><strong>Renee S. &mdash; Facebook</strong><span>Booked a slot, then never confirmed the reminder text.</span></div>
-                <div class="ow-miss-meta"><span class="ow-convo-pill cold">No Response</span><button type="button" class="ow-review-resolve" data-ow-followup>Follow Up</button></div>
-              </div>
-            </div>
-            <div class="ow-attn">
-              <i></i>
-              <p><strong>Tip:</strong> Leads lost to price hesitation convert 3&times; better with a same-day callback that mentions financing.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-overview">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg><span data-i18n="ownerDash.tab1.title">Overview</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab1.desc">The first thing you see when you log in &mdash; how many leads I brought in, how many turned into booked jobs, how many texts and emails went out on autopilot, and anything that still needs your attention.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/overview</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>This Week</h4><span>Coastline Air &amp; Heat</span></div>
-            <div class="ow-kpis">
-              <div class="ow-kpi"><div class="ow-kpi-label">New Leads</div><div class="ow-kpi-value">38</div><div class="ow-kpi-delta up">+6 vs last week</div></div>
-              <div class="ow-kpi"><div class="ow-kpi-label">Jobs Booked</div><div class="ow-kpi-value">24</div><div class="ow-kpi-delta flat">63% of leads</div></div>
-              <div class="ow-kpi"><div class="ow-kpi-label">Avg Reply Time</div><div class="ow-kpi-value">4s</div><div class="ow-kpi-delta flat">Every single one</div></div>
-            </div>
-            <div class="ow-chart-wrap">
-              <svg class="ow-chart" viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true">
-                <path d="M8,82 L8,71.7 L55.3,51.1 L102.7,82 L150,30.6 L197.3,61.4 L244.7,40.9 L292,10 L292,82 Z" fill="var(--red)" fill-opacity="0.1" stroke="none"></path>
-                <polyline points="8,71.7 55.3,51.1 102.7,82 150,30.6 197.3,61.4 244.7,40.9 292,10" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-                <circle cx="8" cy="71.7" r="3" fill="var(--red)"></circle>
-                <circle cx="55.3" cy="51.1" r="3" fill="var(--red)"></circle>
-                <circle cx="102.7" cy="82" r="3" fill="var(--red)"></circle>
-                <circle cx="150" cy="30.6" r="3" fill="var(--red)"></circle>
-                <circle cx="197.3" cy="61.4" r="3" fill="var(--red)"></circle>
-                <circle cx="244.7" cy="40.9" r="3" fill="var(--red)"></circle>
-                <circle cx="292" cy="10" r="4" fill="var(--red)" stroke="var(--paper)" stroke-width="2"></circle>
-                <text x="8" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">M</text>
-                <text x="55.3" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">Tu</text>
-                <text x="102.7" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">W</text>
-                <text x="150" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">Th</text>
-                <text x="197.3" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">F</text>
-                <text x="244.7" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">Sa</text>
-                <text x="292" y="95" font-size="7" fill="var(--paper-muted)" text-anchor="middle">Su</text>
-                <rect class="ow-hit" data-day="Monday" data-value="5 leads" data-cx="8" data-cy="71.7" x="0" y="0" width="31.65" height="88"></rect>
-                <rect class="ow-hit" data-day="Tuesday" data-value="7 leads" data-cx="55.3" data-cy="51.1" x="31.65" y="0" width="47.35" height="88"></rect>
-                <rect class="ow-hit" data-day="Wednesday" data-value="4 leads" data-cx="102.7" data-cy="82" x="79" y="0" width="47.35" height="88"></rect>
-                <rect class="ow-hit" data-day="Thursday" data-value="9 leads" data-cx="150" data-cy="30.6" x="126.35" y="0" width="47.3" height="88"></rect>
-                <rect class="ow-hit" data-day="Friday" data-value="6 leads" data-cx="197.3" data-cy="61.4" x="173.65" y="0" width="47.35" height="88"></rect>
-                <rect class="ow-hit" data-day="Saturday" data-value="8 leads" data-cx="244.7" data-cy="40.9" x="221" y="0" width="47.35" height="88"></rect>
-                <rect class="ow-hit" data-day="Sunday" data-value="11 leads" data-cx="292" data-cy="10" x="268.35" y="0" width="31.65" height="88"></rect>
-              </svg>
-              <div class="ow-chart-tip" data-ow-tip></div>
-            </div>
-            <p class="ow-chart-caption">Leads by day &mdash; hover a day for the count</p>
-            <div class="ow-attn">
-              <i></i>
-              <p><strong>3 conversations need a human.</strong> One pricing question I couldn't answer, and two reschedule requests &mdash; all waiting in Conversations.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-reviews">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><span data-i18n="ownerDash.tab4.title">Reviews</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab4.desc">See exactly which reviews I let go public and which I kept private &mdash; resolve a private one once you've made it right with the customer, and set your own reminder timing below. I'll also text you a quick digest every Monday so you're never stuck digging through the dashboard to know where things stand.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/reviews</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Reviews</h4><span>Last 30 days</span></div>
-            <div class="ow-review-split">
-              <div class="ow-review-bar"><span class="good" style="width:91%"></span><span class="hold" style="width:9%"></span></div>
-              <div class="ow-review-split-label">91% posted</div>
-            </div>
-            <div class="ow-review-cards">
-              <div class="ow-review-card">
-                <div class="ow-review-card-top"><strong>Posted &middot; Google</strong>
-                  <div class="review-stars" style="color:var(--paper-green)"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
-                </div>
-                <p>&ldquo;Fast callback, same-day repair, very professional.&rdquo; &mdash; Priya M.</p>
-              </div>
-              <div class="ow-review-card private">
-                <div class="ow-review-card-top"><strong>Private &middot; Never Posted</strong>
-                  <div class="review-stars"><svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--paper-muted)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--paper-muted)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--paper-line)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--paper-line)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="currentColor" style="color:var(--paper-line)"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 21 12 17.77 5.82 21 7 14.14 2 9.27l6.91-1.01L12 2z"></path></svg></div>
-                </div>
-                <p>&ldquo;Technician was late and didn't call ahead.&rdquo; &mdash; James D.</p>
-                <button type="button" class="ow-review-resolve" data-ow-resolve>Mark Resolved</button>
-              </div>
-            </div>
-
-            <div class="ow-digest">
-              <div class="ow-digest-head">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                <div><strong data-i18n="ownerDash.digest.head">Weekly Owner Digest</strong><span data-i18n="ownerDash.digest.sub">Texted to you every Monday morning</span></div>
-              </div>
-              <p class="ow-digest-sms" data-i18n="ownerDash.digest.sms">&ldquo;Coastline weekly digest: 6 review requests sent, 4 posted, 1 reminder pending (Angela K. &mdash; final nudge Thu), 1 declined. Details: app.hellobob.com/reviews&rdquo;</p>
-            </div>
-
-            <div class="ow-reminder-settings">
-              <div class="ow-reminder-settings-head"><strong data-i18n="ownerDash.cadence.head">Reminder Cadence</strong><span data-i18n="ownerDash.cadence.sub">Applies to new review requests going forward</span></div>
-              <div class="ow-reminder-row">
-                <span class="ow-reminder-label" data-i18n="ownerDash.cadence.first">First reminder</span>
-                <select class="ow-reminder-select" data-ow-cadence="first">
-                  <option data-i18n="ownerDash.cadence.opt1day">1 day after</option>
-                  <option selected data-i18n="ownerDash.cadence.opt2day">2 days after</option>
-                  <option data-i18n="ownerDash.cadence.opt3day">3 days after</option>
-                </select>
-              </div>
-              <div class="ow-reminder-row">
-                <span class="ow-reminder-label" data-i18n="ownerDash.cadence.final">Final reminder</span>
-                <select class="ow-reminder-select" data-ow-cadence="final">
-                  <option data-i18n="ownerDash.cadence.opt3dayAfter">3 days after first</option>
-                  <option selected data-i18n="ownerDash.cadence.opt1week">1 week after first</option>
-                  <option data-i18n="ownerDash.cadence.opt2week">2 weeks after first</option>
-                </select>
-              </div>
-              <div class="ow-reminder-row">
-                <span class="ow-reminder-label" data-i18n="ownerDash.cadence.after">After that</span>
-                <span class="ow-reminder-fixed" data-i18n="ownerDash.cadence.afterFixed">Bob stops automatically &mdash; no third nudge</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </details>
-
-    <details class="channel-item" open id="dash-compliance">
-      <summary><span class="channel-item-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"></path></svg><span data-i18n="ownerDash.tab6.title">Compliance</span></span></summary>
-      <div class="channel-item-body">
-        <p class="channel-desc" data-i18n="ownerDash.tab6.desc">Every text I send is logged and classified, one consent from the customer covers reminders, on-my-way alerts, invoices, and review requests together, and nothing goes out during quiet hours or past your state's extra limits &mdash; so you stay covered without having to think about it.</p>
-        <div class="ow-frame">
-          <div class="browser-bar">
-            <div class="browser-dots"><span></span><span></span><span></span></div>
-            <div class="browser-url">app.hellobob.com/compliance</div>
-          </div>
-          <div class="ow-body">
-            <div class="ow-head"><h4>Messaging Compliance</h4><span>All clear</span></div>
-            <div class="ow-kpis">
-              <div class="ow-kpi"><div class="ow-kpi-label">Consent On File</div><div class="ow-kpi-value">100%</div><div class="ow-kpi-delta up">Captured before first reminder/review text</div></div>
-              <div class="ow-kpi"><div class="ow-kpi-label">Quiet Hours</div><div class="ow-kpi-value">8a&ndash;9p</div><div class="ow-kpi-delta flat">Auto-enforced</div></div>
-              <div class="ow-kpi"><div class="ow-kpi-label">Opt-Outs</div><div class="ow-kpi-value">Instant</div><div class="ow-kpi-delta flat">Any reply, any wording</div></div>
-            </div>
-            <div class="ow-compliance-rows">
-              <div class="ow-compliance-row"><span class="ow-compliance-tag transactional">Transactional</span><span>Booking confirmations, appointment reminders, on-the-way alerts, invoices, review requests</span></div>
-              <div class="ow-compliance-row"><span class="ow-compliance-tag promotional">Promotional</span><span>Maintenance-plan reminders, seasonal offers &mdash; separate opt-in, never bundled with the above</span></div>
-            </div>
-            <p class="ow-chart-caption">One consent covers the full transactional bucket above so nothing goes out that wasn't named when the customer said yes; promotional messages always need their own separate opt-in and never ride on transactional consent. Classified automatically so nothing goes out during quiet hours or without consent &mdash; and every opt-out is honored the moment it comes in, however it's worded.</p>
-          </div>
-        </div>
-      </div>
-    </details>
     </div>
   </div>
 </section>
@@ -3260,29 +2735,21 @@
 
 <section class="how" data-page="how">
   <div class="wrap">
-    <p class="section-eyebrow" data-i18n="how.eyebrow">Setup</p>
-    <h2 class="section-title" data-i18n="how.title">Live on your site in four steps.</h2>
+    <p class="section-eyebrow" data-i18n="how.eyebrow">How It Works</p>
+    <h2 class="section-title" data-i18n="how.title">Everything it takes, in four steps.</h2>
+    <p class="section-lede" data-i18n="how.lede">Not just a chatbot &mdash; a website if you need one, instant answers on every channel, and jobs that land in the software you already run.</p>
     <div class="steps">
       <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
         <div class="step-num">01</div><h3 data-i18n="how.step1.head">We build it</h3><p data-i18n="how.step1.body">Send your hours and pricing &mdash; we configure me around your business.</p></div>
       <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-        <div class="step-num">02</div><h3 data-i18n="how.step2.head">You paste one line</h3><p data-i18n="how.step2.body">One snippet on your website. No developer needed.</p></div>
+        <div class="step-num">02</div><h3 data-i18n="how.step2.head">You get what you need</h3><p data-i18n="how.step2.body">One line of code if you already have a site. A full website, free, if you don't.</p></div>
       <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-        <div class="step-num">03</div><h3 data-i18n="how.step3.head">I start answering</h3><p data-i18n="how.step3.body">Every visitor gets an instant reply, day or night.</p></div>
+        <div class="step-num">03</div><h3 data-i18n="how.step3.head">I start answering</h3><p data-i18n="how.step3.body">Every channel, every visitor, an instant reply &mdash; day or night.</p></div>
       <div class="step"><svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
-        <div class="step-num">04</div><h3 data-i18n="how.step4.head">You get the leads</h3><p data-i18n="how.step4.body">Every booking lands in one simple dashboard, ready to dispatch.</p></div>
+        <div class="step-num">04</div><h3 data-i18n="how.step4.head">You get the leads</h3><p data-i18n="how.step4.body">Booked jobs land straight in the dispatch software you already run.</p></div>
     </div>
-  </div>
-</section>
 
-<div class="stripe"></div>
-
-<section class="integrations" data-page="how">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="integrations.eyebrow">Works With What You Run</p>
-    <h2 class="section-title" data-i18n="integrations.title">No new dispatch board to learn.</h2>
-    <p class="section-lede" data-i18n="integrations.lede">I plug into the field service software you already run &mdash; I don't replace it.</p>
-    <div class="integration-badges">
+    <div class="integration-badges" style="margin-top:36px;">
       <span class="integration-badge">ServiceTitan</span>
       <span class="integration-badge">Housecall Pro</span>
       <span class="integration-badge">Jobber</span>
@@ -3290,45 +2757,11 @@
       <span class="integration-badge is-more" data-i18n="integrations.moreOnRequest">+ more on request</span>
     </div>
     <p class="section-lede" style="font-size:13.5px; margin-top:-8px;" data-i18n="integrations.rollout">Built out one account at a time &mdash; tell us what you run at signup.</p>
-    <div class="sync-grid">
-      <div class="sync-card">
-        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-        <h3 class="sync-head" data-i18n="integrations.card1.head">Client Records, Created For You</h3>
-        <p class="sync-body" data-i18n="integrations.card1.body">New callers become real customer records automatically &mdash; no re-typing.</p>
-      </div>
-      <div class="sync-card">
-        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-        <h3 class="sync-head" data-i18n="integrations.card2.head">Your Dispatch Board, Updated Live</h3>
-        <p class="sync-body" data-i18n="integrations.card2.body">Booked jobs land on your calendar the moment they're booked, not batched in later.</p>
-      </div>
-      <div class="sync-card">
-        <svg class="step-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
-        <h3 class="sync-head" data-i18n="integrations.card3.head">Every Outcome, Logged Back</h3>
-        <p class="sync-body" data-i18n="integrations.card3.body">Booked, quoted, or missed &mdash; every outcome is logged back automatically.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<section class="tools-showcase" data-page="how">
-  <div class="wrap">
-    <p class="section-eyebrow">Three Real Tools, One Flat Price</p>
-    <h2 class="section-title">Not mockups. The actual product.</h2>
-    <p class="section-lede">Click through and use them yourself before you sign up for anything &mdash; your Guided Setup questionnaire comes straight to your inbox once you do.</p>
-
-    <div class="tools-group">
-      <div class="tools-grid">
-        <div class="tool-card">
-          <span class="tool-card-tag">Every Subscription</span>
-          <h3 class="tool-card-head">Owner Dashboard</h3>
-          <p class="tool-card-body">The real thing behind the mockup below &mdash; conversations, billing, and full customer records in one place.</p>
-          <ul class="tool-card-list">
-            <li>Overview, conversations, appointments, billing</li>
-            <li>Customer equipment &amp; follow-up tracking</li>
-            <li>A crew view for techs in the field</li>
-          </ul>
-          <a class="btn btn-primary" href="https://claude.ai/code/artifact/916fba66-a396-4815-85c1-721f23bad463?org=0f296a40-4d85-4249-86e2-578d5a58ea21" target="_blank" rel="noopener">Open The Owner Dashboard</a>
-        </div>
+    <div class="tools-group" style="margin-top:48px;">
+      <p class="section-eyebrow">Try Them Yourself</p>
+      <h3 class="section-title" style="font-size:28px;">Not mockups. The actual product.</h3>
+      <div class="tools-grid tools-grid-2">
         <div class="tool-card">
           <span class="tool-card-tag">Included Free</span>
           <h3 class="tool-card-head">Website Builder</h3>
@@ -3356,50 +2789,6 @@
   </div>
 </section>
 
-
-<section class="why" data-page="home">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="why.eyebrow">Why Me</p>
-    <h2 class="section-title" data-i18n="why.title">Built for HVAC, not retrofitted for it.</h2>
-    <div class="why-grid">
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"></path><circle cx="12" cy="12" r="9"></circle></svg>
-        <h3 data-i18n="why.card1.head">Never off the clock</h3>
-        <p data-i18n="why.card1.body">AC failures don't wait for business hours. I'm always on, including 2am emergency messages.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
-        <h3 data-i18n="why.card2.head">Books real appointments</h3>
-        <p data-i18n="why.card2.body">I'm not just a message-taker &mdash; I put jobs directly onto your schedule, with the details your techs need.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 15l4-6 4 3 4-7"></path></svg>
-        <h3 data-i18n="why.card3.head">Speaks HVAC</h3>
-        <p data-i18n="why.card3.body">I'm configured on real trade terms &mdash; diagnostics, tune-ups, refrigerant, emergency dispatch &mdash; not generic small talk.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="0"></rect><path d="M3 10h18M8 2v4M16 2v4"></path></svg>
-        <h3 data-i18n="why.card4.head">One flat monthly rate</h3>
-        <p data-i18n="why.card4.body">No per-conversation metering, no surprise overage bill. You know exactly what I cost, every month.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-        <h3 data-i18n="why.card5.head">Captures leads you'd lose anyway</h3>
-        <p data-i18n="why.card5.body">When I can't fully resolve something, I still get a name and number before the visitor closes the tab &mdash; instead of nothing at all.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
-        <h3 data-i18n="why.card6.head">Live in days, not weeks</h3>
-        <p data-i18n="why.card6.body">Send your hours and pricing, paste one snippet, and I'm answering on your site &mdash; no developer, no long onboarding.</p>
-      </div>
-      <div class="why-card">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"></path></svg>
-        <h3 data-i18n="why.card7.head">Texting compliance built in</h3>
-        <p data-i18n="why.card7.body">State texting rules are a real, personal liability for a small business owner &mdash; I handle consent, quiet hours, and the extra limits certain states require automatically, so a new channel doesn't become a new risk.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
 <section class="reviews" data-page="demo">
   <div class="wrap">
@@ -3439,20 +2828,6 @@
     </div>
   </div>
 </section>
-
-<section class="local" data-page="home">
-  <div class="wrap">
-    <p class="section-eyebrow" data-i18n="local.eyebrow">Why Now</p>
-    <h2 class="section-title" data-i18n="local.title">Built for a trade growing faster than it can staff.</h2>
-    <p class="section-lede" data-i18n="local.lede">This isn't a generic pitch. It's what's actually happening in HVAC right now, in every market.</p>
-    <div class="local-stats">
-      <div class="local-stat"><div class="math-figure" data-i18n="local.stat1.figure">Growing</div><div class="math-figure-label" data-i18n="local.stat1.label">More homes, more aging systems, more service calls every year &mdash; nationwide, not just in one metro</div></div>
-      <div class="local-stat"><div class="math-figure is-red" data-i18n="local.stat2.figure">Understaffed</div><div class="math-figure-label" data-i18n="local.stat2.label">Skilled trades are short-staffed across the country &mdash; demand keeps outrunning hiring</div></div>
-      <div class="local-stat"><div class="math-figure">24/7</div><div class="math-figure-label" data-i18n="local.stat3.label">When an AC or furnace fails, customers go with whoever responds first &mdash; wherever they are</div></div>
-    </div>
-  </div>
-</section>
-
 <section class="value" data-page="pricing">
   <div class="wrap">
     <p class="section-eyebrow" data-i18n="value.eyebrow">What You're Really Paying For</p>
@@ -3483,6 +2858,11 @@
         <span class="value-bar-label" data-i18n="value.bar.staff">Part-time receptionist</span>
         <div class="value-bar-track"><div class="value-bar-fill is-muted" style="width:6%"></div></div>
         <span class="value-bar-amount">~$1,800<span class="value-bar-per" data-i18n="value.perMoShort">/mo</span></span>
+      </div>
+      <div class="value-bar-row">
+        <span class="value-bar-label" data-i18n="value.bar.secretary">Full-time secretary</span>
+        <div class="value-bar-track"><div class="value-bar-fill is-muted" style="width:4%"></div></div>
+        <span class="value-bar-amount">~$2,800<span class="value-bar-per" data-i18n="value.perMoShort">/mo</span></span>
       </div>
       <p class="value-chart-foot" data-i18n="value.chartFoot">Typical ranges for a live answering service and part-time front-desk help &mdash; actual rates vary by provider and market.</p>
     </div>
@@ -3914,8 +3294,8 @@
     'whatwedo.card2.body': 'Pregunto lo que preguntaría un despachador &mdash; para cuando lo ve, el trabajo ya está definido.',
     'whatwedo.card3.head': 'Agendo El Trabajo',
     'whatwedo.card3.body': 'Lo pongo directamente en su calendario y le envío el resumen.',
-    'whatwedo.card4.head': 'Trabajo Desde Cualquier Lugar',
-    'whatwedo.card4.body': 'Sin aplicación necesaria &mdash; chat del sitio web, redes sociales, respuesta a llamada perdida, o un código QR en su camión.',
+    'whatwedo.card4.head': 'Le Construyo Un Sitio Web',
+    'whatwedo.card4.body': '&iquest;Sin sitio todav&iacute;a? Le construyo uno gratis &mdash; elija una plantilla, con su chat y reservas ya integrados.',
     'whatwedo.card5.head': 'Mantengo El Trabajo En Curso',
     'whatwedo.card5.body': 'Recordatorios, avisos de "voy en camino", y mensajes de mantenimiento &mdash; todo automático.',
     'whatwedo.card6.head': 'Doy Seguimiento Para Reseñas',
@@ -4022,16 +3402,17 @@
     'channels.tab10.desc': 'Seis meses después de un mantenimiento &mdash; o la frecuencia que usted defina &mdash; vuelvo a contactar por mi cuenta, antes de la próxima falla en lugar de después.',
     'channels.arrow.tapMessage': 'Toca Sitio Web',
 
-    'how.eyebrow': 'Configuración',
-    'how.title': 'En vivo en su sitio en cuatro pasos.',
+    'how.eyebrow': 'Cómo Funciona',
+    'how.title': 'Todo lo que se necesita, en cuatro pasos.',
+    'how.lede': 'No es solo un chatbot &mdash; un sitio web si lo necesita, respuestas instantáneas en cada canal, y trabajos que llegan al software que ya usa.',
     'how.step1.head': 'Lo construimos',
     'how.step1.body': 'Envíe su horario y precios &mdash; lo configuro alrededor de su negocio.',
-    'how.step2.head': 'Usted pega una línea',
-    'how.step2.body': 'Un fragmento de código en su sitio. Sin desarrollador necesario.',
+    'how.step2.head': 'Usted recibe lo que necesita',
+    'how.step2.body': 'Una línea de código si ya tiene un sitio. Un sitio web completo, gratis, si no lo tiene.',
     'how.step3.head': 'Empiezo a responder',
-    'how.step3.body': 'Cada visitante recibe una respuesta instantánea, día o noche.',
+    'how.step3.body': 'Cada canal, cada visitante, una respuesta instantánea &mdash; día o noche.',
     'how.step4.head': 'Usted recibe los clientes potenciales',
-    'how.step4.body': 'Cada cita llega a un panel sencillo, listo para despachar.',
+    'how.step4.body': 'Los trabajos agendados llegan directo al software de despacho que ya usa.',
 
     'integrations.eyebrow': 'Funciona Con Lo Que Ya Usa',
     'integrations.title': 'Ningún tablero de despacho nuevo que aprender.',
@@ -4085,6 +3466,7 @@
     'value.bar.best': 'Mejor valor',
     'value.bar.answering': 'Servicio de contestación en vivo',
     'value.bar.staff': 'Recepcionista de medio tiempo',
+    'value.bar.secretary': 'Secretaria de tiempo completo',
     'value.chartFoot': 'Rangos típicos para un servicio de contestación en vivo y personal de recepción de medio tiempo &mdash; las tarifas reales varían según el proveedor y el mercado.',
     'value.stat1': 'Su año completo con HelloBob',
     'value.stat2': 'Ahorrado al año frente a un servicio de contestación en vivo',
@@ -4390,16 +3772,6 @@
       document.querySelectorAll('.chat-lang-select').forEach(s => { s.value = newLang; });
       chatEngines.forEach(engine => { if(engine.setLang) engine.setLang(newLang); });
 
-      // If the demo-nudge toast is on screen when the language changes, replay
-      // its own entrance transition (the same .38s fade/rise it used to appear
-      // in the first place) instead of letting its text silently swap in place —
-      // hide it, then bring it back in on that same timing.
-      const nudgeEl = document.getElementById('demoNudge');
-      const NUDGE_TRANSITION_MS = 380;
-      if(nudgeEl && !nudgeEl.hidden && nudgeEl.classList.contains('is-visible')){
-        nudgeEl.classList.remove('is-visible');
-        setTimeout(() => { nudgeEl.classList.add('is-visible'); }, NUDGE_TRANSITION_MS);
-      }
     }
 
     syncUI(siteLang);
@@ -4423,51 +3795,8 @@
     }
   })();
 
-  // Dismissible toast offering the demo reel, shown once, a few seconds
-  // after the page loads — on whichever tab the visitor happens to be on at
-  // that point, not just Home. This used to be chained off the hero intro's
-  // own promise (runHeroIntro().then(showDemoNudge)) and skipped outright if
-  // the visitor had already left the home tab, which meant a quick language
-  // switch (cancelling the intro early) or navigating to another tab before
-  // the timer fired could make it silently never appear for the rest of the
-  // visit. It now fires on its own fixed timer regardless of hero-intro
-  // state or which tab is showing.
-  let demoNudgeShown = false;
-  function showDemoNudge(){
-    if(demoNudgeShown) return;
-    const nudge = document.getElementById('demoNudge');
-    const body = document.getElementById('demoNudgeBody');
-    const closeBtn = document.getElementById('demoNudgeClose');
-    if(!nudge || !body) return;
-    demoNudgeShown = true;
-
-    nudge.hidden = false;
-    requestAnimationFrame(() => { nudge.classList.add('is-visible'); });
-
-    // No auto-hide timer — it stays up until the visitor dismisses it
-    // themselves (the × button) or clicks it to watch the reel.
-    function hideNudge(){
-      nudge.classList.remove('is-visible');
-      setTimeout(() => { nudge.hidden = true; }, 400);
-    }
-    if(closeBtn){
-      closeBtn.addEventListener('click', e => { e.stopPropagation(); hideNudge(); }, { once:true });
-    }
-    body.addEventListener('click', () => {
-      hideNudge();
-      if(typeof window.goToSection === 'function') window.goToSection('demoReel');
-      // Clicking the nudge is itself the visitor's deliberate "play" — the
-      // reel still stays click-to-play everywhere else on the site.
-      setTimeout(() => { if(typeof window.startDemoReel === 'function') window.startDemoReel(); }, 700);
-    }, { once:true });
-  }
 
   runHeroIntro();
-  // Fixed 9.5s delay, independent of how/when the hero intro itself finishes
-  // (interrupted by an early language switch, skipped for reduced motion,
-  // etc.) — see the note above showDemoNudge() for why this isn't chained
-  // off that promise any more.
-  setTimeout(showDemoNudge, 9500);
 
   // ---- Social page previews ----
   const socialModal = document.getElementById('socialModal');
@@ -6562,406 +5891,6 @@
     });
   })();
 
-  // ---------- Demo reel: click-to-play walkthrough ----------
-  // Not a real video file -- a scripted, auto-playing sequence built from the
-  // same chat/dashboard/SMS mockup components used elsewhere on the site.
-  // Each scene's declared duration in SCENE_MS is used only to draw the
-  // progress bar and the timer/poster labels; it's kept in sync by hand with
-  // the sum of that scene's own awaited delays below (noted per scene).
-  (function initDemoReel(){
-    const poster = document.getElementById('reelPoster');
-    const playBtn = document.getElementById('reelPlayBtn');
-    const player = document.getElementById('reelPlayer');
-    const closeBtn = document.getElementById('reelCloseBtn');
-    const stage = document.getElementById('reelStage');
-    const progressFill = document.getElementById('reelProgressFill');
-    const timerNowEl = document.getElementById('reelTimerNow');
-    const timerTotalEl = document.getElementById('reelTimerTotal');
-    const durationChipEl = document.getElementById('reelDurationChip');
-    if(!poster || !playBtn || !player || !stage) return;
-
-    const wait = ms => new Promise(r => setTimeout(r, ms));
-    function esc(str){ return String(str).replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])); }
-    function fmtTime(ms){
-      const s = Math.round(ms / 1000);
-      return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
-    }
-
-    const SCENE_MS = { chat: 16300, dashboard: 6500, followup: 8600, email: 6000 };
-    const TOTAL_MS = SCENE_MS.chat + SCENE_MS.dashboard + SCENE_MS.followup + SCENE_MS.email;
-    if(durationChipEl) durationChipEl.textContent = fmtTime(TOTAL_MS);
-    if(timerTotalEl) timerTotalEl.textContent = fmtTime(TOTAL_MS);
-
-    const COPY = {
-      en: {
-        chatCaption: "9:52 PM · Friday — nobody else picked up.",
-        custMsg1: "hi is anyone there?? my AC just stopped blowing cold air",
-        botMsg1: "Hi! I’m Bob, Coastline’s virtual assistant — sorry to hear that. I can get this on the schedule right now. Is the outdoor unit running, or completely off?",
-        custMsg2: "it's running, just not cold",
-        botMsg2: "Got it — that’s usually a quick fix. What’s your address, and does tomorrow morning or afternoon work better?",
-        custMsg3: "132 Ash Grove Ln, mornings work",
-        botMsg3: "Perfect — Tuesday 8–10 AM is open. I’ll text a confirmation, and Marcus will call 20 minutes out. Anything else?",
-        botConfirm: "Booked ✓ Tue 8–10 AM · 132 Ash Grove Ln",
-        dashCaption1: "Meanwhile, on Coastline’s dashboard —",
-        dashToastHead: "New appointment booked",
-        dashToastSub: "Tue 8–10 AM · Ash Grove Ln",
-        dashCaption2: "You didn’t lift a finger.",
-        followCaption1: "3 days later, job’s done —",
-        followBotMsg1: "Hi! This is Bob from Coastline — thanks for having us out today. Mind rating the visit 1–5 stars?",
-        followCustMsg1: "★★★★★",
-        followBotMsg2: "Awesome, thank you! Mind sharing that on Google too?",
-        followBadgeHead: "Posted to Google",
-        followBadgeSub: "4.9★ · 501 jobs · invoice emailed too",
-        emailCaption1: "Moments later, the invoice lands in their inbox —",
-        emailSubject: "Invoice #4821",
-        emailFromName: "Coastline Air & Heat",
-        emailFromAddr: "billing@coastlineair.com",
-        emailTime: "2:16 PM",
-        emailGreeting: "Hi Maria,",
-        emailBody1: "Thanks for choosing Coastline! Here's your invoice for today's visit.",
-        emailLineItem: "Maintenance Tune-Up",
-        emailLineAmount: "$129.00",
-        emailTotalLabel: "Total Due",
-        emailBadgeHead: "Sent automatically",
-        emailBadgeSub: "no reminder call, no chasing a payment",
-        endStat1Num: "$0", endStat1Label: "Spent Chasing This Lead",
-        endStat2Num: "4 sec", endStat2Label: "Bob's Reply Time",
-        endStat3Num: "+1", endStat3Label: "New 5-Star Review",
-        endHead: "This is Bob. Working while you sleep.",
-        endSub: "No card, nothing due until you've tried Bob yourself.",
-        endCta: "Start My Free 10-Day Trial",
-        endReplay: "Watch Again"
-      },
-      es: {
-        chatCaption: "9:52 PM · viernes — nadie más contestó.",
-        custMsg1: "hola hay alguien? mi aire dejó de enfriar",
-        botMsg1: "¡Hola! Soy Bob, el asistente virtual de Coastline — lamento escuchar eso. Puedo agendarlo ahora mismo. ¿La unidad exterior está funcionando, o completamente apagada?",
-        custMsg2: "está funcionando, solo que no enfría",
-        botMsg2: "Entendido — eso suele ser una reparación rápida. ¿Cuál es su dirección, y le viene mejor mañana en la mañana o en la tarde?",
-        custMsg3: "132 Ash Grove Ln, las mañanas me funcionan",
-        botMsg3: "Perfecto — el martes de 8 a 10 AM está disponible. Le enviaré una confirmación, y Marcus llamará 20 minutos antes. ¿Algo más?",
-        botConfirm: "Agendado ✓ Mar 8–10 AM · 132 Ash Grove Ln",
-        dashCaption1: "Mientras tanto, en el panel de Coastline —",
-        dashToastHead: "Nueva cita agendada",
-        dashToastSub: "Mar 8–10 AM · Ash Grove Ln",
-        dashCaption2: "Usted no movió un dedo.",
-        followCaption1: "3 días después, trabajo terminado —",
-        followBotMsg1: "¡Hola! Soy Bob de Coastline — gracias por confiar en nosotros hoy. ¿Le importaría calificar la visita del 1 al 5?",
-        followCustMsg1: "★★★★★",
-        followBotMsg2: "¡Excelente, gracias! ¿Le importaría compartirlo también en Google?",
-        followBadgeHead: "Publicado en Google",
-        followBadgeSub: "4.9★ · 501 trabajos · factura enviada también",
-        emailCaption1: "Minutos después, la factura llega a su bandeja de entrada —",
-        emailSubject: "Factura #4821",
-        emailFromName: "Coastline Air & Heat",
-        emailFromAddr: "billing@coastlineair.com",
-        emailTime: "2:16 PM",
-        emailGreeting: "Hola Maria,",
-        emailBody1: "¡Gracias por elegir a Coastline! Aquí está su factura de la visita de hoy.",
-        emailLineItem: "Mantenimiento Programado",
-        emailLineAmount: "$129.00",
-        emailTotalLabel: "Total A Pagar",
-        emailBadgeHead: "Enviado automáticamente",
-        emailBadgeSub: "sin llamada de recordatorio, sin perseguir el pago",
-        endStat1Num: "$0", endStat1Label: "Gastado Persiguiendo Este Cliente",
-        endStat2Num: "4 seg", endStat2Label: "Tiempo De Respuesta De Bob",
-        endStat3Num: "+1", endStat3Label: "Nueva Reseña De 5 Estrellas",
-        endHead: "Este es Bob. Trabajando mientras usted duerme.",
-        endSub: "Sin tarjeta, no paga nada hasta probarlo usted mismo.",
-        endCta: "Comience Mi Prueba Gratis De 10 Días",
-        endReplay: "Ver De Nuevo"
-      }
-    };
-
-    let playToken = 0; // bumped on close/replay so an in-flight scene bails out
-
-    function clearStage(){ stage.innerHTML = ''; }
-    function addCaption(text, extraClass){
-      const p = document.createElement('p');
-      p.className = extraClass ? 'reel-caption ' + extraClass : 'reel-caption';
-      p.textContent = text;
-      stage.appendChild(p);
-      return p;
-    }
-
-    // ---- Scene 1: the customer's phone (sum of waits below = SCENE_MS.chat) ----
-    async function playChatScene(t, token){
-      clearStage();
-      addCaption(t.chatCaption);
-      const phone = document.createElement('div');
-      phone.className = 'phone';
-      phone.innerHTML =
-        '<div class="phone-screen"><div class="phone-notch"></div>' +
-        '<div class="phone-status"><span>9:52</span><span>5G</span></div>' +
-        '<div class="phone-chat"><div class="chat-head"><div class="chat-avatar">B</div>' +
-        '<div class="chat-head-text"><strong>Bob</strong><span class="chat-status"><i></i>Online now</span></div></div>' +
-        '<div class="chat-log-mini" id="reelChatLog"></div></div></div>';
-      stage.appendChild(phone);
-      const log = phone.querySelector('#reelChatLog');
-      const scrollDown = () => { log.scrollTop = log.scrollHeight; };
-
-      async function userSay(text, holdMs){
-        await wait(400);
-        if(token !== playToken) return;
-        const row = document.createElement('div');
-        row.className = 'msg-row';
-        row.style.alignSelf = 'flex-end';
-        row.innerHTML = '<div class="msg user">' + esc(text) + '</div>';
-        log.appendChild(row); scrollDown();
-        await wait(holdMs);
-      }
-      async function botSay(text, holdMs){
-        const typingRow = document.createElement('div');
-        typingRow.className = 'msg-row';
-        typingRow.innerHTML = '<span class="msg-avatar">B</span><div class="typing"><span></span><span></span><span></span></div>';
-        log.appendChild(typingRow); scrollDown();
-        await wait(1300);
-        if(token !== playToken) return;
-        typingRow.remove();
-        const row = document.createElement('div');
-        row.className = 'msg-row';
-        row.innerHTML = '<span class="msg-avatar">B</span><div class="msg bot">' + esc(text) + '</div>';
-        log.appendChild(row); scrollDown();
-        await wait(holdMs);
-      }
-
-      await wait(500);
-      if(token !== playToken) return;
-      await userSay(t.custMsg1, 700); if(token !== playToken) return;
-      await botSay(t.botMsg1, 1800); if(token !== playToken) return;
-      await userSay(t.custMsg2, 700); if(token !== playToken) return;
-      await botSay(t.botMsg2, 1800); if(token !== playToken) return;
-      await userSay(t.custMsg3, 700); if(token !== playToken) return;
-      await botSay(t.botMsg3, 2200); if(token !== playToken) return;
-      await botSay(t.botConfirm, 1500);
-    }
-
-    // ---- Scene 2: cut to the owner's dashboard (sum = SCENE_MS.dashboard) ----
-    async function playDashboardScene(t, token){
-      clearStage();
-      addCaption(t.dashCaption1);
-      const wrap = document.createElement('div');
-      wrap.className = 'reel-dash-wrap';
-      wrap.innerHTML =
-        '<div class="ow-frame"><div class="browser-bar"><div class="browser-dots"><span></span><span></span><span></span></div>' +
-        '<div class="browser-url">app.hellobob.com/overview</div></div><div class="ow-body">' +
-        '<div class="ow-head"><h4>This Week</h4><span>Coastline Air &amp; Heat</span></div>' +
-        '<div class="ow-kpis">' +
-        '<div class="ow-kpi"><div class="ow-kpi-label">New Leads</div><div class="ow-kpi-value" id="reelKpiLeads">38</div></div>' +
-        '<div class="ow-kpi"><div class="ow-kpi-label">Jobs Booked</div><div class="ow-kpi-value" id="reelKpiJobs">24</div></div>' +
-        '<div class="ow-kpi"><div class="ow-kpi-label">Avg Reply Time</div><div class="ow-kpi-value">4s</div></div>' +
-        '</div></div></div>';
-      stage.appendChild(wrap);
-
-      await wait(700);
-      if(token !== playToken) return;
-      const toast = document.createElement('div');
-      toast.className = 'reel-toast';
-      toast.innerHTML =
-        '<span class="reel-toast-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>' +
-        '<span class="reel-toast-text"><strong>' + esc(t.dashToastHead) + '</strong><span>' + esc(t.dashToastSub) + '</span></span>';
-      wrap.appendChild(toast);
-
-      await wait(1400);
-      if(token !== playToken) return;
-      const leadsEl = wrap.querySelector('#reelKpiLeads');
-      const jobsEl = wrap.querySelector('#reelKpiJobs');
-      if(leadsEl){ leadsEl.textContent = '39'; leadsEl.classList.add('reel-kpi-flash'); }
-      if(jobsEl){ jobsEl.textContent = '25'; jobsEl.classList.add('reel-kpi-flash'); }
-
-      await wait(1800);
-      if(token !== playToken) return;
-      addCaption(t.dashCaption2, 'reel-subcaption');
-      await wait(2600);
-    }
-
-    // ---- Scene 3: the follow-up text, days later (sum = SCENE_MS.followup) ----
-    async function playFollowupScene(t, token){
-      clearStage();
-      addCaption(t.followCaption1);
-      const phone = document.createElement('div');
-      phone.className = 'phone';
-      phone.innerHTML =
-        '<div class="phone-screen"><div class="phone-notch"></div>' +
-        '<div class="phone-status"><span>2:14</span><span>5G</span></div>' +
-        '<div class="sms-app"><div class="sms-app-top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>' +
-        '<div class="sms-contact"><div class="sms-avatar">C</div><span>Coastline Air &amp; Heat</span></div></div>' +
-        '<div class="sms-thread" id="reelSmsThread"><div class="sms-timestamp">Monday 2:14 PM</div></div></div></div>';
-      stage.appendChild(phone);
-      const thread = phone.querySelector('#reelSmsThread');
-      const scrollDown = () => { thread.scrollTop = thread.scrollHeight; };
-
-      await wait(700);
-      if(token !== playToken) return;
-      const b1 = document.createElement('div');
-      b1.className = 'sms-bubble in';
-      b1.textContent = t.followBotMsg1;
-      thread.appendChild(b1); scrollDown();
-
-      await wait(1900);
-      if(token !== playToken) return;
-      const u1 = document.createElement('div');
-      u1.className = 'sms-bubble out';
-      u1.textContent = t.followCustMsg1;
-      thread.appendChild(u1); scrollDown();
-
-      await wait(1400);
-      if(token !== playToken) return;
-      const b2 = document.createElement('div');
-      b2.className = 'sms-bubble in';
-      b2.textContent = t.followBotMsg2;
-      thread.appendChild(b2); scrollDown();
-
-      await wait(2000);
-      if(token !== playToken) return;
-      const badge = document.createElement('div');
-      badge.className = 'reel-badge';
-      badge.innerHTML =
-        '<span class="reel-badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>' +
-        '<strong>' + esc(t.followBadgeHead) + '</strong><span>' + esc(t.followBadgeSub) + '</span>';
-      stage.appendChild(badge);
-      await wait(2600);
-    }
-
-    // ---- Scene 4: moments later, the automated invoice email (sum = SCENE_MS.email) ----
-    async function playEmailScene(t, token){
-      clearStage();
-      addCaption(t.emailCaption1);
-      const phone = document.createElement('div');
-      phone.className = 'phone';
-      phone.innerHTML =
-        '<div class="phone-screen"><div class="phone-notch"></div>' +
-        '<div class="phone-status"><span>2:16</span><span>5G</span></div>' +
-        '<div class="email-app">' +
-          '<div class="email-app-top">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"></path></svg>' +
-            '<span>' + esc(t.emailSubject) + '</span>' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.2"></circle><circle cx="12" cy="12" r="1.2"></circle><circle cx="12" cy="19" r="1.2"></circle></svg>' +
-          '</div>' +
-          '<div class="email-app-meta">' +
-            '<div class="email-app-avatar">C</div>' +
-            '<div class="email-app-from"><strong>' + esc(t.emailFromName) + '</strong><span>' + esc(t.emailFromAddr) + '</span></div>' +
-            '<span class="email-app-time">' + esc(t.emailTime) + '</span>' +
-          '</div>' +
-          '<div class="email-app-body" id="reelEmailBody"></div>' +
-        '</div></div>';
-      stage.appendChild(phone);
-      const body = phone.querySelector('#reelEmailBody');
-
-      await wait(700);
-      if(token !== playToken) return;
-      const p1 = document.createElement('p');
-      p1.textContent = t.emailGreeting;
-      body.appendChild(p1);
-
-      await wait(900);
-      if(token !== playToken) return;
-      const p2 = document.createElement('p');
-      p2.textContent = t.emailBody1;
-      body.appendChild(p2);
-
-      await wait(1200);
-      if(token !== playToken) return;
-      const invoice = document.createElement('div');
-      invoice.className = 'email-app-invoice';
-      invoice.innerHTML =
-        '<div class="price-row"><span>' + esc(t.emailLineItem) + '</span><span>' + esc(t.emailLineAmount) + '</span></div>' +
-        '<div class="price-row"><span>' + esc(t.emailTotalLabel) + '</span><span>' + esc(t.emailLineAmount) + '</span></div>';
-      body.appendChild(invoice);
-
-      await wait(1300);
-      if(token !== playToken) return;
-      const emailBadge = document.createElement('div');
-      emailBadge.className = 'reel-badge';
-      emailBadge.innerHTML =
-        '<span class="reel-badge-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg></span>' +
-        '<strong>' + esc(t.emailBadgeHead) + '</strong><span>' + esc(t.emailBadgeSub) + '</span>';
-      stage.appendChild(emailBadge);
-      await wait(1900);
-    }
-
-    function renderEndScene(t){
-      clearStage();
-      const end = document.createElement('div');
-      end.className = 'reel-end';
-      end.innerHTML =
-        '<div class="reel-stat-row">' +
-        '<div class="reel-stat"><div class="reel-stat-num">' + esc(t.endStat1Num) + '</div><div class="reel-stat-label">' + esc(t.endStat1Label) + '</div></div>' +
-        '<div class="reel-stat"><div class="reel-stat-num">' + esc(t.endStat2Num) + '</div><div class="reel-stat-label">' + esc(t.endStat2Label) + '</div></div>' +
-        '<div class="reel-stat"><div class="reel-stat-num">' + esc(t.endStat3Num) + '</div><div class="reel-stat-label">' + esc(t.endStat3Label) + '</div></div>' +
-        '</div>' +
-        '<h3>' + esc(t.endHead) + '</h3>' +
-        '<div class="reel-end-actions">' +
-        '<a class="btn btn-primary btn-stacked" href="#contact" data-goto="contact">' +
-          '<span class="btn-main">' + esc(t.endCta) + '</span>' +
-          '<span class="btn-sub"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>' + esc(t.endSub) + '</span></span>' +
-        '</a>' +
-        '<button type="button" class="reel-replay-btn" id="reelReplayBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6M23 20v-6h-6"></path><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>' + esc(t.endReplay) + '</button>' +
-        '</div>';
-      stage.appendChild(end);
-      const replayBtn = end.querySelector('#reelReplayBtn');
-      if(replayBtn) replayBtn.addEventListener('click', playReel);
-    }
-
-    let timerInterval = null;
-    function startTimer(){
-      const startedAt = Date.now();
-      stopTimer();
-      timerInterval = setInterval(() => {
-        if(timerNowEl) timerNowEl.textContent = fmtTime(Math.min(Date.now() - startedAt, TOTAL_MS));
-      }, 250);
-    }
-    function stopTimer(){ if(timerInterval){ clearInterval(timerInterval); timerInterval = null; } }
-
-    function animateProgressTo(pct, durationMs){
-      if(!progressFill) return;
-      progressFill.style.transitionDuration = durationMs + 'ms';
-      requestAnimationFrame(() => { progressFill.style.width = pct + '%'; });
-    }
-
-    async function playReel(){
-      const token = ++playToken;
-      const t = COPY[siteLang === 'es' ? 'es' : 'en'];
-      if(timerNowEl) timerNowEl.textContent = '0:00';
-      if(progressFill){ progressFill.style.transitionDuration = '0ms'; progressFill.style.width = '0%'; }
-      startTimer();
-
-      const scenes = [
-        { run: playChatScene, ms: SCENE_MS.chat },
-        { run: playDashboardScene, ms: SCENE_MS.dashboard },
-        { run: playFollowupScene, ms: SCENE_MS.followup },
-        { run: playEmailScene, ms: SCENE_MS.email }
-      ];
-      let cum = 0;
-      for(const scene of scenes){
-        if(token !== playToken) return;
-        cum += scene.ms;
-        animateProgressTo(100 * cum / TOTAL_MS, scene.ms);
-        await scene.run(t, token);
-        if(token !== playToken) return;
-      }
-      stopTimer();
-      if(timerNowEl) timerNowEl.textContent = fmtTime(TOTAL_MS);
-      renderEndScene(t);
-    }
-
-    function openPlayer(){
-      poster.hidden = true;
-      player.hidden = false;
-      playReel();
-    }
-    function closePlayer(){
-      playToken++; // cancels any in-flight scene's remaining awaits
-      stopTimer();
-      player.hidden = true;
-      poster.hidden = false;
-      clearStage();
-    }
-
-    playBtn.addEventListener('click', openPlayer);
-    if(closeBtn) closeBtn.addEventListener('click', closePlayer);
-    window.startDemoReel = openPlayer;
-  })();
 
   // ---- Subtle scroll-reveal for the icon/step cards added across What I Do,
   // Setup, Integrations, and the tools showcase. Cards fade/rise in as they
